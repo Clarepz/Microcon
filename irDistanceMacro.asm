@@ -8,10 +8,11 @@ ADCCaddr_sra:
 	reti
 	
 ; === initialization (reset) ====
-IRset:
+.macro IRSET
 	OUTI	ADCSR,(1<<ADEN)+(1<<ADIE)+6 ; AD Enable, AD int. enable, PS=CK/64	
 	OUTI	ADMUX,3			; select channel irdistance
 	ret
+.endmacro
 
 .macro DISTANCEREAD
 	sbi	ADCSR,ADSC			; start conversion
