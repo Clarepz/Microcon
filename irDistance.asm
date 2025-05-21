@@ -17,13 +17,14 @@ ADCCaddr_sra:
 		
 	in	a0,ADCL				; read low byte first
 	in	a1,ADCH				; store 2 MSB
-	cpi a1,0b00000010		; compare value
-	brlo PC + 3			
-	ldi	r23,0x00			; clear boolean
-	reti			
-	ldi r23,0xff			; set the boolean
+	;cpi a1,0b00000010		; compare value
+	out PORTC, a1
+	;brlo PC + 3			
+	;ldi	r23,0x00			; clear boolean
+	;reti			
+	;ldi r23,0xff			; set the boolean
 	reti					; ADIF cleared here
-	sbi	ADCSR,ADSC			; AD start conversion
+	;sbi	ADCSR,ADSC			; AD start conversion
 	
 ; === initialization (reset) ====
 reset:
@@ -39,7 +40,8 @@ reset:
 
 ; === main program ===
 main:
-	nop
+	
+	sbi	ADCSR,ADSC			; AD start conversion
 	WAIT_MS 100				;
-	out r23, PORTC			;
+	;out r23, PORTC			;
 	rjmp	main			; jump back to main
