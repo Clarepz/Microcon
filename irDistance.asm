@@ -19,9 +19,9 @@ ADCCaddr_sra:
 	in	a1,ADCH				; store 2 MSB
 	cpi a1,0b00000010		; compare value
 	brlo PC + 3			
-	ldi	r23,0x01			; clear boolean
+	ldi	r23,0x00			; clear boolean
 	reti			
-	ldi r23,0x00			; set the boolean
+	ldi r23,0xff			; set the boolean
 	reti					; ADIF cleared here
 	sbi	ADCSR,ADSC			; AD start conversion
 	
@@ -40,4 +40,6 @@ reset:
 ; === main program ===
 main:
 	nop
+	WAIT_MS 100				;
+	out r23, PORTC			;
 	rjmp	main			; jump back to main
