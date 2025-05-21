@@ -22,8 +22,8 @@ reset:
 
 main:
     DISTANCEREAD
-    LSR a3,a2,a1,a0
-    LSR a3,a2,a1,a0
+    LSR2 a1,a0
+    LSR2 a1,a0
     com a0
     out PORTC, a0           ; show on led
     rjmp main
