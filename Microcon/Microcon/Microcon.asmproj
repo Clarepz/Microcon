@@ -15,7 +15,7 @@
     <Name>Microcon</Name>
     <RootNamespace>Microcon</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
-    <EntryFile>$(MSBuildProjectDirectory)\Yann23cm.asm</EntryFile>
+    <EntryFile>$(MSBuildProjectDirectory)\main2.asm</EntryFile>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <CacheFlash>true</CacheFlash>
@@ -121,6 +121,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ServoGPT.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ServoQuiMarche.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="smiley.asm">

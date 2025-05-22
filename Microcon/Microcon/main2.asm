@@ -20,7 +20,7 @@
 .include "irDistanceMacro.asm"
 .include "printf.asm"
 .include "uart.asm"	
-.include "lcd.asm"
+;.include "lcd.asm"
 .include "speedControl.asm"
 .include "Yann23cm.asm"
 ;================
@@ -29,9 +29,10 @@
 reset:
     LDSP	RAMEND			; set up stack pointer (SP)
 	OUTI	DDRC,0xff		; leds
+	rcall	ws2812b4_init
     rcall   printSHappy
-	;rcall	UART0_init
-    rcall   LCD_init    
+	rcall	UART0_init
+    ;rcall   LCD_init    
     rcall   SPEED_init      ;init speed control
     IRSET                   ;init le capteur de distance
     sei
@@ -41,8 +42,8 @@ main:
 	
     DISTANCEREAD            ; read distance in b1:b0
     WAIT_MS 100
-    ;PRINTF	UART0_putc		; print printDistance
-	;.db	CR,CR,"Distance=",FDEC2,b,"    ",0
+    PRINTF	UART0_putc		; print printDistance
+	.db	CR,CR,"Distance=",FDEC2,b,"    ",0
     MOV2 a1,a0,b1,b0
     LSR2 a1,a0              ; print on leds
     LSR2 a1,a0
@@ -51,16 +52,16 @@ main:
     cpi a0, DISTANCETRESH   ; check distance
     brsh wall           
 
-    ;PRINTF	UART0_putc		; print speed
-	;.db	CR,CR,"Speed=",FDEC2,c,"    ",0
+    PRINTF	UART0_putc		; print speed
+	.db	CR,CR,"Speed=",FDEC2,c,"    ",0
     ;PRINTF	LCD		; print speed
-	;.db	CR,CR,"Speed=",FDEC2,c,"    ",0
+	.db	CR,CR,"Speed=",FDEC2,c,"    ",0
     
     rjmp main
 
 
 wall:
-    rcall LCD_uninit
+    ;rcall LCD_uninit
     rcall printSConcerned
     WAIT_MS 500
     rcall printSDead
