@@ -1,7 +1,7 @@
 ; file target ATmega128L-4MHz-STK300
 ; semaphores: r25
 
-.def DISTANCETRESH = 900
+.equ DISTANCETRESH = 900/4
 
 .include "macros.asm"		; include macro definitions
 .include "definitions.asm"	; include register/constant definitions

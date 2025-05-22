@@ -1,12 +1,6 @@
 ; file target ATmega128L-4MHz-STK300
 ; semaphores: r25
 ;===Definition===
-.equ DISTANCETRESH = 900
-.equ ISPEED = 170
-.def speed = c0
-
-.include "macros.asm"		; include macro definitions
-.include "definitions.asm"	; include register/constant definitions
 
 ; === interrupt table ===
 .org	0
@@ -17,10 +11,18 @@
 	jmp	ADCCaddr_sra
 .org	0x30
 
+
+.equ DISTANCETRESH = 225
+.equ ISPEED = 170
+
+.include "macros.asm"		; include macro definitions
+.include "definitions.asm"	; include register/constant definitions
+
 .include "irDistanceMacro.asm"
 .include "printf.asm"
 .include "uart.asm"	
 .include "lcd.asm"
+.include "speedControl.asm"
 
 reset:
 	OUTI	DDRC,0xff		; configure portC to output

@@ -87,20 +87,25 @@ main:
 overflow2:
 	in  _sreg, SREG
 	push zl
-	push zh	
+	push zh
+	push a0	
 	lds _w, 2*servoTable+NBSERVO
 	sbrs _w, 7			;skip si EOC=1
-	rjmp PC+2
+	rjmp suite
 	ldi _w, SBOFFSET
-	OUTI TIMSK, (1<<OCIE2)
+	in a0,TIMSK		;on peut pas utiliser _u car <r16
+	ori a0, 0b01000000
+	out TIMSK, a0
 	;write 1 sur port servo
 	
 	;OUTI PORTC, 0xff
+suite:
 	sbrs _w, 6
 	OUTI PORTB, 0xff
 	;end of test
 	subi _w, -1	;SB+1
 	sts 2*servoTable+NBSERVO, _w	;sortie
+	pop a0
 	pop zh
 	pop zl
 	out SREG, _sreg
@@ -111,6 +116,7 @@ output_compare2:
 	in  _sreg, SREG
 	push zl
 	push zh	
+	push a0
 	lds _w, 2*servoTable+1+nbServo		;w contient zl de OCR2
 	mov zl, _w
 	ldi zh, high(2*servoTable)
@@ -122,11 +128,16 @@ output_compare2:
 	;en cours
 	OUTI PORTB, 0x00
 	;en cours
-	cpi _w, SBOFFSET+NBSERVO
-	brne PC+3	;step=nbServo ?
-	OUTI TIMSK, (0<<OCIE2)
+	ldi w, SBOFFSET+NBSERVO-1
+	cpi _w, SBOFFSET+NBSERVO-1
+	brne step2	;step=nbServo ?
+	in a0,TIMSK		;on peut pas utiliser _u car <r16
+	andi a0, 0b10111111
+	out TIMSK, a0
 	ori _w, 0b01000000	;WB=1
+step2:
 	sts 2*servoTable+NBSERVO, _w	;sortie
+	pop a0
 	pop zh
 	pop zl
 	out SREG, _sreg
@@ -143,7 +154,7 @@ servoSetup:
 	st  z+, w
 	dec a0
 	brne PC-3
-	ldi w, 0b10000000
+	ldi w, SBOFFSET
 	st z+, w
 	ldi w,low(2*servoTable)
 	st z, w

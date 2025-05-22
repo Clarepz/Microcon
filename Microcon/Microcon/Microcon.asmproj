@@ -15,7 +15,7 @@
     <Name>Microcon</Name>
     <RootNamespace>Microcon</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
-    <EntryFile>$(MSBuildProjectDirectory)\ServoGPT.asm</EntryFile>
+    <EntryFile>$(MSBuildProjectDirectory)\main2.asm</EntryFile>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <CacheFlash>true</CacheFlash>
@@ -102,6 +102,9 @@
     <Compile Include="main.asm">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="main2.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="printf.asm">
       <SubType>Code</SubType>
     </Compile>
@@ -118,6 +121,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="smiley.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="speedControl.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="uart.asm">

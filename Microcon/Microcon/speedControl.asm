@@ -1,8 +1,6 @@
 ; file	int0.asm   target ATmega128L-4MHz-STK300		
 ; purpose using INT0..INT3
 
-.include "macros.asm"		; include macros definitions
-.include "definitions.asm"	; include register/constant definition
 
 ; === interrupt table ===
 .org	0x02
