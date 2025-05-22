@@ -15,8 +15,11 @@ servoTable: .byte 12+nbServo		;lookup table of servo management
 .org	0
 	jmp reset
 
-.org OVF2addr
+.org	OVF2addr
 	rjmp overflow2
+
+.org OC2addr
+	rjmp output_compare2
 
 .org	0x30
 
@@ -118,6 +121,50 @@ ecrit0:
 	brne PC+2
 	ori _w, 0b01000000
 	rjmp changeFlanc
+
+
+output_compare2:
+	in  _sreg, SREG
+	push zl
+	push zh	
+	lds _w, 2*servoTable+11+nbServo		;w contient zl de OCR2
+	mov zl, _w
+	ldi zh, high(2*servoTable)
+	ld _u, z		;u contient la valeur de OCR2				
+	out OCR2, _u
+	INC_CYC _w, low(2*servoTable), low(2*servoTable)+nbServo
+	sts 2*servoTable+11+nbServo, _w
+	lds _w, 2*servoTable+nbServo
+ecrit0:
+	;write 0 sur port servo
+	OUTI PORTB, 0b11000000
+	;end of test
+	cpi _w, servoROffset+nbServo
+	brne PC+2
+	ori _w, 0b01000000
+	rjmp changeFlanc
+sortieInterupt:
+	sts 2*servoTable+10+nbServo, _w
+	pop zh
+	pop zl
+	out SREG, _sreg
+	reti
+ecrit1:
+	sbrc _w, 0			;skip if IWT=0 ~ WT=1
+	rjmp ecrit0
+	sbrc _w, 7			;skip si EOC=0
+	ldi _w, servoROffset
+	;write 1 sur port servo
+	
+	;OUTI PORTC, 0xff
+	OUTI PORTB, 0xff
+	;end of test
+changeFlanc:
+	subi _w, -1
+	;update OCR2
+	;end of test
+	rjmp sortieInterupt
+
 
 
 
