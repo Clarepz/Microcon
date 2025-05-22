@@ -1,0 +1,31 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.2.6</VERSION>
+ <DEVICE>"ATmega128"</DEVICE>
+ <WORKING_DIR>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m128def.inc</FILE>
+  <FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm</FILE>
+  <FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\definitions.asm</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\Debug\Microcon.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>Microcon.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>Microcon.map</FILE>
+  <FILE>Microcon.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <reset><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm</FILE><LINE>30</LINE></reset>
+  <ADCCaddr_sra><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm</FILE><LINE>16</LINE></ADCCaddr_sra>
+  <main><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm</FILE><LINE>42</LINE></main>
+ </LABELS>
+</ASSEMBLER_INFO>

@@ -14,13 +14,20 @@
 .include "irDistanceMacro.asm"
 
 reset:
+	OUTI	DDRC,0xff		; configure portC to output
+	rjmp RESET
     LDSP	RAMEND			; set up stack pointer (SP)
-    OUTI	DDRB,0xff		; configure portC to output
+    
     sei
     IRSET
     rjmp main
 
 main:
+	;OUTI PORTC, 0x00
+	;WAIT_MS 1000
+	;OUTI PORTC, 0XFF
+	;WAIT_MS 1000
+	;rjmp main
     DISTANCEREAD
     LSR2 a1,a0
     LSR2 a1,a0

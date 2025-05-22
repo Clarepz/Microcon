@@ -24,7 +24,7 @@ servoTable: .byte 12+nbServo		;lookup table of servo management
 
 
 ;change the values of a servo in the lookUp table
-.macro SERVOW		; nbr of the servo (starting at 0), value
+.macro SERVOWI		; nbr of the servo (starting at 0), value
 	ldi zh, high(2*servoTable)
 	ldi zl, @0
 	lsl zl
@@ -36,19 +36,34 @@ servoTable: .byte 12+nbServo		;lookup table of servo management
 	st z, w
 .endmacro
 
+;change the values of a servo in the lookUp table
+.macro SERVOW		; nbr of the servo (starting at 0), value
+	ldi zh, high(2*servoTable)
+	ldi zl, @0
+	lsl zl
+	adiw z, low(2*servoTable)
+	mov w, @1
+	st z+, w
+	neg w
+	subi w, 1
+	st z, w
+.endmacro
+
 
 reset:
 	LDSP RAMEND
 	call servoSetup
 
-	OUTI TIMSK, (1<<TOIE2)
+	OUTI TIMSK, (1<<OCIE2)
 	OUTI TCCR2, (1<<CTC2)+3
 	OUTI OCR2, 120
-	SERVOW 0, 220
+	SERVOWI 0, 200
 
 	OUTI DDRB, 0xff
 	OUTI DDRC, 0xff
 	OUTI DDRD, 0x00
+
+	sei
 
 
 	
@@ -56,8 +71,6 @@ reset:
 
 
 main:
-	OUTI PORTC, 0x00
-	WAIT_MS 500
 	rjmp main
 
 

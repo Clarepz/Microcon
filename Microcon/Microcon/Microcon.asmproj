@@ -11,11 +11,11 @@
     <OutputFileExtension>.obj</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
     <Language>ASSEMBLY</Language>
-    <AssemblyName>Project</AssemblyName>
-    <Name>Project</Name>
-    <RootNamespace>Project</RootNamespace>
+    <AssemblyName>Microcon</AssemblyName>
+    <Name>Microcon</Name>
+    <RootNamespace>Microcon</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
-    <EntryFile>$(MSBuildProjectDirectory)\main.asm</EntryFile>
+    <EntryFile>$(MSBuildProjectDirectory)\irDistance.asm</EntryFile>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <CacheFlash>true</CacheFlash>
@@ -38,19 +38,6 @@
         </dependencies>
       </framework-data>
     </AsfFrameworkConfig>
-    <avrtool>com.atmel.avrdbg.tool.simulator</avrtool>
-    <avrtoolserialnumber />
-    <avrdeviceexpectedsignature>0x1E9702</avrdeviceexpectedsignature>
-    <com_atmel_avrdbg_tool_simulator>
-      <ToolOptions xmlns="">
-        <InterfaceProperties>
-        </InterfaceProperties>
-      </ToolOptions>
-      <ToolType xmlns="">com.atmel.avrdbg.tool.simulator</ToolType>
-      <ToolNumber xmlns="">
-      </ToolNumber>
-      <ToolName xmlns="">Simulator</ToolName>
-    </com_atmel_avrdbg_tool_simulator>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
@@ -78,6 +65,9 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BLINK.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="definitions.asm">
       <SubType>Code</SubType>
     </Compile>
@@ -102,13 +92,13 @@
     <Compile Include="servo1.asm">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="servoDeYannLeBoss.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ServoGPT.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="smiley.asm">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="servoDeYannLeBoss.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ws2812b_4MHz_demo01_S.asm">

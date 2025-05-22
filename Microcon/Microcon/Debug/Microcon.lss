@@ -1,14 +1,12 @@
 
-AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Project\main.asm Wed May 21 15:23:38 2025
+AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm Thu May 22 09:49:33 2025
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m128def.inc'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Project\main.asm(4): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Project\macros.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Project\main.asm(5): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Project\definitions.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Project\main.asm(14): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Project\irDistanceMacro.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm(4): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm(5): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\definitions.asm'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m128def.inc'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Project\main.asm(4): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Project\macros.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Project\main.asm(5): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Project\definitions.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Project\main.asm(14): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Project\irDistanceMacro.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm(4): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm(5): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\definitions.asm'
                                  
                                  ; file target ATmega128L-4MHz-STK300
                                  
@@ -1229,7 +1227,7 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Project\main.a
                                  
                                  ; ***** END OF FILE ******************************************************
                                  
-                                 ; semaphores: r25
+                                 ; purpose button triggered ADC with semaphore
                                  
                                  .include "macros.asm"		; include macro definitions
                                  
@@ -3084,64 +3082,67 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Project\main.a
 000000 940c 0034                 	jmp	reset
                                  .org 	ADCCaddr
 00002a 940c 0030                 	jmp	ADCCaddr_sra
+                                 	
                                  .org	0x30
-                                 
-                                 .include "irDistanceMacro.asm"
-                                 
-                                 
+                                 	
                                  ; === interrupt service routines
                                  ADCCaddr_sra:
+                                 		
 000030 b124                      	in	a0,ADCL				; read low byte first
 000031 b135                      	in	a1,ADCH				; store 2 MSB
-000032 6091                      	sbr r25, 0b00000001 	; set semaphore
-000033 9518                      	reti
+                                 	;cpi a1,0b00000010		; compare value
+000032 bb35                      	out PORTC, a1
+                                 	;brlo PC + 3			
+                                 	;ldi	r23,0x00			; clear boolean
+                                 	;reti			
+                                 	;ldi r23,0xff			; set the boolean
+000033 9518                      	reti					; ADIF cleared here
+                                 	;sbi	ADCSR,ADSC			; AD start conversion
                                  	
                                  ; === initialization (reset) ====
-                                 .macro IRSET
-                                 	OUTI	ADCSR,(1<<ADEN)+(1<<ADIE)+6 ; AD Enable, AD int. enable, PS=CK/64	
-                                 	OUTI	ADMUX,3			; select channel irdistance
-                                 	ret
-                                 .endmacro
-                                 
-                                 .macro DISTANCEREAD
-                                 	sbi	ADCSR,ADSC			; start conversion
-                                 	sbrs r25, 0				; wait for semaphor set
-                                 	rjmp PC-1
-                                 .endmacro
-                                 
-                                 
-                                 
                                  reset:
 000034 ef0f
 000035 bf0d
 000036 e100
-000037 bf0e                          LDSP	RAMEND			; set up stack pointer (SP)
+000037 bf0e                      	LDSP	RAMEND			; set up stack pointer (SP)
 000038 ef0f
-000039 bb07                          OUTI	DDRB,0xff		; configure portC to output
-00003a 9478                          sei
-00003b e80e
-00003c b906
-00003d e003
-00003e b907
-00003f 9508                          IRSET
-000040 c000                          rjmp main
+000039 bb07                      	OUTI	DDRB,0xff		; configure portC to output
+00003a ef0f
+00003b bb04                      	OUTI	DDRC,0xff
+00003c 9478                      	sei
+00003d e80e
+00003e b906                      	OUTI	ADCSR,(1<<ADEN)+(1<<ADIE)+6 ; AD Enable, AD int. enable, PS=CK/64	
+00003f e003
+000040 b907                      	OUTI	ADMUX,3			; select channel irdistance
+000041 9a36                      	sbi	ADCSR,ADSC			; start conversion
+000042 c000                      	rjmp	main			; jump ahead to the main program
+                                 	
                                  
+                                 ; === main program ===
                                  main:
-000041 9a36
-000042 ff90
-000043 cffe                          DISTANCEREAD
-000044 9556
-000045 9547
-000046 9537
-000047 9527                          LSR4 a3,a2,a1,a0
-000048 9556
-000049 9547
-00004a 9537
-00004b 9527                          LSR4 a3,a2,a1,a0
-00004c 9520                          com a0
-00004d bb25                          out PORTC, a0           ; show on led
-00004e cff2                          rjmp main
-                                     
+                                 	
+000043 9a36                      	sbi	ADCSR,ADSC			; AD start conversion
+000044 e604
+000045 2e30
+000046 e001
+000047 930f
+000048 923f
+000049 e300
+00004a 2e30
+00004b e006
+00004c 943a
+00004d f7f1
+00004e 943a
+00004f 950a
+000050 f7d9
+000051 903f
+000052 910f
+000053 943a
+000054 f791
+000055 950a
+000056 f781                      	WAIT_MS 100				;
+                                 	;out r23, PORTC			;
+000057 cfeb                      	rjmp	main			; jump back to main
 
 
 RESOURCE USE INFORMATION
@@ -3159,40 +3160,40 @@ counted separately from r26..r31 here.
 .dseg memory usage only counts static data declared with .byte
 
 "ATmega128" register use summary:
-x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
+x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   7 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  10 r17:   0 r18:   5 r19:   3 r20:   2 
-r21:   2 r22:   0 r23:   0 r24:   0 r25:   2 r26:   0 r27:   0 r28:   0 
+r13:   0 r14:   0 r15:   0 r16:  22 r17:   0 r18:   1 r19:   2 r20:   0 
+r21:   0 r22:   0 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
 r29:   0 r30:   0 r31:   0 
-Registers used: 6 out of 35 (17.1%)
+Registers used: 4 out of 35 (11.4%)
 
 "ATmega128" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
 brcc  :   0 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
-brne  :   0 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brne  :   4 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
 brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   0 cbr   :   0 
 clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0 
-clt   :   0 clv   :   0 clz   :   0 com   :   1 cp    :   0 cpc   :   0 
-cpi   :   0 cpse  :   0 dec   :   0 elpm  :   0 eor   :   0 fmul  :   0 
+clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
+cpi   :   0 cpse  :   0 dec   :   5 elpm  :   0 eor   :   0 fmul  :   0 
 fmuls :   0 fmulsu:   0 icall :   0 ijmp  :   0 in    :   2 inc   :   0 
-jmp   :   2 ld    :   0 ldd   :   0 ldi   :   5 lds   :   0 lpm   :   0 
-lsl   :   0 lsr   :   2 mov   :   0 movw  :   0 mul   :   0 muls  :   0 
-mulsu :   0 neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   6 
-pop   :   0 push  :   0 rcall :   0 ret   :   1 reti  :   1 rjmp  :   3 
-rol   :   0 ror   :   6 sbc   :   0 sbci  :   0 sbi   :   1 sbic  :   0 
-sbis  :   0 sbiw  :   0 sbr   :   1 sbrc  :   0 sbrs  :   1 sec   :   0 
+jmp   :   2 ld    :   0 ldd   :   0 ldi   :  10 lds   :   0 lpm   :   0 
+lsl   :   0 lsr   :   0 mov   :   2 movw  :   0 mul   :   0 muls  :   0 
+mulsu :   0 neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   7 
+pop   :   2 push  :   2 rcall :   0 ret   :   0 reti  :   1 rjmp  :   2 
+rol   :   0 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   2 sbic  :   0 
+sbis  :   0 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 
 seh   :   0 sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 
 sev   :   0 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 
 sts   :   0 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
 
-Instructions used: 14 out of 114 (12.3%)
+Instructions used: 13 out of 114 (11.4%)
 
 "ATmega128" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x00009e     70      0     70  131072   0.1%
+[.cseg] 0x000000 0x0000b0     88      0     88  131072   0.1%
 [.dseg] 0x000100 0x000100      0      0      0    4096   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    4096   0.0%
 

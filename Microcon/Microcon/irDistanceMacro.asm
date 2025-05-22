@@ -15,7 +15,7 @@ ADCCaddr_sra:
 .endmacro
 
 .macro DISTANCEREAD
-	cbr r25, 0x00			; clear semaphore
+	cbr r25, 0x01			; clear semaphore
 	sbi	ADCSR,ADSC			; start conversion
 	sbrs r25, 0				; wait for semaphor set
 	rjmp PC-1

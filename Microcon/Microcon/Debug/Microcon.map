@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Project\main.asm Wed May 21 15:23:38 2025
+AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm Thu May 22 09:49:33 2025
 
 
 EQU  SIGNATURE_000 0000001e
@@ -940,4 +940,5 @@ EQU  BNC1         00000002
 EQU  BNC2         00000004
 CSEG reset        00000034
 CSEG ADCCaddr_sra 00000030
-CSEG main         00000041
+CSEG main         00000043
+CSEG WAIT_MS@WAIT_MS@3224 00000047
