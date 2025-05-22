@@ -10,7 +10,7 @@
 .include "definitions.asm"	; include register/constant definitions
 ;====== fin de zone
 
-smileyHappyTable: .db 0x242400423C0000
+
 
 
 
@@ -35,35 +35,73 @@ smileyHappyTable: .db 0x242400423C0000
 	cbi PORTD, 1
 	;nop	;deactivated on purpose of respecting timings
 	;nop
-
 .endm
 
 .org 0
 	jmp	reset
 
+;.dseg
+;.db 0b00000000,0b00100100,0b00100100,0b00000000,0b01000010,0b00111100,0b00000000,0b00000000
+.org 0x30
 
 reset:
 	LDSP	RAMEND			; Load Stack Pointer (SP)
 	rcall	ws2812b4_init	; initialize 
+	rcall printSmileyHappy
+	rjmp main
 
 main:
-	coucou
+	rjmp main
+
+
+
+remplissage:
+ldi	b0,17
+ldi zl,low(0x0400)
+	ldi zh,high(0x0400)
+imgld_loop:
+	ldi	a0, 0x0f	; pixel 1, light green
+	st	z+,a0
+	ldi a0,0x0f
+	st	z+,a0
+	ldi	a0, 0x00
+	st z+,a0
+
+	ldi	a0, 0x00	; pixel 2, light red
+	st	z+,a0
+	ldi a0,0x0f
+	st	z+,a0
+	ldi	a0, 0x00
+	st z+,a0
+
+	ldi	a0, 0x00	; pixel 3, light blue
+	st	z+,a0
+	ldi a0,0x00
+	st	z+,a0
+	ldi	a0, 0x0f
+	st z+,a0
+
+	ldi	a0, 0x00	; pixel 4, off
+	st	z+,a0
+	ldi a0,0x00
+	st	z+,a0
+	ldi	a0, 0x00
+	st z+,a0
+
+	dec b0
+	brne imgld_loop
+	ret
 
 
 
 
 
 
-
-
-
-
-
-
-printSmiley:
-	ldi zl,low(smileyHappyTable)
-	ldi zh,high(smileyHappyTable)
-	_LDI	,64
+printSmileyHappy:
+	rcall remplissage
+	ldi zl,low(0x0400)
+	ldi zh,high(0x0400)
+	ldi w,64
 loop:
 
 	ld a0, z+
@@ -77,9 +115,10 @@ loop:
 	rcall ws2812b4_byte3wr
 	sei
 
-	dec r0
+	dec w
 	brne loop
 	rcall ws2812b4_reset
+	ret
 
 
 

@@ -3,8 +3,7 @@
 .include "macros.asm"		; include macro definitions
 .include "definitions.asm"	; include register/constant definitions
 .def servochanel = r13
-.def servocounter = r19
-
+.def servocounter = r18
 ; === interrupt vector table ===
 .org	0
 	jmp	reset
@@ -14,8 +13,11 @@
 	jmp overflow
 .org	0x30
 
+.include "printf.asm"
+.include "UART.asm"
+
 ; === interrupt service routines ====
-.set	timer0 = 190
+.set	timer0 = 200
 
 
 output_compare0:
@@ -24,19 +26,22 @@ output_compare0:
 	OUTI 	PORTB, 0x00
 
 	lsl 	servochanel
+
+	;PRINTF	UART0_putc		; print formatted	
+	;.db	CR,CR,"CACA=",FHEX2,b,"=",FDEC2,b,"    ",0	
+
 	inc		servocounter
 
 	cpi 	servocounter, 10
-	brlo	PC+3
+	brlo	cacaNicole
 	clr		servocounter
 	_LDI		servochanel,	0b00000001
 
 
-	cpi 	servocounter, 8
-	brlo	PC+3
-	clr 	servochanel 
-
-
+	;cpi 	servocounter, 8
+	;brlo	PC+2
+	;clr 	servochanel 
+cacaNicole:
 	out		SREG, _sreg
 	reti
 
@@ -60,6 +65,7 @@ reset:
 	_LDI 	servochanel, 0b00000001
 	clr 	servocounter
 
+	rcall	UART0_init		; initialize UART
 	sei							; set global interrupt
 ; === main program ===
 main:
