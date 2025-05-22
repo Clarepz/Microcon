@@ -44,6 +44,7 @@ main:
     MOV2 a1,a0,b1,b0
     LSR2 a1,a0              ; print on leds
     LSR2 a1,a0
+	OUTI	DDRC,0xff		; configure portC to output
     out PORTC, a0
 
     cpi a0, DISTANCETRESH   ; check distance

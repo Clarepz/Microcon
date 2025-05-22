@@ -52,14 +52,16 @@ reset:
 	call servoSetup
 
 	OUTI TIMSK, (1<<OCIE2)+(1<<TOIE2)
-	OUTI TCCR2, (1<<CTC2)+3
+	OUTI TCCR2, (0<<CTC2)+3
 	OUTI OCR2, 120
-	SERVOWI 0, 200
+	SERVOWI 0, 240
+	SERVOWI 1, 30
 
 	OUTI DDRB, 0xff
 	OUTI DDRC, 0xff
 	OUTI DDRD, 0x00
 	OUTI PORTB, 0xff
+	OUTI DDRA, 0xff
 
 	sei
 
@@ -90,20 +92,23 @@ overflow2:
 	push zh
 	push a0	
 	lds _w, 2*servoTable+NBSERVO
+	sbrs _w, 6
+	;write1 zone
+	subi _w, SBOFFSET
+	sbrc _w, 0
+	OUTI PORTB, 0xff
+	sbrc _w, 1
+	OUTI PORTA, 0xff
+	;end of test
+	lds _w, 2*servoTable+NBSERVO
+	subi _w, -1	;SB+1
 	sbrs _w, 7			;skip si EOC=1
 	rjmp suite
 	ldi _w, SBOFFSET
 	in a0,TIMSK		;on peut pas utiliser _u car <r16
 	ori a0, 0b01000000
 	out TIMSK, a0
-	;write 1 sur port servo
-	
-	;OUTI PORTC, 0xff
 suite:
-	sbrs _w, 6
-	OUTI PORTB, 0xff
-	;end of test
-	subi _w, -1	;SB+1
 	sts 2*servoTable+NBSERVO, _w	;sortie
 	pop a0
 	pop zh
@@ -127,6 +132,7 @@ output_compare2:
 	lds _w, 2*servoTable+NBSERVO ;w contient state byte
 	;en cours
 	OUTI PORTB, 0x00
+	OUTI PORTA, 0x00
 	;en cours
 	ldi w, SBOFFSET+NBSERVO-1
 	cpi _w, SBOFFSET+NBSERVO-1

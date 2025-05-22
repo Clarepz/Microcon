@@ -1,24 +1,14 @@
 
-AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm Thu May 22 14:12:47 2025
+AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm Thu May 22 15:34:16 2025
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m128def.inc'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(17): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(18): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\definitions.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(20): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistanceMacro.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(21): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\printf.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(22): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\uart.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(23): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\lcd.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(24): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\speedControl.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm(22): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm(23): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\definitions.asm'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m128def.inc'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(17): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(18): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\definitions.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(20): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistanceMacro.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(21): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\printf.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(22): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\uart.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(23): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\lcd.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(24): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\speedControl.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm(22): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm(23): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\definitions.asm'
                                  
-                                 ; file target ATmega128L-4MHz-STK300
+                                 /*
                                  
                                  ;***** Created: 2011-02-09 12:03 ******* Source: ATmega128.xml ***********
                                  ;*************************************************************************
@@ -1237,21 +1227,26 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2
                                  
                                  ; ***** END OF FILE ******************************************************
                                  
-                                 ; semaphores: r25
-                                 ;===Definition===
-                                 .equ DISTANCETRESH = 225
-                                 .equ ISPEED = 170
-                                 ; === interrupt table ===
-                                 .org	0
-000000 940c 01ad                 	jmp	reset
-                                 .org INT0addr
-000002 940c 01a6                     jmp ext_int0
-                                 .org INT1addr
-000004 940c 01a8                 	jmp	ext_int1
-                                 .org 	ADCCaddr
-00002a 940c 0030                 	jmp	ADCCaddr_sra
-                                 .org	0x30
-                                 ;=== includes ===
+                                  * smiley.asm
+                                  *
+                                  *  Created: 02.05.2025 23:12:36
+                                  *   Author: royer
+                                  */ 
+                                  ; file	ws2812b_4MHz_demo01_S.asm   target ATmega128L-4MHz-STK300
+                                 ; purpose send data to ws2812b using 4 MHz MCU and standard I/O port
+                                 ;         display and paralllel process (blinking LED0)
+                                 ; usage: buttons on PORTC, ws2812 on PORTD (bit 1)
+                                 ;        press button 0
+                                 ;       a pattern is stored into memory and displayed on the array
+                                 ;       LED0 blinks fast; when button0 is pressed and released, LED1
+                                 ;       akcnowledges and the pattern displayed on the array moves by
+                                 ;       one memory location
+                                 ; warnings: 1/2 timings of pulses in the macros are sensitive
+                                 ;			2/2 intensity of LEDs is high, thus keep intensities
+                                 ;				within the range 0x00-0x0f, and do not look into
+                                 ;				LEDs
+                                 ; 20220315 AxS
+                                 
                                  .include "macros.asm"		; include macro definitions
                                  
                                  ; purpose library, general-purpose macros
@@ -3100,856 +3095,306 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2
                                  ; === definitions  ===
                                  .list
                                  
-                                 .include "irDistanceMacro.asm"
-                                 
-                                 
-                                 ; === interrupt service routines
-                                 ADCCaddr_sra:
-000030 b164                      	in	b0,ADCL				; read low byte first
-000031 b175                      	in	b1,ADCH				; store 2 MSB
-                                 	;sbr r25, 0b00000001 	; set semaphore
-000032 9518                      	reti
-                                 	
-                                 ; === initialization (reset) ====
-                                 .macro IRSET
-                                 	OUTI	ADCSR,(1<<ADEN)+(1<<ADIE)+6 ; AD Enable, AD int. enable, PS=CK/64	
-                                 	OUTI	ADMUX,3			; select channel irdistance
-                                 .endmacro
-                                 
-                                 .macro DISTANCEREAD
-                                 	;cbr r25, 0x01			; clear semaphore
-                                 	sbi	ADCSR,ADSC			; start conversion
-                                 	;sbrs r25, 0				; wait for semapho
-                                 .endmacro
-                                 
-                                 
-                                 .include "printf.asm"
-                                 
-                                 ; purpose library, formatted output generation
-                                 ; author (c) R.Holzer (adapted MICRO210/EE208 A.Schmid)
-                                 ; v2019.02 20180821 AxS supports SRAM input from 0x0260
-                                 ;					through 0x02ff that should be reserved
-                                 
-                                 ; === description ===
-                                 ; 
-                                 ; The program "printf" interprets and prints formatted strings.
-                                 ; The special formatting characters regognized are:
-                                 ;
-                                 ; FDEC	decimal number
-                                 ; FHEX	hexadecimal number
-                                 ; FBIN	binary number
-                                 ; FFRAC	fixed fraction number
-                                 ; FCHAR	single ASCII character
-                                 ; FSTR	zero-terminated ASCII string
-                                 ;	
-                                 ; The special formatting characters are distinguished from normal 
-                                 ; ASCII characters by having their bit7 set to 1.
-                                 ;
-                                 ; Signification of bit fields:
-                                 ;
-                                 ; b 	bytes		1..4 b bytes		2
-                                 ; s 	sign		0(unsigned), 1(signed)	1
-                                 ; i		integer digits	
-                                 ; e 	base		2,,36			5
-                                 ; dp 	dec. point	0..32			5
-                                 ; $if	i=integer digits,  0=all digits,  1..15 digits 
-                                 ;		f=fraction digits, 0=no fraction, 1..15 digits
-                                 ;
-                                 ; Formatting characters must be followed by an SRAM address (0..ff)
-                                 ; that determines the origin of variables that must be printed (if any)
-                                 ; FBIN,	sram
-                                 ; FHEX,	sram
-                                 ; FDEC,	sram
-                                 ; FCHAR,sram
-                                 ; FSTR,	sram
-                                 ;
-                                 ; The address 'sram' is a 1-byte constant. It addresses
-                                 ; 	 0..1f	registers r0..r31, 
-                                 ; 	20..3f	i/o ports, (need to be addressed with an offset of $20)
-                                 ;	0x0260..0x02ff	SRAM
-                                 ; Variables can be located into register and I/0s, and can also
-                                 ; be stored into data SRAM at locations 0x0200 through 0x02ff. Any
-                                 ; sram address higher than 0x0060 is assumed to be at (0x0260+address)
-                                 ; from automatic address detection in _printf_formatted: and subsequent
-                                 ; assignment to xh; xl keeps its value. Consequently, variables that are
-                                 ; to be stored into SRAM and further printed by fprint must reside at
-                                 ; 0x0200 up to 0x02ff, and must be addressed using a label. Usage: see
-                                 ; file string1.asm, for example.
-                                 
-                                 ; The FFRAC formatting character must be followed by 
-                                 ;	ONE sram address and 
-                                 ;	TWO more formatting characters
-                                 ; FFRAC,sram,dp,$if
-                                 
-                                 ; dp	decimal point position, 0=right, 32=left
-                                 ; $if	format i.f, i=integer digits, f=fraction digits
-                                 
-                                 ; The special formatting characters use the following coding
-                                 ;
-                                 ; FDEC	11bb'iiis	i=0 all digits, i=1-7 digits
-                                 ; FBIN	101i'iiis	i=0 8 digits,	i=1-7 digits
-                                 ; FHEX	1001'iiis	i=0 8 digits,	i=1-7 digits
-                                 ; FFRAC	1000'1bbs
-                                 ; FCHAR	1000'0100
-                                 ; FSTR	1000'0101
-                                 ; FREP	1000'0110
-                                 ; FFUNC	1000'0111
-                                 ;	1000'0010
-                                 ;	1000'0011
-                                 ; FESC	1000'0000
-                                 
-                                 ; examples
-                                 ; formatting string			printing
-                                 ; "a=",FDEC,a,0				1-byte variable a, unsigned decimal
-                                 ; "a=",FDEC2,a,0			2-byte variable a (a1,a0), unsigend
-                                 ; "a=",FDEC|FSIGN,a,0		1-byte variable 1, signed decimal
-                                 ; "n=",FBIN,PIND+$20,0		i/o port, binary, notice offset of $20
-                                 ; "f=",FFRAC4|FSIGN,a,16,$88,0	4-byte signed fixed-point fraction
-                                 ;				dec.point at 16, 8 int.digits, 8 frac.digits	
-                                 ; "f=",FFRAC2,a,16,$18,0		2-byte unsigned fixed-point fraction
-                                 ;				dec.point at 16, 1 int.digits, 8 frac.digits	
-                                 ; "a=",FDEC|FDIG5|FSIGN,a,0	1-byte variable, 5-digit, decimal, signed
-                                 ; "a=",FDEC|FDIG5,a,0		1-byte variable, 5-digit, decimal, unsigned
-                                 
-                                 ; === registers modified ===
-                                 ; e0,e1	used to transmit address of putc routine
-                                 ; zh,zl	used as pointer to prog-memory
-                                 
-                                 ; === constants ==============================================
-                                 
-                                 .equ	FDEC	= 0b11000000	; 1-byte variable
-                                 .equ	FDEC2	= 0b11010000	; 2-byte variable
-                                 .equ	FDEC3	= 0b11100000	; 3-byte variable
-                                 .equ	FDEC4	= 0b11110000	; 4-byte variable
-                                 
-                                 .equ	FBIN	= 0b10100000
-                                 .equ	FHEX	= 0b10010100	; 1-byte variable
-                                 .equ	FHEX2	= 0b10011000	; 2-byte variable
-                                 .equ	FHEX3	= 0b10011100	; 3-byte variable
-                                 .equ	FHEX4	= 0b10010000	; 4-byte variable
-                                 
-                                 .equ	FFRAC	= 0b10001000	; 1-byte variable
-                                 .equ	FFRAC2	= 0b10001010	; 2-byte variable
-                                 .equ	FFRAC3	= 0b10001100	; 3-byte variable
-                                 .equ	FFRAC4	= 0b10001110	; 4-byte variable
-                                 
-                                 .equ	FCHAR	= 0b10000100
-                                 .equ	FSTR	= 0b10000101
-                                 
-                                 .equ	FSIGN	= 0b00000001
-                                 
-                                 .equ	FDIG1	= 1<<1
-                                 .equ	FDIG2	= 2<<1
-                                 .equ	FDIG3	= 3<<1	
-                                 .equ	FDIG4	= 4<<1
-                                 .equ	FDIG5	= 5<<1
-                                 .equ	FDIG6	= 6<<1
-                                 .equ	FDIG7	= 7<<1
-                                 
-                                 ; ===macro ====================================================
-                                 
-                                 .macro	PRINTF			; putc function (UART, LCD...)
-                                 	ldi	w, low(@0)		; address of "putc" in e1:d0
-                                 	mov	e0,w
-                                 	ldi	w,high(@0)
-                                 	mov	e1,w
-                                 	rcall	_printf
-                                 	.endmacro
-                                 
-                                 ; mod	y,z
-                                 
-                                 
-                                 ; === routines ================================================
-                                 
-                                 _printf:
-000033 91ff
-000034 91ef                      	POPZ			; z points to begin of "string"
-000035 0fee
-000036 1fff                      	MUL2Z			; multiply Z by two, (word ptr -> byte ptr)
-000037 93af
-000038 93bf                      	PUSHX
-                                 		
-                                 _printf_read:
-000039 95c8                      	lpm				; places prog_mem(Z) into r0 (=c)
-00003a 9631                      	adiw	zl,1	; increment pointer Z
-00003b 2000                      	tst	r0			; test for ZERO (=end of string)
-00003c f021                      	breq	_printf_end	; char=0 indicates end of ascii string
-00003d f04a                      	brmi	_printf_formatted ; bit7=1 indicates formatting character
-00003e 2d00                      	mov	w,r0
-00003f d017                      	rcall	_putw	; display the character
-000040 cff8                      	rjmp	_printf_read	; read next character in the string
-                                 	
-                                 _printf_end:
-000041 9631                      	adiw	zl,1	; point to the next character
-000042 95f6
-000043 95e7                      	DIV2Z			; divide by 2 (byte ptr -> word ptr)
-000044 91bf
-000045 91af                      	POPX
-000046 9409                      	ijmp			; return to instruction after "string"
-                                 
-                                 _printf_formatted:
-                                 
-                                 ; FDEC	11bb'iiis
-                                 ; FBIN	101i'iiis
-                                 ; FHEX	1001'iiis
-                                 ; FFRAC	1000'1bbs
-                                 ; FCHAR	1000'0100
-                                 ; FSTR	1000'0101
-                                 
-000047 fa00                      	bst	r0,0		; store sign in T
-000048 2d00                      	mov	w,r0		; store formatting character in w
-000049 95c8                      	lpm	
-00004a 2da0                      	mov	xl,r0		; load x-pointer with SRAM address
-00004b 36a0                      	cpi	xl,0x60
-00004c f010                      	brlo rio_space
-                                 dataram_space:		; variable originates from SRAM memory
-00004d e0b2                      	ldi	xh,0x02		;>addresses are limited to 0x0260 through 0x02ff
-00004e c001                      	rjmp space_detect_end	;>that enables automatic detection of the origin
-                                 rio_space:			; variable originates from reg or I/O space 
-00004f 27bb                      	clr	xh			; clear high-byte, addresses are 0x0000 through 0x003f (0x005f)
-                                 space_detect_end:
-000050 9631                       	adiw	zl,1	; increment pointer Z
-                                 
-                                 ;	JB1	w,6,_putdec
-                                 ;	JB1	w,5,_putbin
-                                 ;	JB1	w,4,_puthex
-                                 ;	JB1	w,3,_putfrac
-000051 3804
-000052 f079                      	JK	w,FCHAR,_putchar
-000053 3805
-000054 f081                      	JK	w,FSTR ,_putstr
-000055 c015                      	rjmp	_putnum
-                                 	
-000056 cfe2                      	rjmp	_printf_read	
-                                 
-                                 ; === putc (put character) ===============================
-                                 ; in	w	character to put
-                                 ;	e1,e0	address of output routine (UART, LCD putc)
-                                 _putw:
-000057 932f
-000058 93ff
-000059 93ef                      	PUSH3	a0,zh,zl
-00005a 2de4
-00005b 2df5
-00005c 2f20                      	MOV3	a0,zh,zl, w,e1,e0
-00005d 9509                      	icall			; indirect call to "putc"
-00005e 91ef
-00005f 91ff
-000060 912f                      	POP3	a0,zh,zl
-000061 9508                      	ret
-                                 
-                                 ; === putchar (put character) ============================
-                                 ; in	x	pointer to character to put
-                                 _putchar:
-000062 910c                      	ld	w,x
-000063 dff3                      	rcall	_putw
-000064 cfd4                      	rjmp	_printf_read
-                                 	
-                                 ; === putstr (put string) ================================
-                                 ; in	x	pointer to ascii string
-                                 ;	b3,b2	address of output routine (UART, LCD putc)
-                                 _putstr:
-000065 910d                      	ld	w,x+
-000066 2300                      	tst	w
-000067 f409                      	brne	PC+2
-000068 cfd0                      	rjmp	_printf_read
-000069 dfed                      	rcall	_putw
-00006a cffa                      	rjmp	_putstr
-                                 
-                                 ; === putnum (dec/bin/hex/frac) ===========================
-                                 ; in	x	pointer to SRAM variable to print
-                                 ; 	r0	formatting character
-                                 	
-                                 _putnum:
-00006b 935f
-00006c 934f
-00006d 933f
-00006e 932f                      	PUSH4	a3,a2,a1,a0	; safeguard a
-00006f 939f
-000070 938f
-000071 937f
-000072 936f                      	PUSH4	b3,b2,b1,b0	; safeguard b	
-000073 912d
-000074 913d
-000075 914d
-000076 915d                      	LDX4	a3,a2,a1,a0	; load operand to print into a
-                                 
-                                 ; FDEC	11bb'iiis
-                                 ; FBIN	101i'iiis
-                                 ; FHEX	1001'iiis
-                                 ; FRACT	1000'1bbs
-                                 
-000077 fd06
-000078 c006                      	JB1	w,6,_putdec
-000079 fd05
-00007a c00f                      	JB1	w,5,_putbin
-00007b fd04
-00007c c010                      	JB1	w,4,_puthex
-00007d fd03
-00007e c019                      	JB1	w,3,_putfrac
-                                 
-                                 ; FDEC	11bb'iiis
-                                 _putdec:
-00007f e06a                      	ldi	b0,10		; b0 = base (10)
-                                 
-000080 2f70                      	mov	b1,w
-000081 9576                      	lsr	b1
-000082 7077                      	andi	b1,0b111	
-000083 9572                      	swap	b1		; b1 = format 0iii'0000 (integer digits)
-000084 e080                      	ldi	b2,0		; b2 = dec. point position = 0 (right)
-                                 	
-000085 2f90                      	mov	b3,w
-000086 9592                      	swap	b3
-000087 7093                      	andi	b3,0b11
-000088 9593                      	inc	b3			; b3 = number of bytes (1..4)
-000089 c01a                      	rjmp	_getnum	; get number of digits (iii)
-                                 
-                                 ; FBIN	101i'iiis	addr
-                                 _putbin:	
-00008a e062                      	ldi	b0,2		; b0 = base (2)
-00008b e094                      	ldi	b3,4		; b3 = number of bytes (4)	
-00008c c003                      	rjmp	_getdig	; get number of digits (iii)
-                                 
-                                 ; FHEX	1001'iiis	addr
-                                 _puthex:	
-00008d e160                      	ldi	b0,16		; b0 = base (16)
-00008e e094                      	ldi	b3,4		; b3 = number of bytes (4)
-00008f c000                      	rjmp	_getdig
-                                 
-                                 _getdig:
-000090 2f70                      	mov	b1,w
-000091 9576                      	lsr	b1
-000092 7077                      	andi	b1,0b111
-000093 f409                      	brne	PC+2
-000094 e078                      	ldi	b1,8		; if b1=0 then 8-digits
-000095 9572                      	swap	b1		; b1 = format 0iii'0000 (integer digits)
-000096 e080                      	ldi	b2, 0		; b2 = dec. point position = 0 (right)
-000097 c00c                      	rjmp	_getnum
-                                 
-                                 ; FFRAC	1000'1bbs	addr	 00dd'dddd, 	iiii'ffff
-                                 	
-                                 _putfrac:
-000098 e06a                      	ldi	b0,10		; base=10	
-000099 95c8                      	lpm
-00009a 2d80                      	mov	b2,r0		; load dec.point position
-00009b 9631                      	adiw	zl,1	; increment char pointer
-00009c 95c8                      	lpm
-00009d 2d70                      	mov	b1,r0		; load ii.ff format
-00009e 9631                      	adiw	zl,1	; increment char pointer
-                                 	
-00009f 2f90                      	mov	b3,w
-0000a0 9595                      	asr	b3
-0000a1 7093                      	andi	b3,0b11
-0000a2 9593                      	inc	b3			; b3 = number of bytes (1..4)
-                                 
-0000a3 c000                      	rjmp	_getnum
-                                 
-                                 _getnum:
-                                 ; in 	a	4-byte variable
-                                 ; 	b3	number of bytes (1..4)
-                                 ;	T	sign, 0=unsigned, 1=signed
-                                 
-0000a4 3094
-0000a5 f081                      	JK	b3,4,_printf_4b
-0000a6 3093
-0000a7 f051                      	JK	b3,3,_printf_3b
-0000a8 3092
-0000a9 f021                      	JK	b3,2,_printf_2b	
-                                 	
-                                 _printf_1b:			; sign extension
-0000aa 2733                      	clr	a1
-0000ab f416                      	brtc	PC+3	; T=1 sign extension
-0000ac fd27                      	sbrc	a0,7
-0000ad ef3f                      	ldi	a1,0xff
-                                 _printf_2b:
-0000ae 2744                      	clr	a2
-0000af f416                      	brtc	PC+3	; T=1 sign extension	
-0000b0 fd37                      	sbrc	a1,7
-0000b1 ef4f                      	ldi	a2,0xff
-                                 _printf_3b:	
-0000b2 2755                      	clr	a3
-0000b3 f416                      	brtc	PC+3	; T=1 sign extension
-0000b4 fd47                      	sbrc	a2,7
-0000b5 ef5f                      	ldi	a3,0xff
-                                 _printf_4b:
-                                 
-0000b6 d009                      	rcall	_ftoa		; float to ascii
-0000b7 916f
-0000b8 917f
-0000b9 918f
-0000ba 919f                      	POP4	b3,b2,b1,b0	; restore b
-0000bb 912f
-0000bc 913f
-0000bd 914f
-0000be 915f                      	POP4	a3,a2,a1,a0	; restore a
-                                 	
-0000bf cf79                      	rjmp	_printf_read
-                                 
-                                 ; ===============================================
-                                 ; func	ftoa
-                                 ; converts a fixed-point fractional number to an ascii string
-                                 ; author (c) Raphael Holzer
-                                 ;
-                                 ; in	a3-a0	variable to print
-                                 ;	b0	base, 2 to 36, but usually decimal (10)
-                                 ;	b1	number of digits to print ii.ff
-                                 ; 	b2	position of the decimal point (0=right, 32=left)
-                                 ;	T	sign (T=0 unsiged, T=1 signed)
-                                 
-                                 _ftoa:
-0000c0 92cf                      	push	d0
-0000c1 92bf
-0000c2 92af
-0000c3 929f
-0000c4 928f                      	PUSH4	c3,c2,c1,c0	; c = fraction part, a = integer part
-0000c5 18bb
-0000c6 24aa
-0000c7 2499
-0000c8 2488                      	CLR4	c3,c2,c1,c0	; clear fraction part
-                                 
-0000c9 f486                      	brtc	_ftoa_plus	; if T=0 then unsigned
-0000ca 94e8                      	clt
-0000cb 2355                      	tst	a3				; if MSb(a)=1 then a=-a
-0000cc f46a                      	brpl	_ftoa_plus
-0000cd 9468                      	set					; T=1 (minus)
-0000ce 2377                      	tst	b1
-0000cf f009                      	breq	PC+2		; if b1=0 the print ALL digits
-0000d0 5170                      	subi	b1,0x10		; decrease int digits
-0000d1 9550
-0000d2 9540
-0000d3 9530
-0000d4 9520
-0000d5 ef0f
-0000d6 1b20
-0000d7 0b30
-0000d8 0b40
-0000d9 0b50                      	NEG4	a3,a2,a1,a0	; negate a
-                                 _ftoa_plus:	
-0000da 2388                      	tst	b2				; b0=0 (only integer part)
-0000db f051                      	breq	_ftoa_int	
-                                 _ftoa_shift:	
-0000dc 9555
-0000dd 9547
-0000de 9537
-0000df 9527                      	ASR4	a3,a2,a1,a0	; a = integer part	
-0000e0 94b7
-0000e1 94a7
-0000e2 9497
-0000e3 9487                      	ROR4	c3,c2,c1,c0	; c = fraction part
-0000e4 958a
-0000e5 f7b1                      	DJNZ	b2,_ftoa_shift
-                                 _ftoa_int:
-0000e6 937f                      	push	b1			; ii.ff (ii=int digits)
-0000e7 9572                      	swap	b1
-0000e8 707f                      	andi	b1,0x0f
-                                 	
-0000e9 e20e                      	ldi	w,'.'			; push decimal point
-0000ea 930f                      	push	w
-                                 _ftoa_int1:
-0000eb d045                      	rcall	_div41		; int=int/10
-0000ec 2d0c                      	mov	w,d0			; d=reminder
-0000ed d030                      	rcall	_hex2asc
-0000ee 930f                      	push	w			; push rem(int/10)
-0000ef 2700
-0000f0 1720
-0000f1 0730
-0000f2 0740
-0000f3 0750                      	TST4	a3,a2,a1,a0	; (int/10)=?
-0000f4 f029                      	breq	_ftoa_space	; (int/10)=0 then finished
-0000f5 2377                      	tst	b1
-0000f6 f3a1                      	breq	_ftoa_int1	; if b1=0 then print ALL int-digits
-0000f7 957a
-0000f8 f791                      	DJNZ	b1,_ftoa_int1
-0000f9 c007                      	rjmp	_ftoa_sign
-                                 _ftoa_space:
-0000fa 2377                      	tst	b1				; if b1=0 then print ALL int-digits
-0000fb f029                      	breq	_ftoa_sign
-0000fc 957a                      	dec	b1
-0000fd f019                      	breq	_ftoa_sign
-0000fe e200                      	ldi	w,' '			; write spaces
-0000ff df57                      	rcall	_putw	
-000100 cff9                      	rjmp	_ftoa_space
-                                 _ftoa_sign:
-000101 f416                      	brtc	PC+3		; if T=1 then write 'minus'
-000102 e20d                      	ldi	w,'-'
-000103 df53                      	rcall	_putw
-                                 _ftoa_int3:
-000104 910f                      	pop	w
-000105 320e                      	cpi	w,'.'
-000106 f011                      	breq	PC+3
-000107 df4f                      	rcall	_putw
-000108 cffb                      	rjmp	_ftoa_int3
-                                 
-000109 917f                      	pop	b1				; ii.ff (ff=frac digits)
-00010a 707f                      	andi	b1,0x0f
-00010b 2377                      	tst	b1
-00010c f059                      	breq	_ftoa_end
-                                 _ftoa_point:	
-00010d df49                      	rcall	_putw		; write decimal point
-00010e 2d28
-00010f 2d39
-000110 2d4a
-000111 2d5b                      	MOV4	a3,a2,a1,a0, c3,c2,c1,c0		
-                                 _ftoa_frac:
-000112 d011                      	rcall	_mul41		; d.frac=10*frac
-000113 2d0c                      	mov	w,d0
-000114 d009                      	rcall	_hex2asc
-000115 df41                      	rcall	_putw
-000116 957a
-000117 f7d1                      	DJNZ	b1,_ftoa_frac
-                                 _ftoa_end:
-000118 908f
-000119 909f
-00011a 90af
-00011b 90bf                      	POP4	c3,c2,c1,c0
-00011c 90cf                      	pop	d0
-00011d 9508                      	ret
-                                 
-                                 ; === hexadecimal to ascii ===
-                                 ; in	w
-                                 _hex2asc:
-00011e 300a                      	cpi	w,10
-00011f f410                      	brsh	PC+3
-000120 5d00                      	addi	w,'0'
-000121 9508                      	ret
-000122 5a09                      	addi	w,('a'-10)
-000123 9508                      	ret
-                                 
-                                 ; === multiply 4byte*1byte ===
-                                 ; funct mul41
-                                 ; multiplies a3-a0 (4-byte) by b0 (1-byte)
-                                 ; author (c) Raphael Holzer, EPFL
-                                 ; 
-                                 ; in	a3..a0	multiplicand (argument to multiply)
-                                 ;	b0	multiplier
-                                 ; out	a3..a0	result
-                                 ; 	d0	result MSB (byte 4)
-                                 ;
-000124 24cc                      _mul41:	clr	d0			; clear byte4 of result
-000125 e200                      	ldi	w,32			; load bit counter
-000126 9488                      __m41:	clc				; clear carry
-000127 fd20                      	sbrc	a0,0		; skip addition if LSB=0
-000128 0ec6                      	add	d0,b0			; add b to MSB of a
-000129 94c7
-00012a 9557
-00012b 9547
-00012c 9537
-00012d 9527                      	ROR5	d0,a3,a2,a1,a0	; shift-right c, LSB (of b) into carry
-00012e 950a
-00012f f7b1                      	DJNZ	w,__m41		; Decrement and Jump if bit-count Not Zero
-000130 9508                      	ret
-                                 
-                                 ; === divide 4byte/1byte ===
-                                 ; func div41
-                                 ; in	a0..a3 	divident (argument to divide)
-                                 ;	b0 	divider
-                                 ; out	a0..a3 	result 
-                                 ;	d0	reminder
-                                 ;
-000131 24cc                      _div41:	clr	d0			; d will contain the remainder
-000132 e200                      	ldi	w,32			; load bit counter
-000133 1f22
-000134 1f33
-000135 1f44
-000136 1f55
-000137 1ccc                      __d41:	ROL5	d0,a3,a2,a1,a0	; shift carry into result c
-000138 1ac6                      	sub	d0, b0			; subtract b from remainder
-000139 f408                      	brcc	PC+2	
-00013a 0ec6                      	add	d0, b0			; restore if remainder became negative
-00013b 950a
-00013c f7b1                      	DJNZ	w,__d41		; Decrement and Jump if bit-count Not Zero
-00013d 1f22
-00013e 1f33
-00013f 1f44
-000140 1f55                      	ROL4	a3,a2,a1,a0	; last shift (carry into result c)
-000141 9550
-000142 9540
-000143 9530
-000144 9520                      	COM4	a3,a2,a1,a0	; complement result
-000145 9508                      	ret
-                                 .include "uart.asm"	
-                                 
-                                 ; purpose setup to two UART units 0 and 1
-                                 
-                                 ;.equ	baud0	= 19200
-                                 .equ	baud0	= 9600
-                                 .equ	_UBRR0	= clock/(16*baud0)-1
-                                 
-                                 UART0_init:	; 19200-8-N-1
-                                 
-                                 	;ldi		r16, 12
-                                 	;out		UBRR0L,r16
-000146 e000                      	ldi		r16, 0x00
-000147 9300 0090                 	sts		UBRR0H,r16
-000149 e002                      	ldi		r16,0b00000010
-00014a b902                      	out		DDRE,r16
-00014b 2700                      	clr	r16
-00014c e108                      	ldi r16,(1<<TXEN0)|(1<<RXEN0)
-00014d b90a                      	out	UCSR0B,r16
-00014e 2700                      	clr r16
-00014f e006                      	ldi r16,(1<<UCSZ01)+(1<<UCSZ00)
-000150 9300 0095                 	sts	UCSR0C, r16
-                                 
-                                 
-                                 
-000152 e109
-000153 b909                      	OUTI	UBRR0L, _UBRR0				; set Baud rate
-                                 	;OUTI	UBRR0H, 0x00
-                                 	;OUTI	DDRE,0b00000010				; make pin TX0 output
-                                 	;OUTI	UCSR0B,(1<<TXEN0)+(1<<RXEN0)	; Transmit/Receive Enable
-                                 	;OUTI	UCSR0C, (1<<UCSZ01)+(1<<UCSZ00)	; 8-bit, 1 stop bit, parity disabled
-000154 9508                      	ret
-                                 
-                                 UART0:
-                                 UART0_putc:	
-000155 9b5d                      	sbis	UCSR0A,UDRE0					; wait for UART Data Register Empty
-000156 cffe                      	rjmp	PC-1						; loop back if not empty
-000157 b92c                      	out		UDR0,a0						; output character to UART Data Register
-000158 9508                      	ret
-                                 	
-                                 UART0_getc:
-000159 9b5f                      	sbis	UCSR0A,RXC0		; wait for UART Receive Complete
-00015a cffe                      	rjmp	PC-1		; loop back if not complete
-00015b b12c                      	in		a0,UDR0		; read character to UART Data Register
-                                 .include "lcd.asm"
-00015c 9508                      
-                                 ; purpose  LCD HD44780U library
-                                 ; ATmega 128 and Atmel Studio 7.0 compliant
-                                 
-                                 ; === definitions ===
-                                 .equ	LCD_IR	= 0x8000	; address LCD instruction reg
-                                 .equ	LCD_DR	= 0xc000	; address LCD data register
-                                 
-                                 ; === subroutines ===
-                                 LCD_wr_ir:
-                                 ; in	w (byte to write to LCD IR)
-00015d 9030 8000                 	lds	u, LCD_IR		; read IR to check busy flag  (bit7)
-00015f fc37
-000160 cffc                      	JB1	u,7,LCD_wr_ir	; Jump if Bit=1 (still busy)
-000161 d003                      	rcall	lcd_4us		; delay to increment DRAM addr counter
-000162 9300 8000                 	sts	LCD_IR, w		; store w in IR
-000164 9508                      	ret
-                                 	
-                                 lcd_4us:
-000165 d000                      	rcall	lcd_2us		; recursive call		
-                                 lcd_2us:
-000166 0000                      	nop					; rcall(3) + nop(1) + ret(4) = 8 cycles (2us)
-000167 9508                      	ret
-                                 
-                                 LCD:
-                                 LCD_putc:
-000168 302d
-000169 f169                      	JK	a0,CR,LCD_cr	; Jump if a0=CR
-00016a 302a
-00016b f1a9                      	JK	a0,LF,LCD_lf	; Jump if a0=LF
-                                 LCD_wr_dr:
-                                 ; in	a0 (byte to write to LCD DR)
-00016c 9100 8000                 	lds	w, LCD_IR		; read IR to check busy flag  (bit7)
-00016e fd07
-00016f cffc                      	JB1	w,7,LCD_wr_dr	; Jump if Bit=1 (still busy)
-000170 dff4                      	rcall	lcd_4us		; delay to increment DRAM addr counter
-000171 9320 c000                 	sts	LCD_DR, a0		; store a0 in DR
-000173 9508                      	ret	
-                                 	
-000174 e001
-000175 cfe7                      LCD_clear:		JW	LCD_wr_ir, 0b00000001		; clear display
-000176 e002
-000177 cfe5                      LCD_home:		JW	LCD_wr_ir, 0b00000010		; return home
-000178 e100
-000179 cfe3                      LCD_cursor_left:	JW	LCD_wr_ir, 0b00010000	; move cursor to left
-00017a e104
-00017b cfe1                      LCD_cursor_right:	JW	LCD_wr_ir, 0b00010100	; move cursor to right
-00017c e108
-00017d cfdf                      LCD_display_left:	JW	LCD_wr_ir, 0b00011000	; shifts display to left
-00017e e10c
-00017f cfdd                      LCD_display_right:	JW	LCD_wr_ir, 0b00011100	; shifts display to right
-000180 e00d
-000181 cfdb                      LCD_blink_on:		JW	LCD_wr_ir, 0b00001101	; Display=1,Cursor=0,Blink=1
-000182 e00c
-000183 cfd9                      LCD_blink_off:		JW	LCD_wr_ir, 0b00001100	; Display=1,Cursor=0,Blink=0
-000184 e00e
-000185 cfd7                      LCD_cursor_on:		JW	LCD_wr_ir, 0b00001110	; Display=1,Cursor=1,Blink=0
-000186 e00c
-000187 cfd5                      LCD_cursor_off:		JW	LCD_wr_ir, 0b00001100	; Display=1,Cursor=0,Blink=0
-                                 		
-                                 LCD_init:
-000188 b705                      	in	w,MCUCR					; enable access to ext. SRAM
-000189 6c00                      	sbr	w,(1<<SRE)+(1<<SRW10)
-00018a bf05                      	out	MCUCR,w
-00018b e001
-00018c dfd0                      	CW	LCD_wr_ir, 0b00000001	; clear display
-00018d e006
-00018e dfce                      	CW	LCD_wr_ir, 0b00000110	; entry mode set (Inc=1, Shift=0)
-00018f e00c
-000190 dfcc                      	CW	LCD_wr_ir, 0b00001100	; Display=1,Cursor=0,Blink=0	
-000191 e308
-000192 dfca                      	CW	LCD_wr_ir, 0b00111000	; 8bits=1, 2lines=1, 5x8dots=0
-000193 9508                      	ret
-                                 
-                                 LCD_pos:
-                                 ; in	a0 = position (0x00..0x0f first line, 0x40..0x4f second line)
-000194 2f02                      	mov	w,a0
-000195 6800                      	ori	w,0b10000000
-000196 cfc6                      	rjmp	LCD_wr_ir
-                                 
-                                 LCD_cr:
-                                 ; moving the cursor to the beginning of the line (carriage return)
-000197 9100 8000                 	lds	w, LCD_IR			; read IR to check busy flag  (bit7)
-000199 fd07
-00019a cffc                      	JB1	w,7,LCD_cr			; Jump if Bit=1 (still busy)
-00019b 7400                      	andi	w,0b01000000	; keep bit6 (begin of line 1/2)
-00019c 6800                      	ori	w,0b10000000		; write address command
-00019d dfc7                      	rcall	lcd_4us			; delay to increment DRAM addr counter
-00019e 9300 8000                 	sts	LCD_IR,w			; store in IR
-0001a0 9508                      	ret
-                                 
-                                 LCD_lf:
-                                 ; moving the cursor to the beginning of the line 2 (line feed)
-0001a1 932f                      	push	a0				; safeguard a0
-0001a2 e420                      	ldi	a0,$40				; load position $40 (begin of line 2)
-0001a3 dff0                      	rcall	LCD_pos			; set cursor position
-0001a4 912f                      	pop	a0					; restore a0
-                                 .include "speedControl.asm"
-0001a5 9508                      
-                                 
-                                 ; === interrupt service routines	
-                                 ext_int0:
-0001a6 9483                      	inc c0
-0001a7 9518                          reti
-                                 ext_int1:
-0001a8 948a                          dec c0
-0001a9 9518                      	reti
-                                 ; === initialization (reset) ====
-                                 SPEED_init:
-0001aa e003
-0001ab bf09                      	OUTI	EIMSK,0b00000011 	; enable INT0/1
-0001ac 9508                      ;================
+                                 ; WS2812b4_WR0	; macro ; arg: void; used: void
+                                 ; purpose: write an active-high zero-pulse to PD1
+                                 .macro	WS2812b4_WR0
+                                 	clr u
+                                 	sbi PORTD, 1
+                                 	out PORTD, u
+                                 	nop
+                                 	nop
+                                 	;nop	;deactivated on purpose of respecting timings
+                                 	;nop
+                                 .endm
+                                 
+                                 ; WS2812b4_WR1	; macro ; arg: void; used: void
+                                 ; purpose: write an active-high one-pulse to PD1
+                                 .macro	WS2812b4_WR1
+                                 	sbi PORTD, 1
+                                 	nop
+                                 	nop
+                                 	cbi PORTD, 1
+                                 	;nop	;deactivated on purpose of respecting timings
+                                 	;nop
+                                 
+                                 .endm
+                                 
+                                 .org 0
+000000 940c 0002                 	jmp	reset
                                  
                                  
                                  reset:
-0001ad ef0f
-0001ae bb04                      	OUTI	DDRC,0xff		; configure portC to output
-0001af ef0f
-0001b0 bf0d
-0001b1 e100
-0001b2 bf0e                          LDSP	RAMEND			; set up stack pointer (SP)
-0001b3 df92                      	rcall	UART0_init
-0001b4 dfd3                          rcall   LCD_init    
-0001b5 dff4                          rcall   SPEED_init      ;init speed control
-0001b6 e80e
-0001b7 b906
-0001b8 e003
-0001b9 b907                          IRSET
-0001ba 9478                          sei
-0001bb c000                          rjmp main
+000002 ef0f
+000003 bf0d
+000004 e100
+000005 bf0e                      	LDSP	RAMEND			; Load Stack Pointer (SP)
+000006 d088                      	rcall	ws2812b4_init	; initialize 
+000007 ef0f
+000008 bb07                      	OUTI	DDRB, 0xff		; connect LEDs to PORTB, output mode
+000009 e000
+00000a bb04                      	OUTI	DDRC, 0x00		; connectbuttons to PORTC, input mode
+00000b e050                      	ldi a3, 0
                                  
                                  main:
+                                 	; ------ part 1: store image that will be displayed into SRAM
+00000c 2777                      	clr b1
+00000d e0e0                      	ldi zl,low(0x0400)
+00000e e0f4                      	ldi zh,high(0x0400)
+00000f c011                      	rjmp smileyHappy
+                                 
+                                 ;debut du chargement de la RAM
+                                 oops:
+000010 ef37                      	ldi a1, 0b11110111
+000011 d031                      	rcall chargement
+000012 ee3f                      	ldi a1, 0b11101111
+000013 d02f                      	rcall chargement
+000014 ed3b                      	ldi a1, 0b11011011
+000015 d02d                      	rcall chargement
+000016 e635                      	ldi a1, 0b01100101
+000017 d02b                      	rcall chargement
+000018 ea36                      	ldi a1, 0b10100110
+000019 d029                      	rcall chargement
+00001a ed3b                      	ldi a1, 0b11011011
+00001b d027                      	rcall chargement
+00001c ef37                      	ldi a1, 0b11110111
+00001d d025                      	rcall chargement
+00001e ee3f                      	ldi a1, 0b11101111
+00001f d023                      	rcall chargement
+                                 
+000020 c049                      	rjmp restart
+                                 
+                                 smileyHappy:
+000021 e030                      	ldi a1,0b00000000
+000022 d020                      	rcall chargement
+000023 e234                      	ldi a1,0b00100100
+000024 d01e                      	rcall chargement
+000025 e234                      	ldi a1,0b00100100
+000026 d01c                      	rcall chargement
+000027 e030                      	ldi a1,0b00000000
+000028 d01a                      	rcall chargement
+000029 e432                      	ldi a1,0b01000010
+00002a d018                      	rcall chargement
+00002b e33c                      	ldi a1,0b00111100
+00002c d016                      	rcall chargement
+00002d e030                      	ldi a1,0b00000000
+00002e d014                      	rcall chargement
+00002f e030                      	ldi a1,0b00000000
+000030 d012                      	rcall chargement
+                                 
+000031 c038                      	rjmp restart
+                                 
+                                 smileyConcerned :
+000032 e030                      	ldi a1,0b00000000
+000033 d00f                      	rcall chargement
+000034 e234                      	ldi a1,0b00100100
+000035 d00d                      	rcall chargement
+000036 e234                      	ldi a1,0b00100100
+000037 d00b                      	rcall chargement
+000038 e030                      	ldi a1,0b00000000
+000039 d009                      	rcall chargement
+00003a e33c                      	ldi a1,0b00111100
+00003b d007                      	rcall chargement
+00003c e432                      	ldi a1,0b01000010
+00003d d005                      	rcall chargement
+00003e e432                      	ldi a1,0b01000010
+00003f d003                      	rcall chargement
+000040 e33c                      	ldi a1,0b00111100
+000041 d001                      	rcall chargement
+                                 
+000042 c027                      	rjmp restart
                                  	
-0001bc 9a36                          DISTANCEREAD            ; read distance in b1:b0
-0001bd e604
-0001be 2e30
-0001bf e001
-0001c0 930f
-0001c1 923f
-0001c2 e300
-0001c3 2e30
-0001c4 e006
-0001c5 943a
-0001c6 f7f1
-0001c7 943a
-0001c8 950a
-0001c9 f7d9
-0001ca 903f
-0001cb 910f
-0001cc 943a
-0001cd f791
-0001ce 950a
-0001cf f781                          WAIT_MS 100
-0001d0 e505
-0001d1 2e40
-0001d2 e001
-0001d3 2e50
-0001d4 de5e                          PRINTF	UART0_putc		; print printDistance
-0001d5 0d0d
-0001d6 4143
-0001d7 4143
-0001d8 983d
-0001d9 3d16
-0001da 16d0
-0001db 2020
-0001dc 2020
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(43): warning: .cseg .db misalignment - padding zero byte
-0001dd 0000                      	.db	CR,CR,"CACA=",FHEX2,b,"=",FDEC2,b,"    ",0
-0001de 2f26
-0001df 2f37                          MOV2 a1,a0,b1,b0
-0001e0 9536
-0001e1 9527                          LSR2 a1,a0              ; print on leds
-0001e2 9536
-0001e3 9527                          LSR2 a1,a0
-0001e4 bb25                          out PORTC, a0
                                  
-0001e5 3e21                          cpi a0, DISTANCETRESH   ; check distance
-0001e6 f470                          brsh wall
+                                 chargement:
+000043 e048                      	ldi a2, 8		;compteur
+000044 c001                      	rjmp boucle_chargement
+000045 9518                      	reti
                                  
-0001e7 e505
-0001e8 2e40
-0001e9 e001
-0001ea 2e50
-0001eb de47                          PRINTF	UART0_putc		; print speed
-0001ec 0d0d
-0001ed 7053
-0001ee 6565
-0001ef 3d64
-0001f0 08d0
-0001f1 2020
-0001f2 2020
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(53): warning: .cseg .db misalignment - padding zero byte
-0001f3 0000                      	.db	CR,CR,"Speed=",FDEC2,c,"    ",0
+                                 boucle_chargement:
+000046 ff37                      	sbrs a1, 7
+000047 c017                      	rjmp rouge
+000048 2388                      	tst b2
+000049 f009                      	breq blanc
+00004a c000                      	rjmp blanc
                                  
-0001f4 cfc7                          rjmp main
-                                 wall:
-0001f5 ef0f
-0001f6 bb05                          OUTI PORTC, 0xff
-0001f7 ec08
-0001f8 2e30
-0001f9 e001
-0001fa 930f
-0001fb 923f
-0001fc e300
-0001fd 2e30
-0001fe e006
-0001ff 943a
-000200 f7f1
-000201 943a
-000202 950a
-000203 f7d9
-000204 903f
-000205 910f
-000206 943a
-000207 f791
-000208 950a
-000209 f781                          WAIT_MS 200
-00020a e000
-00020b bb05                          OUTI PORTC, 0x00
-00020c ec08
-00020d 2e30
-00020e e001
-00020f 930f
-000210 923f
-000211 e300
-000212 2e30
-000213 e006
-000214 943a
-000215 f7f1
-000216 943a
-000217 950a
-000218 f7d9
-000219 903f
-00021a 910f
-00021b 943a
-00021c f791
-00021d 950a
-00021e f781                          WAIT_MS 200
+                                 	blanc:
+00004b 0f33                      	lsl a1
+00004c e027                      	ldi	a0, 0x07	; pixel blanc
+00004d 9321                      	st	z+,a0
+00004e e027                      	ldi a0, 0x07
+00004f 9321                      	st	z+,a0
+000050 e027                      	ldi	a0, 0x07
+000051 9321                      	st z+,a0
+                                 
+000052 954a                      	dec a2
+000053 f0a9                      	breq return 
+000054 cff1                      	rjmp boucle_chargement
+                                 
+                                 	noir:
+000055 0f33                      	lsl a1
+000056 e020                      	ldi	a0, 0x00	; pixel blanc
+000057 9321                      	st	z+,a0
+000058 e020                      	ldi a0, 0x00
+000059 9321                      	st	z+,a0
+00005a e020                      	ldi	a0, 0x00
+00005b 9321                      	st z+,a0
+                                 
+00005c 954a                      	dec a2
+00005d f059                      	breq return 
+00005e cfe7                      	rjmp boucle_chargement
+                                 
+                                 	rouge:
+00005f 0f33                      	lsl a1
+000060 e020                      	ldi	a0, 0x00	; pixel noir
+000061 9321                      	st	z+,a0
+000062 e02f                      	ldi a0,0x0f
+000063 9321                      	st	z+,a0
+000064 e020                      	ldi	a0, 0x00
+000065 9321                      	st z+,a0
+                                 
+000066 954a                      	dec a2
+000067 f009                      	breq return 
+000068 cfdd                      	rjmp boucle_chargement
+                                 
+                                 return:
+000069 9518                      	reti
+                                 
+                                 
+                                 	; ------ part 2, display: read image from SRAM and send to display
+                                 restart:
+                                 
+00006a e0e0                      	ldi zl,low(0x0400)
+00006b e0f4                      	ldi zh,high(0x0400)
+                                 
+00006c e400
+00006d 2e00                      	_LDI	r0,64
+                                 loop:
+                                 
+00006e 9121                      	ld a0, z+
+                                 	;add a1,b1		; increase intensity (and color) until all white
+00006f 9131                      	ld a1, z+		;>and high intensity, uncomment to use
+                                 	;add a1,b1
+000070 9141                      	ld a2,z+
+                                 	;add a2,b1
+                                 
+000071 94f8                      	cli
+000072 d01f                      	rcall ws2812b4_byte3wr
+000073 9478                      	sei
+                                 
+000074 940a                      	dec r0
+000075 f7c1                      	brne loop
+000076 d04c                      	rcall ws2812b4_reset
+000077 ed00
+000078 2e30
+000079 e008
+00007a 930f
+00007b 923f
+00007c e300
+00007d 2e30
+00007e e006
+00007f 943a
+000080 f7f1
+000081 943a
+000082 950a
+000083 f7d9
+000084 903f
+000085 910f
+000086 943a
+000087 f791
+000088 950a
+000089 f781                      	WAIT_MS 2000
+00008a df85                      	rcall oops
+00008b 94f8                      	cli
+00008c d005                      	rcall ws2812b4_byte3wr
+00008d 9478                      	sei
+00008e cfff                      	bcv: rjmp bcv
+                                 
+                                 
+                                 ; ws2812b4_init		; arg: void; used: r16 (w)
+                                 ; purpose: initialize AVR to support ws2812
+                                 ws2812b4_init:
+00008f e002
+000090 bb01                      	OUTI	DDRD,0x02
+000091 9508                      ret
+                                 
+                                 ; ws2812b4_byte3wr	; arg: a0,a1,a2 ; used: r16 (w)
+                                 ; purpose: write contents of a0,a1,a2 (24 bit) into ws2812, 1 LED configuring
+                                 ;     GBR color coding, LSB first
+                                 ws2812b4_byte3wr:
+                                 
+000092 e008                      	ldi w,8
+                                 ws2b3_starta0:
+000093 fd27                      	sbrc a0,7
+000094 c006                      	rjmp	ws2b3w1
+000095 2433
+000096 9a91
+000097 ba32
+000098 0000
+000099 0000                      	WS2812b4_WR0			; write a zero
+00009a c004                      	rjmp	ws2b3_nexta0
+                                 ws2b3w1:
+00009b 9a91
+00009c 0000
+00009d 0000
+00009e 9891                      	WS2812b4_WR1
+                                 ws2b3_nexta0:
+00009f 0f22                      	lsl a0
+0000a0 950a                      	dec	w
+0000a1 f789                      	brne ws2b3_starta0
+                                 
+0000a2 e008                      	ldi w,8
+                                 ws2b3_starta1:
+0000a3 fd37                      	sbrc a1,7
+0000a4 c006                      	rjmp	ws2b3w1a1
+0000a5 2433
+0000a6 9a91
+0000a7 ba32
+0000a8 0000
+0000a9 0000                      	WS2812b4_WR0			; write a zero
+0000aa c004                      	rjmp	ws2b3_nexta1
+                                 ws2b3w1a1:
+0000ab 9a91
+0000ac 0000
+0000ad 0000
+0000ae 9891                      	WS2812b4_WR1
+                                 ws2b3_nexta1:
+0000af 0f33                      	lsl a1
+0000b0 950a                      	dec	w
+0000b1 f789                      	brne ws2b3_starta1
+                                 
+0000b2 e008                      	ldi w,8
+                                 ws2b3_starta2:
+0000b3 fd47                      	sbrc a2,7
+0000b4 c006                      	rjmp	ws2b3w1a2
+0000b5 2433
+0000b6 9a91
+0000b7 ba32
+0000b8 0000
+0000b9 0000                      	WS2812b4_WR0			; write a zero
+0000ba c004                      	rjmp	ws2b3_nexta2
+                                 ws2b3w1a2:
+0000bb 9a91
+0000bc 0000
+0000bd 0000
+0000be 9891                      	WS2812b4_WR1
+                                 ws2b3_nexta2:
+0000bf 0f44                      	lsl a2
+0000c0 950a                      	dec	w
+0000c1 f789                      	brne ws2b3_starta2
+                                 	
+0000c2 9508                      ret
+                                 
+                                 ; ws2812b4_reset	; arg: void; used: r16 (w)
+                                 ; purpose: reset pulse, configuration becomes effective
+                                 ws2812b4_reset:
+0000c3 9891                      	cbi PORTD, 1
+0000c4 e401
+0000c5 2e30
+0000c6 e001
+0000c7 943a
+0000c8 f7f1
+0000c9 943a
+0000ca 950a
+0000cb f7d9                      	WAIT_US	50 	; 50 us are required, NO smaller works
 
 
 RESOURCE USE INFORMATION
@@ -3967,41 +3412,41 @@ counted separately from r26..r31 here.
 .dseg memory usage only counts static data declared with .byte
 
 "ATmega128" register use summary:
-x  :   6 y  :   0 z  :   0 r0 :   7 r1 :   0 r2 :   0 r3 :  23 r4 :   3 
-r5 :   3 r6 :   0 r7 :   0 r8 :   7 r9 :   5 r10:   5 r11:   6 r12:  11 
-r13:   0 r14:   0 r15:   0 r16: 135 r17:   0 r18:  31 r19:  18 r20:  15 
-r21:  15 r22:  11 r23:  27 r24:   7 r25:  15 r26:   4 r27:   4 r28:   0 
-r29:   0 r30:  11 r31:   6 
-Registers used: 23 out of 35 (65.7%)
+x  :   0 y  :   0 z  :  12 r0 :   2 r1 :   0 r2 :   0 r3 :  16 r4 :   0 
+r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
+r13:   0 r14:   0 r15:   0 r16:  32 r17:   0 r18:  21 r19:  31 r20:   7 
+r21:   1 r22:   0 r23:   1 r24:   1 r25:   0 r26:   0 r27:   0 r28:   0 
+r29:   0 r30:   2 r31:   2 
+Registers used: 12 out of 35 (34.3%)
 
 "ATmega128" instruction use summary:
-.lds  :   0 .sts  :   0 adc   :   0 add   :   2 adiw  :   5 and   :   0 
-andi  :   7 asr   :   2 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :   1 brcs  :   0 break :   0 breq  :  16 brge  :   0 brhc  :   0 
-brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 brlt  :   0 brmi  :   1 
-brne  :  19 brpl  :   1 brsh  :   2 brtc  :   5 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   1 call  :   0 cbi   :   0 cbr   :   0 
-clc   :   1 clh   :   0 cli   :   0 cln   :   0 clr   :  12 cls   :   0 
-clt   :   1 clv   :   0 clz   :   0 com   :   8 cp    :   1 cpc   :   3 
-cpi   :  11 cpse  :   0 dec   :  22 elpm  :   0 eor   :   0 fmul  :   0 
-fmuls :   0 fmulsu:   0 icall :   1 ijmp  :   1 in    :   4 inc   :   3 
-jmp   :   4 ld    :   6 ldd   :   0 ldi   :  63 lds   :   3 lpm   :  12 
-lsl   :   1 lsr   :   5 mov   :  31 movw  :   0 mul   :   0 muls  :   0 
-mulsu :   0 neg   :   0 nop   :   1 or    :   0 ori   :   2 out   :  14 
-pop   :  29 push  :  28 rcall :  27 ret   :  16 reti  :   3 rjmp  :  39 
-rol   :  10 ror   :  15 sbc   :   3 sbci  :   0 sbi   :   1 sbic  :   0 
-sbis  :   2 sbiw  :   0 sbr   :   1 sbrc  :  11 sbrs  :   0 sec   :   0 
-seh   :   0 sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   1 
-sev   :   0 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 
-sts   :   5 sub   :   3 subi  :   3 swap  :   4 tst   :   8 wdr   :   0 
+.lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
+andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
+brcc  :   0 brcs  :   0 break :   0 breq  :   4 brge  :   0 brhc  :   0 
+brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
+brne  :  10 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   4 cbr   :   0 
+clc   :   0 clh   :   0 cli   :   2 cln   :   0 clr   :   4 cls   :   0 
+clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
+cpi   :   0 cpse  :   0 dec   :  15 elpm  :   0 eor   :   0 fmul  :   0 
+fmuls :   0 fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   0 
+jmp   :   1 ld    :   3 ldd   :   0 ldi   :  54 lds   :   0 lpm   :   0 
+lsl   :   6 lsr   :   0 mov   :   4 movw  :   0 mul   :   0 muls  :   0 
+mulsu :   0 neg   :   0 nop   :  12 or    :   0 ori   :   0 out   :   8 
+pop   :   2 push  :   2 rcall :  29 ret   :   3 reti  :   2 rjmp  :  17 
+rol   :   0 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   6 sbic  :   0 
+sbis  :   0 sbiw  :   0 sbr   :   0 sbrc  :   3 sbrs  :   1 sec   :   0 
+seh   :   0 sei   :   2 sen   :   0 ser   :   0 ses   :   0 set   :   0 
+sev   :   0 sez   :   0 sleep :   0 spm   :   0 st    :   9 std   :   0 
+sts   :   0 sub   :   0 subi  :   0 swap  :   0 tst   :   1 wdr   :   0 
 
-Instructions used: 56 out of 114 (49.1%)
+Instructions used: 25 out of 114 (21.9%)
 
 "ATmega128" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000440    974     34   1008  131072   0.8%
+[.cseg] 0x000000 0x00019a    410      0    410  131072   0.3%
 [.dseg] 0x000100 0x000100      0      0      0    4096   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    4096   0.0%
 
-Assembly complete, 0 errors, 2 warnings
+Assembly complete, 0 errors, 0 warnings

@@ -62,6 +62,7 @@ main:
 	clr b1
 	ldi zl,low(0x0400)
 	ldi zh,high(0x0400)
+	rjmp smileyHappy
 
 ;debut du chargement de la RAM
 oops:
@@ -185,7 +186,6 @@ restart:
 
 	ldi zl,low(0x0400)
 	ldi zh,high(0x0400)
-	add	zl,b1
 
 	_LDI	r0,64
 loop:
@@ -204,29 +204,12 @@ loop:
 	dec r0
 	brne loop
 	rcall ws2812b4_reset
-
-	; on lit l’état actuel du bouton (PINC bit0)
-	in    b3, PINC
-	andi  b3, 0x01     ; curr = PINC & 1
-
-; si pas de changement d’état, on repart tout de suite
-	cp    b3, a3      ; compare curr vs prev
-	breq  restart       ; si égal ? pas de front ? on réaffiche
-
-; sinon il y a eu un front
-	tst   b3           ; met Z si curr==0
-	breq  on_release    ; si Z=1 ? front descendant
-
-	on_press:
-	ldi b2, 1 ; front montant ? incrémente l’offset
-	rjmp update_prev
-
-	on_release:
-	ldi b2, 0 ; front descendant ? décrémente l’offset
-
-	update_prev:
-	mov a3, b3 ; mémorise curr dans prev
-	jmp restart ; boucle d’affichage
+	WAIT_MS 2000
+	rcall oops
+	cli
+	rcall ws2812b4_byte3wr
+	sei
+	bcv: rjmp bcv
 
 
 ; ws2812b4_init		; arg: void; used: r16 (w)
