@@ -16,6 +16,7 @@
   <FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\printf.asm</FILE>
   <FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\uart.asm</FILE>
   <FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\lcd.asm</FILE>
+  <FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\speedControl.asm</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
   <FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\Debug\Microcon.obj</FILE>
@@ -28,7 +29,9 @@
   <FILE>Microcon.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <reset><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm</FILE><LINE>25</LINE></reset>
+  <reset><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm</FILE><LINE>28</LINE></reset>
+  <ext_int0><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\speedControl.asm</FILE><LINE>4</LINE></ext_int0>
+  <ext_int1><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\speedControl.asm</FILE><LINE>7</LINE></ext_int1>
   <ADCCaddr_sra><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistanceMacro.asm</FILE><LINE>4</LINE></ADCCaddr_sra>
   <_printf><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\printf.asm</FILE><LINE>138</LINE></_printf>
   <_printf_read><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\printf.asm</FILE><LINE>143</LINE></_printf_read>
@@ -91,7 +94,8 @@
   <LCD_cursor_off><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\lcd.asm</FILE><LINE>45</LINE></LCD_cursor_off>
   <LCD_init><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\lcd.asm</FILE><LINE>47</LINE></LCD_init>
   <LCD_pos><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\lcd.asm</FILE><LINE>57</LINE></LCD_pos>
-  <main><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm</FILE><LINE>35</LINE></main>
-  <wall><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm</FILE><LINE>53</LINE></wall>
+  <SPEED_init><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\speedControl.asm</FILE><LINE>11</LINE></SPEED_init>
+  <main><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm</FILE><LINE>38</LINE></main>
+  <wall><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm</FILE><LINE>56</LINE></wall>
  </LABELS>
 </ASSEMBLER_INFO>

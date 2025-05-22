@@ -2,10 +2,10 @@
 
 ; === interrupt service routines	
 ext_int0:
-	inc speed
+	inc c0
     reti
 ext_int1:
-    dec speed
+    dec c0
 	reti
 ; === initialization (reset) ====
 SPEED_init:
