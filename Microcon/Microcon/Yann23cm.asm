@@ -5,11 +5,6 @@
  *   Author: royer
  */ 
 
- ;a enlever apr�s test
- .include "macros.asm"		; include macro definitions
-.include "definitions.asm"	; include register/constant definitions
-;====== fin de zone
-
 
 
 
@@ -37,33 +32,11 @@
 	;nop
 .endm
 
-.org 0
-	jmp	reset
-
-.org 0x30
-
 smileyHapppy: .db 0b00000000,0b00100100,0b00100100,0b00000000,0b01000010,0b00111100,0b00000000,0b00000000
 smileyConcerned: .db 0b00000000,0b00100100,0b00100100,0b00000000,0b00111100,0b01000010,0b01000010,0b00111100
 smileyDead: .db 0b00000000,0b10100101,0b01000010,0b10100101,0b00000000,0b00111100,0b01000010,0b00000000
 
-
-reset:
-	LDSP	RAMEND			; Load Stack Pointer (SP)
-	rcall	ws2812b4_init	; initialize 
-	
-	rjmp main
-
-main:
-	rcall printSHappy
-	WAIT_MS 2000
-	rcall printSConcerned
-	WAIT_MS 2000
-	rcall printSDead
-	WAIT_MS 2000
-	rjmp main
-
-
-
+;========= Sous Routines à appeler ===========
 
 ;uses w,u,a0,a1,a2 and print a happpy smiley on leds
 printSHappy:
@@ -83,8 +56,12 @@ printSDead:
 	ldi zh, high(2*smileyDead)
 	rjmp remplissageEtEnvoie
 
+;========== Fin des Sous Routines à appeler =======
 
 
+
+
+;========== Sous Routines exclusivent au fichier =========
 
 ;parameter : z and uses w,u,a0,a1,a2 print a shape pointed by z 
 remplissageEtEnvoie:
@@ -144,20 +121,6 @@ envoiePixel:
 	brne envoiePixel
 	rcall ws2812b4_reset
 	ret
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
  ws2812b4_init:
