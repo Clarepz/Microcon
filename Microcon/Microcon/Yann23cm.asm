@@ -5,7 +5,7 @@
  *   Author: royer
  */ 
 
- ;a enlever après test
+ ;a enlever aprï¿½s test
  .include "macros.asm"		; include macro definitions
 .include "definitions.asm"	; include register/constant definitions
 ;====== fin de zone
@@ -42,32 +42,54 @@
 
 .org 0x30
 
-smiley: .db 0b00000000,0b00100100,0b00100100,0b00000000,0b01000010,0b00111100,0b00000000,0b00000000
+smileyHapppy: .db 0b00000000,0b00100100,0b00100100,0b00000000,0b01000010,0b00111100,0b00000000,0b00000000
+smileyConcerned: .db 0b00000000,0b00100100,0b00100100,0b00000000,0b00111100,0b01000010,0b01000010,0b00111100
 
 
 reset:
 	LDSP	RAMEND			; Load Stack Pointer (SP)
 	rcall	ws2812b4_init	; initialize 
-	rcall printSmileyHappy
 	rjmp main
 
 main:
+	rcall printSHappy
+	WAIT_MS 2000
+	rcall printSConcerned
+	WAIT_MS 2000
 	rjmp main
 
 
-remplissage :
-	ldi zl, low(2*smiley)
-	ldi zh, high(2*smiley)
+
+
+;uses w,u,a0,a1,a2 and print a happpy smiley on leds
+printSHappy:
+	ldi zl, low(2*smileyHapppy)
+	ldi zh, high(2*smileyHapppy)
+	rjmp remplissageEtEnvoie
+
+;uses w,u,a0,a1,a2 and print a concerned smiley on leds
+printSConcerned:
+	ldi zl, low(2*smileyConcerned)
+	ldi zh, high(2*smileyConcerned)
+	rjmp remplissageEtEnvoie
+
+printSAngry
+
+
+
+
+;parameter : z and uses w,u,a0,a1,a2 print a shape pointed by z 
+remplissageEtEnvoie:
 	ldi yl, low(0x0400)
 	ldi yh, high(0x0400)
 	ldi w, 9	;compteur pour les bit
 ligne:
 	dec w
-	brne PC+2
+	brne envoie
 	ret 
 	lpm u, z+	;contient l'info
 	ldi a1, 8	;compteur pour les leds
-ledRGB:
+pixel:
 	sbrs u, 7
 	rjmp noir
 
@@ -82,7 +104,7 @@ jaune :
 	lsl u
 	dec a1
 	breq ligne
-	rjmp ledRGB
+	rjmp pixel
 
 noir:
 	ldi	a0, 0x00	; pixel noir
@@ -95,30 +117,30 @@ noir:
 	lsl u
 	dec a1
 	breq ligne
-	rjmp ledRGB
+	rjmp pixel
 
-
-
-
-printSmileyHappy:
-	rcall remplissage
-	ldi zl,low(0x0400)
-	ldi zh,high(0x0400)
+envoie:
+	ldi yl,low(0x0400)
+	ldi yh,high(0x0400)
 	_LDI r0,64
-loop:
+envoiePixel:
 
-	ld a0, z+
-	ld a1, z+	
-	ld a2, z+
+	ld a0, y+
+	ld a1, y+	
+	ld a2, y+
 
 	cli
 	rcall ws2812b4_byte3wr
 	sei
 
 	dec r0
-	brne loop
+	brne envoiePixel
 	rcall ws2812b4_reset
 	ret
+
+
+
+
 
 
 
