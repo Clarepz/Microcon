@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm Thu May 22 16:47:57 2025
+AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm Thu May 22 17:06:32 2025
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m128def.inc'
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(3): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm'
@@ -3082,15 +3082,15 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\Servo
                                  
                                  ; === interrupt vector table ===
                                  .org	0
-000000 940c 003f                 	jmp	reset
+000000 940c 0041                 	jmp	reset
                                  .org	OC0addr					; timer 0 output compare match
 00001e 940c 0030                 	jmp	output_compare0
                                  .org 	OVF0addr
-000020 940c 003d                 	jmp overflow
+000020 940c 003f                 	jmp overflow
                                  .org	0x30
                                  
                                  ; === interrupt service routines ====
-                                 .set	timer0 = 100
+                                 .set	timer0 = 200
                                  
                                  
                                  output_compare0:
@@ -3103,37 +3103,39 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\Servo
 000034 9533                      	inc		servocounter
                                  
 000035 303a                      	cpi 	servocounter, 10
-000036 f008                      	brlo	PC+2
-000037 2733                      	clr		servocounter  
+000036 f010                      	brlo	PC+3
+000037 2733                      	clr		servocounter
+000038 e001
+000039 2ed0                      	_LDI		servochanel,	0b00000001
                                  
-000038 3038                      	cpi 	servocounter, 8
-000039 f008                      	brlo	PC+2
-00003a 24dd                      	clr 	servochanel 	
-                                 	
                                  
-00003b be1f                      	out		SREG, _sreg
-00003c 9518                      	reti
+00003a 3038                      	cpi 	servocounter, 8
+00003b f010                      	brlo	PC+3
+00003c 24dd                      	clr 	servochanel 
+                                 
+                                 
+00003d be1f                      	out		SREG, _sreg
+00003e 9518                      	reti
                                  
                                  overflow:
-00003d bad8                      	out 	PORTB, servochanel
+00003f bad8                      	out 	PORTB, servochanel
                                  	
-00003e 9518                      	reti
+000040 9518                      	reti
                                  
                                  ; === initialisation (reset) ===	
                                  reset: 
-00003f ef0f
-000040 bf0d
-000041 e100
-000042 bf0e                      	LDSP	RAMEND				; load stack pointer (SP)
-000043 ef0f
-000044 bb07                      	OUTI	DDRB,0xff			; portB = output
+000041 ef0f
+000042 bf0d
+000043 e100
+000044 bf0e                      	LDSP	RAMEND				; load stack pointer (SP)
+000045 ef0f
+000046 bb07                      	OUTI	DDRB,0xff			; portB = output
                                  		
-000045 e008
-000046 bf00                      	OUTI	ASSR,  (1<<AS0)		; clock from TOSC1 (external)
-000047 e006
-000048 bf03                      	OUTI	TCCR0, (0<<CTC0)+6	;  CS0=6 CK	
+                                 	;OUTI	ASSR,  (1<<AS0)		; clock from TOSC1 (external)
+000047 e003
+000048 bf03                      	OUTI	TCCR0, (0<<CTC0)+3	;  CS0=6 CK	
                                  	
-000049 e603
+000049 ec07
 00004a bf01                      	OUTI	OCR0,timer0-1		; Output Compare reg 0
                                  	
                                  	
@@ -3165,7 +3167,7 @@ counted separately from r26..r31 here.
 "ATmega128" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   2 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   4 r14:   0 r15:   0 r16:  18 r17:   0 r18:   0 r19:   5 r20:   0 
+r13:   5 r14:   0 r15:   0 r16:  18 r17:   0 r18:   0 r19:   5 r20:   0 
 r21:   0 r22:   0 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
 r29:   0 r30:   0 r31:   0 
 Registers used: 4 out of 35 (11.4%)
@@ -3182,8 +3184,8 @@ clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0
 cpi   :   2 cpse  :   0 dec   :   0 elpm  :   0 eor   :   0 fmul  :   0 
 fmuls :   0 fmulsu:   0 icall :   0 ijmp  :   0 in    :   1 inc   :   1 
 jmp   :   3 ld    :   0 ldd   :   0 ldi   :   9 lds   :   0 lpm   :   0 
-lsl   :   1 lsr   :   0 mov   :   1 movw  :   0 mul   :   0 muls  :   0 
-mulsu :   0 neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :  10 
+lsl   :   1 lsr   :   0 mov   :   2 movw  :   0 mul   :   0 muls  :   0 
+mulsu :   0 neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   9 
 pop   :   0 push  :   0 rcall :   0 ret   :   0 reti  :   2 rjmp  :   1 
 rol   :   0 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 
 sbis  :   0 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 

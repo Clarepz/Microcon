@@ -135,6 +135,9 @@
     <Compile Include="ws2812b_4MHz_demo01_S.asm">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Yann23cm.asm">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Assembler.targets" />
 </Project>

@@ -15,7 +15,7 @@
 .org	0x30
 
 ; === interrupt service routines ====
-.set	timer0 = 100
+.set	timer0 = 190
 
 
 output_compare0:
@@ -28,8 +28,8 @@ output_compare0:
 
 	cpi 	servocounter, 10
 	brlo	PC+3
-	clr		servocounter,
-	ldi		servochanel	0b00000001
+	clr		servocounter
+	_LDI		servochanel,	0b00000001
 
 
 	cpi 	servocounter, 8

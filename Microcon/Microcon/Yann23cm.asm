@@ -47,32 +47,42 @@ reset:
 	rcall	ws2812b4_init	; initialize 
 
 main:
-	rcall smileyHappy
+	coucou
 
 
 
 
 
 
-smileyHappy:
-	ldi a1,0b00000000
-	rcall chargement
-	ldi a1,0b00100100
-	rcall chargement
-	ldi a1,0b00100100
-	rcall chargement
-	ldi a1,0b00000000
-	rcall chargement
-	ldi a1,0b01000010
-	rcall chargement
-	ldi a1,0b00111100
-	rcall chargement
-	ldi a1,0b00000000
-	rcall chargement
-	ldi a1,0b00000000
-	rcall chargement
 
-	rjmp restart
+
+
+
+
+
+printSmiley:
+	ldi zl,low(smileyHappyTable)
+	ldi zh,high(smileyHappyTable)
+	_LDI	,64
+loop:
+
+	ld a0, z+
+	;add a1,b1		; increase intensity (and color) until all white
+	ld a1, z+		;>and high intensity, uncomment to use
+	;add a1,b1
+	ld a2,z+
+	;add a2,b1
+
+	cli
+	rcall ws2812b4_byte3wr
+	sei
+
+	dec r0
+	brne loop
+	rcall ws2812b4_reset
+
+
+
 
 
 

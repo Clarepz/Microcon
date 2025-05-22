@@ -24,9 +24,9 @@
   <FILE>Microcon.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <reset><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>47</LINE></reset>
+  <reset><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>49</LINE></reset>
   <output_compare0><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>21</LINE></output_compare0>
-  <overflow><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>41</LINE></overflow>
-  <main><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>63</LINE></main>
+  <overflow><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>43</LINE></overflow>
+  <main><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>65</LINE></main>
  </LABELS>
 </ASSEMBLER_INFO>
