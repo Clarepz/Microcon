@@ -44,6 +44,7 @@
 
 smileyHapppy: .db 0b00000000,0b00100100,0b00100100,0b00000000,0b01000010,0b00111100,0b00000000,0b00000000
 smileyConcerned: .db 0b00000000,0b00100100,0b00100100,0b00000000,0b00111100,0b01000010,0b01000010,0b00111100
+smileyDead: .db 0b00000000,0b10100101,0b01000010,0b10100101,0b00000000,0b00111100,0b01000010,0b00000000
 
 
 reset:
@@ -56,6 +57,8 @@ main:
 	rcall printSHappy
 	WAIT_MS 2000
 	rcall printSConcerned
+	WAIT_MS 2000
+	rcall printSDead
 	WAIT_MS 2000
 	rjmp main
 
@@ -74,7 +77,11 @@ printSConcerned:
 	ldi zh, high(2*smileyConcerned)
 	rjmp remplissageEtEnvoie
 
-
+;uses w,u,a0,a1,a2 and print a dead smiley on leds
+printSDead:
+	ldi zl, low(2*smileyDead)
+	ldi zh, high(2*smileyDead)
+	rjmp remplissageEtEnvoie
 
 
 
