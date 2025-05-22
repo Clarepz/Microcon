@@ -2,7 +2,8 @@
 
 .include "macros.asm"		; include macro definitions
 .include "definitions.asm"	; include register/constant definitions
-.def servocounter = r12
+.def servochannel = r12
+.def servocounter = r13
 
 ; === interrupt vector table ===
 .org	0
@@ -18,19 +19,28 @@
 
 
 output_compare0:
-	cpi 	servocounter, 8	 	 	
-	brsh 	PC+2
-	cbi 	PORTB, servocounter
+	in 		_sreg, SREG
 
-	inc 	servocounter		
-	sbrc 	servocounter, 2
-	clr 	servocounter
+	OUTI 	PORTB, 0x00
+
+	lsl 	servochanel
+	inc		servocounter
+
+	cpi 	servocounter, 10
+	brlo	PC+2
+	clr		servocounter  
+
+	cpi 	servocounter, 8
+	brlo	PC+2
+	clr 	servochanel 	
+	
+
+	out		SREG, _sreg
 	reti
 
 overflow:
-	cpi servocounter, 8
-	brsh PC+2
-	sbi	PORTB, servocounter
+	out 	PORTB, servochanel
+	
 	reti
 
 ; === initialisation (reset) ===	
@@ -45,6 +55,7 @@ reset:
 	
 	
 	OUTI	TIMSK,(1<<OCIE0)+(1<<TOIE0); enable outputcompar and overflow
+	ldi 	servochanel, 0b00000001
 	clr 	servocounter
 
 	sei							; set global interrupt
