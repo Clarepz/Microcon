@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm Thu May 22 21:43:21 2025
+AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm Thu May 22 23:47:25 2025
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m128def.inc'
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(17): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm'
@@ -7,6 +7,7 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(20): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistanceMacro.asm'
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(21): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\printf.asm'
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(22): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\uart.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(23): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\lcd.asm'
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(24): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\speedControl.asm'
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(25): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\Yann23cm.asm'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m128def.inc'
@@ -15,6 +16,7 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(20): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistanceMacro.asm'
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(21): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\printf.asm'
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(22): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\uart.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(23): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\lcd.asm'
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(24): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\speedControl.asm'
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(25): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\Yann23cm.asm'
                                  
@@ -1243,11 +1245,11 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2
                                  .equ ISPEED = 170
                                  ; === interrupt table ===
                                  .org	0
-000000 940c 01e5                 	jmp	reset
+000000 940c 0232                 	jmp	reset
                                  .org INT0addr
-000002 940c 015d                     jmp ext_int0
+000002 940c 01aa                     jmp ext_int0
                                  .org INT1addr
-000004 940c 015f                 	jmp	ext_int1
+000004 940c 01ac                 	jmp	ext_int1
                                  .org 	ADCCaddr
 00002a 940c 0030                 	jmp	ADCCaddr_sra
                                  .org	0x30
@@ -3711,25 +3713,128 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2
 000159 9b5f                      	sbis	UCSR0A,RXC0		; wait for UART Receive Complete
 00015a cffe                      	rjmp	PC-1		; loop back if not complete
 00015b b12c                      	in		a0,UDR0		; read character to UART Data Register
-00015c 9508                      ;.include "lcd.asm"
-                                 .include "speedControl.asm"
+                                 .include "lcd.asm"
+00015c 9508                      
+                                 ; purpose  LCD HD44780U library
+                                 ; ATmega 128 and Atmel Studio 7.0 compliant
                                  
+                                 ; === definitions ===
+                                 .equ	LCD_IR	= 0x8000	; address LCD instruction reg
+                                 .equ	LCD_DR	= 0xc000	; address LCD data register
+                                 
+                                 ; === subroutines ===
+                                 LCD_wr_ir:
+                                 ; in	w (byte to write to LCD IR)
+00015d 9030 8000                 	lds	u, LCD_IR		; read IR to check busy flag  (bit7)
+00015f fc37
+000160 cffc                      	JB1	u,7,LCD_wr_ir	; Jump if Bit=1 (still busy)
+000161 d003                      	rcall	lcd_4us		; delay to increment DRAM addr counter
+000162 9300 8000                 	sts	LCD_IR, w		; store w in IR
+000164 9508                      	ret
+                                 	
+                                 lcd_4us:
+000165 d000                      	rcall	lcd_2us		; recursive call		
+                                 lcd_2us:
+000166 0000                      	nop					; rcall(3) + nop(1) + ret(4) = 8 cycles (2us)
+000167 9508                      	ret
+                                 
+                                 LCD:
+                                 LCD_putc:
+000168 302d
+000169 f189                      	JK	a0,CR,LCD_cr	; Jump if a0=CR
+00016a 302a
+00016b f1c9                      	JK	a0,LF,LCD_lf	; Jump if a0=LF
+                                 LCD_wr_dr:
+                                 ; in	a0 (byte to write to LCD DR)
+00016c 9100 8000                 	lds	w, LCD_IR		; read IR to check busy flag  (bit7)
+00016e fd07
+00016f cffc                      	JB1	w,7,LCD_wr_dr	; Jump if Bit=1 (still busy)
+000170 dff4                      	rcall	lcd_4us		; delay to increment DRAM addr counter
+000171 9320 c000                 	sts	LCD_DR, a0		; store a0 in DR
+000173 9508                      	ret	
+                                 	
+000174 e001
+000175 cfe7                      LCD_clear:		JW	LCD_wr_ir, 0b00000001		; clear display
+000176 e002
+000177 cfe5                      LCD_home:		JW	LCD_wr_ir, 0b00000010		; return home
+000178 e100
+000179 cfe3                      LCD_cursor_left:	JW	LCD_wr_ir, 0b00010000	; move cursor to left
+00017a e104
+00017b cfe1                      LCD_cursor_right:	JW	LCD_wr_ir, 0b00010100	; move cursor to right
+00017c e108
+00017d cfdf                      LCD_display_left:	JW	LCD_wr_ir, 0b00011000	; shifts display to left
+00017e e10c
+00017f cfdd                      LCD_display_right:	JW	LCD_wr_ir, 0b00011100	; shifts display to right
+000180 e00d
+000181 cfdb                      LCD_blink_on:		JW	LCD_wr_ir, 0b00001101	; Display=1,Cursor=0,Blink=1
+000182 e00c
+000183 cfd9                      LCD_blink_off:		JW	LCD_wr_ir, 0b00001100	; Display=1,Cursor=0,Blink=0
+000184 e00e
+000185 cfd7                      LCD_cursor_on:		JW	LCD_wr_ir, 0b00001110	; Display=1,Cursor=1,Blink=0
+000186 e00c
+000187 cfd5                      LCD_cursor_off:		JW	LCD_wr_ir, 0b00001100	; Display=1,Cursor=0,Blink=0
+                                 		
+                                 LCD_init:
+000188 b705                      	in	w,MCUCR					; enable access to ext. SRAM
+000189 6c00                      	sbr	w,(1<<SRE)+(1<<SRW10)
+00018a bf05                      	out	MCUCR,w
+00018b e001
+00018c dfd0                      	CW	LCD_wr_ir, 0b00000001	; clear display
+00018d e006
+00018e dfce                      	CW	LCD_wr_ir, 0b00000110	; entry mode set (Inc=1, Shift=0)
+00018f e00c
+000190 dfcc                      	CW	LCD_wr_ir, 0b00001100	; Display=1,Cursor=0,Blink=0	
+000191 e308
+000192 dfca                      	CW	LCD_wr_ir, 0b00111000	; 8bits=1, 2lines=1, 5x8dots=0
+000193 9508                      	ret
+                                 
+                                 LCD_uninit:
+000194 b705                      	in	w,MCUCR
+000195 6c00                      	sbr	w,(1<<SRE)+(1<<SRW10)
+000196 bf05                      	out	MCUCR,w
+000197 9508                      	ret
+                                 
+                                 LCD_pos:
+                                 ; in	a0 = position (0x00..0x0f first line, 0x40..0x4f second line)
+000198 2f02                      	mov	w,a0
+000199 6800                      	ori	w,0b10000000
+00019a cfc2                      	rjmp	LCD_wr_ir
+                                 
+                                 LCD_cr:
+                                 ; moving the cursor to the beginning of the line (carriage return)
+00019b 9100 8000                 	lds	w, LCD_IR			; read IR to check busy flag  (bit7)
+00019d fd07
+00019e cffc                      	JB1	w,7,LCD_cr			; Jump if Bit=1 (still busy)
+00019f 7400                      	andi	w,0b01000000	; keep bit6 (begin of line 1/2)
+0001a0 6800                      	ori	w,0b10000000		; write address command
+0001a1 dfc3                      	rcall	lcd_4us			; delay to increment DRAM addr counter
+0001a2 9300 8000                 	sts	LCD_IR,w			; store in IR
+0001a4 9508                      	ret
+                                 
+                                 LCD_lf:
+                                 ; moving the cursor to the beginning of the line 2 (line feed)
+0001a5 932f                      	push	a0				; safeguard a0
+0001a6 e420                      	ldi	a0,$40				; load position $40 (begin of line 2)
+0001a7 dff0                      	rcall	LCD_pos			; set cursor position
+0001a8 912f                      	pop	a0					; restore a0
+                                 .include "speedControl.asm"
+0001a9 9508                      
                                  
                                  ; === interrupt service routines	
                                  ext_int0:
-00015d 9483                      	inc c0
-00015e 9518                          reti
+0001aa 9483                      	inc c0
+0001ab 9518                          reti
                                  ext_int1:
-00015f 948a                          dec c0
-000160 9518                      	reti
+0001ac 948a                          dec c0
+0001ad 9518                      	reti
                                  ; === initialization (reset) ====
                                  SPEED_init:
-000161 e003
-000162 bf09                      	OUTI   EIMSK,0b00000011 	; enable INT0/1
-000163 e00f                          ldi    w, 0b00001111
-000164 9300 006a                     sts    EICRA,w    ; set to flanc montant
+0001ae e003
+0001af bf09                      	OUTI   EIMSK,0b00000011 	; enable INT0/1
+0001b0 e00f                          ldi    w, 0b00001111
+0001b1 9300 006a                     sts    EICRA,w    ; set to flanc montant
                                  .include "Yann23cm.asm"
-000166 9508                      
+0001b3 9508                      
                                   * Yann23cm.asm
                                   *
                                   *  Created: 22.05.2025 16:52:00
@@ -3763,38 +3868,38 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2
                                  	;nop
                                  .endm
                                  
-000167 2400
-000168 0024
-000169 3c42
-00016a 0000                      smileyHapppy: .db 0b00000000,0b00100100,0b00100100,0b00000000,0b01000010,0b00111100,0b00000000,0b00000000
-00016b 2400
-00016c 0024
-00016d 423c
-00016e 3c42                      smileyConcerned: .db 0b00000000,0b00100100,0b00100100,0b00000000,0b00111100,0b01000010,0b01000010,0b00111100
-00016f a500
-000170 a542
-000171 3c00
-000172 0042                      smileyDead: .db 0b00000000,0b10100101,0b01000010,0b10100101,0b00000000,0b00111100,0b01000010,0b00000000
+0001b4 2400
+0001b5 0024
+0001b6 3c42
+0001b7 0000                      smileyHapppy: .db 0b00000000,0b00100100,0b00100100,0b00000000,0b01000010,0b00111100,0b00000000,0b00000000
+0001b8 2400
+0001b9 0024
+0001ba 423c
+0001bb 3c42                      smileyConcerned: .db 0b00000000,0b00100100,0b00100100,0b00000000,0b00111100,0b01000010,0b01000010,0b00111100
+0001bc a500
+0001bd a542
+0001be 3c00
+0001bf 0042                      smileyDead: .db 0b00000000,0b10100101,0b01000010,0b10100101,0b00000000,0b00111100,0b01000010,0b00000000
                                  
                                  ;========= Sous Routines à appeler ===========
                                  
                                  ;uses w,u,a0,a1,a2 and print a happpy smiley on leds
                                  printSHappy:
-000173 ecee                      	ldi zl, low(2*smileyHapppy)
-000174 e0f2                      	ldi zh, high(2*smileyHapppy)
-000175 c006                      	rjmp remplissageEtEnvoie
+0001c0 e6e8                      	ldi zl, low(2*smileyHapppy)
+0001c1 e0f3                      	ldi zh, high(2*smileyHapppy)
+0001c2 c006                      	rjmp remplissageEtEnvoie
                                  
                                  ;uses w,u,a0,a1,a2 and print a concerned smiley on leds
                                  printSConcerned:
-000176 ede6                      	ldi zl, low(2*smileyConcerned)
-000177 e0f2                      	ldi zh, high(2*smileyConcerned)
-000178 c003                      	rjmp remplissageEtEnvoie
+0001c3 e7e0                      	ldi zl, low(2*smileyConcerned)
+0001c4 e0f3                      	ldi zh, high(2*smileyConcerned)
+0001c5 c003                      	rjmp remplissageEtEnvoie
                                  
                                  ;uses w,u,a0,a1,a2 and print a dead smiley on leds
                                  printSDead:
-000179 edee                      	ldi zl, low(2*smileyDead)
-00017a e0f2                      	ldi zh, high(2*smileyDead)
-00017b c000                      	rjmp remplissageEtEnvoie
+0001c6 e7e8                      	ldi zl, low(2*smileyDead)
+0001c7 e0f3                      	ldi zh, high(2*smileyDead)
+0001c8 c000                      	rjmp remplissageEtEnvoie
                                  
                                  ;========== Fin des Sous Routines à appeler =======
                                  
@@ -3805,288 +3910,307 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2
                                  
                                  ;parameter : z and uses w,u,a0,a1,a2 print a shape pointed by z 
                                  remplissageEtEnvoie:
-00017c e0c0                      	ldi yl, low(0x0400)
-00017d e0d4                      	ldi yh, high(0x0400)
-00017e e009                      	ldi w, 9	;compteur pour les bit
+0001c9 e0c0                      	ldi yl, low(0x0400)
+0001ca e0d4                      	ldi yh, high(0x0400)
+0001cb e009                      	ldi w, 9	;compteur pour les bit
                                  ligne:
-00017f 950a                      	dec w
-000180 f0c1                      	breq envoie
-000181 9035                      	lpm u, z+	;contient l'info
-000182 e038                      	ldi a1, 8	;compteur pour les leds
+0001cc 950a                      	dec w
+0001cd f0c1                      	breq envoie
+0001ce 9035                      	lpm u, z+	;contient l'info
+0001cf e038                      	ldi a1, 8	;compteur pour les leds
                                  pixel:
-000183 fe37                      	sbrs u, 7
-000184 c00a                      	rjmp noir
+0001d0 fe37                      	sbrs u, 7
+0001d1 c00a                      	rjmp noir
                                  
                                  jaune :
-000185 e02f                      	ldi	a0, 0x0f	; pixel jaune
-000186 9329                      	st	y+,a0
-000187 e02f                      	ldi a0,0x0f
-000188 9329                      	st	y+,a0
-000189 e020                      	ldi	a0, 0x00
-00018a 9329                      	st y+,a0
+0001d2 e02f                      	ldi	a0, 0x0f	; pixel jaune
+0001d3 9329                      	st	y+,a0
+0001d4 e02f                      	ldi a0,0x0f
+0001d5 9329                      	st	y+,a0
+0001d6 e020                      	ldi	a0, 0x00
+0001d7 9329                      	st y+,a0
                                  
-00018b 0c33                      	lsl u
-00018c 953a                      	dec a1
-00018d f389                      	breq ligne
-00018e cff4                      	rjmp pixel
+0001d8 0c33                      	lsl u
+0001d9 953a                      	dec a1
+0001da f389                      	breq ligne
+0001db cff4                      	rjmp pixel
                                  
                                  noir:
-00018f e020                      	ldi	a0, 0x00	; pixel noir
-000190 9329                      	st	y+,a0
-000191 e020                      	ldi a0, 0x00
-000192 9329                      	st	y+,a0
-000193 e020                      	ldi	a0, 0x00
-000194 9329                      	st y+,a0
+0001dc e020                      	ldi	a0, 0x00	; pixel noir
+0001dd 9329                      	st	y+,a0
+0001de e020                      	ldi a0, 0x00
+0001df 9329                      	st	y+,a0
+0001e0 e020                      	ldi	a0, 0x00
+0001e1 9329                      	st y+,a0
                                  
-000195 0c33                      	lsl u
-000196 953a                      	dec a1
-000197 f339                      	breq ligne
-000198 cfea                      	rjmp pixel
+0001e2 0c33                      	lsl u
+0001e3 953a                      	dec a1
+0001e4 f339                      	breq ligne
+0001e5 cfea                      	rjmp pixel
                                  
                                  envoie:
-000199 e0c0                      	ldi yl,low(0x0400)
-00019a e0d4                      	ldi yh,high(0x0400)
-00019b e400
-00019c 2e00                      	_LDI r0,64
+0001e6 e0c0                      	ldi yl,low(0x0400)
+0001e7 e0d4                      	ldi yh,high(0x0400)
+0001e8 e400
+0001e9 2e00                      	_LDI r0,64
                                  envoiePixel:
                                  
-00019d 9129                      	ld a0, y+
-00019e 9139                      	ld a1, y+	
-00019f 9149                      	ld a2, y+
+0001ea 9129                      	ld a0, y+
+0001eb 9139                      	ld a1, y+	
+0001ec 9149                      	ld a2, y+
                                  
-0001a0 94f8                      	cli
-0001a1 d008                      	rcall ws2812b4_byte3wr
-0001a2 9478                      	sei
+0001ed 94f8                      	cli
+0001ee d008                      	rcall ws2812b4_byte3wr
+0001ef 9478                      	sei
                                  
-0001a3 940a                      	dec r0
-0001a4 f7c1                      	brne envoiePixel
-0001a5 d035                      	rcall ws2812b4_reset
-0001a6 9508                      	ret
+0001f0 940a                      	dec r0
+0001f1 f7c1                      	brne envoiePixel
+0001f2 d035                      	rcall ws2812b4_reset
+0001f3 9508                      	ret
                                  
                                  
                                   ws2812b4_init:
-0001a7 e002
-0001a8 bb01                      	OUTI	DDRD,0x02
-0001a9 9508                      ret
+0001f4 e002
+0001f5 bb01                      	OUTI	DDRD,0x02
+0001f6 9508                      ret
                                  
                                  ; ws2812b4_byte3wr	; arg: a0,a1,a2 ; used: r16 (w)
                                  ; purpose: write contents of a0,a1,a2 (24 bit) into ws2812, 1 LED configuring
                                  ;     GBR color coding, LSB first
                                  ws2812b4_byte3wr:
                                  
-0001aa e008                      	ldi w,8
+0001f7 e008                      	ldi w,8
                                  ws2b3_starta0:
-0001ab fd27                      	sbrc a0,7
-0001ac c006                      	rjmp	ws2b3w1
-0001ad 2433
-0001ae 9a91
-0001af ba32
-0001b0 0000
-0001b1 0000                      	WS2812b4_WR0			; write a zero
-0001b2 c004                      	rjmp	ws2b3_nexta0
+0001f8 fd27                      	sbrc a0,7
+0001f9 c006                      	rjmp	ws2b3w1
+0001fa 2433
+0001fb 9a91
+0001fc ba32
+0001fd 0000
+0001fe 0000                      	WS2812b4_WR0			; write a zero
+0001ff c004                      	rjmp	ws2b3_nexta0
                                  ws2b3w1:
-0001b3 9a91
-0001b4 0000
-0001b5 0000
-0001b6 9891                      	WS2812b4_WR1
+000200 9a91
+000201 0000
+000202 0000
+000203 9891                      	WS2812b4_WR1
                                  ws2b3_nexta0:
-0001b7 0f22                      	lsl a0
-0001b8 950a                      	dec	w
-0001b9 f789                      	brne ws2b3_starta0
+000204 0f22                      	lsl a0
+000205 950a                      	dec	w
+000206 f789                      	brne ws2b3_starta0
                                  
-0001ba e008                      	ldi w,8
+000207 e008                      	ldi w,8
                                  ws2b3_starta1:
-0001bb fd37                      	sbrc a1,7
-0001bc c006                      	rjmp	ws2b3w1a1
-0001bd 2433
-0001be 9a91
-0001bf ba32
-0001c0 0000
-0001c1 0000                      	WS2812b4_WR0			; write a zero
-0001c2 c004                      	rjmp	ws2b3_nexta1
+000208 fd37                      	sbrc a1,7
+000209 c006                      	rjmp	ws2b3w1a1
+00020a 2433
+00020b 9a91
+00020c ba32
+00020d 0000
+00020e 0000                      	WS2812b4_WR0			; write a zero
+00020f c004                      	rjmp	ws2b3_nexta1
                                  ws2b3w1a1:
-0001c3 9a91
-0001c4 0000
-0001c5 0000
-0001c6 9891                      	WS2812b4_WR1
+000210 9a91
+000211 0000
+000212 0000
+000213 9891                      	WS2812b4_WR1
                                  ws2b3_nexta1:
-0001c7 0f33                      	lsl a1
-0001c8 950a                      	dec	w
-0001c9 f789                      	brne ws2b3_starta1
+000214 0f33                      	lsl a1
+000215 950a                      	dec	w
+000216 f789                      	brne ws2b3_starta1
                                  
-0001ca e008                      	ldi w,8
+000217 e008                      	ldi w,8
                                  ws2b3_starta2:
-0001cb fd47                      	sbrc a2,7
-0001cc c006                      	rjmp	ws2b3w1a2
-0001cd 2433
-0001ce 9a91
-0001cf ba32
-0001d0 0000
-0001d1 0000                      	WS2812b4_WR0			; write a zero
-0001d2 c004                      	rjmp	ws2b3_nexta2
+000218 fd47                      	sbrc a2,7
+000219 c006                      	rjmp	ws2b3w1a2
+00021a 2433
+00021b 9a91
+00021c ba32
+00021d 0000
+00021e 0000                      	WS2812b4_WR0			; write a zero
+00021f c004                      	rjmp	ws2b3_nexta2
                                  ws2b3w1a2:
-0001d3 9a91
-0001d4 0000
-0001d5 0000
-0001d6 9891                      	WS2812b4_WR1
+000220 9a91
+000221 0000
+000222 0000
+000223 9891                      	WS2812b4_WR1
                                  ws2b3_nexta2:
-0001d7 0f44                      	lsl a2
-0001d8 950a                      	dec	w
-0001d9 f789                      	brne ws2b3_starta2
+000224 0f44                      	lsl a2
+000225 950a                      	dec	w
+000226 f789                      	brne ws2b3_starta2
                                  	
-0001da 9508                      ret
+000227 9508                      ret
                                  
                                  ; ws2812b4_reset	; arg: void; used: r16 (w)
                                  ; purpose: reset pulse, configuration becomes effective
                                  ws2812b4_reset:
-0001db 9891                      	cbi PORTD, 1
-0001dc e401
-0001dd 2e30
-0001de e001
-0001df 943a
-0001e0 f7f1
-0001e1 943a
-0001e2 950a
-0001e3 f7d9                      	WAIT_US	50 	; 50 us are required, NO smaller works
-0001e4 9508                      ;================
+000228 9891                      	cbi PORTD, 1
+000229 e401
+00022a 2e30
+00022b e001
+00022c 943a
+00022d f7f1
+00022e 943a
+00022f 950a
+000230 f7d9                      	WAIT_US	50 	; 50 us are required, NO smaller works
+000231 9508                      ;================
                                  
                                  
                                  reset:
-0001e5 ef0f
-0001e6 bf0d
-0001e7 e100
-0001e8 bf0e                          LDSP	RAMEND			; set up stack pointer (SP)
-0001e9 ef0f
-0001ea bb04                      	OUTI	DDRC,0xff		; leds
-0001eb dfbb                      	rcall	ws2812b4_init
-0001ec df86                          rcall   printSHappy
-0001ed df58                      	rcall	UART0_init
-                                     ;rcall   LCD_init    
-0001ee df72                          rcall   SPEED_init      ;init speed control
-0001ef e80e
-0001f0 b906
-0001f1 e003
-0001f2 b907                          IRSET                   ;init le capteur de distance
-0001f3 9478                          sei
-0001f4 c000                          rjmp main
+000232 ef0f
+000233 bf0d
+000234 e100
+000235 bf0e                          LDSP	RAMEND			; set up stack pointer (SP)
+000236 ef0f
+000237 bb04                      	OUTI	DDRC,0xff		; leds
+000238 dfbb                      	rcall	ws2812b4_init
+000239 df86                          rcall   printSHappy
+00023a df0b                      	rcall	UART0_init
+00023b df4c                          rcall   LCD_init    
+00023c df71                          rcall   SPEED_init      ;init speed control
+00023d e80e
+00023e b906
+00023f e003
+000240 b907                          IRSET                   ;init le capteur de distance
+000241 9478                          sei
+000242 c000                          rjmp main
                                  
                                  main:
                                  	
-0001f5 9a36                          DISTANCEREAD            ; read distance in b1:b0
-0001f6 e604
-0001f7 2e30
-0001f8 e001
-0001f9 930f
-0001fa 923f
-0001fb e300
-0001fc 2e30
-0001fd e006
-0001fe 943a
-0001ff f7f1
-000200 943a
-000201 950a
-000202 f7d9
-000203 903f
-000204 910f
-000205 943a
-000206 f791
-000207 950a
-000208 f781                          WAIT_MS 100
-000209 e505
-00020a 2e40
-00020b e001
-00020c 2e50
-00020d de25                          PRINTF	UART0_putc		; print printDistance
-00020e 0d0d
-00020f 6944
-000210 7473
-000211 6e61
-000212 6563
-000213 d03d
-000214 2016
-000215 2020
-000216 0020                      	.db	CR,CR,"Distance=",FDEC2,b,"    ",0
-000217 2f26
-000218 2f37                          MOV2 a1,a0,b1,b0
-000219 9536
-00021a 9527                          LSR2 a1,a0              ; print on leds
-00021b 9536
-00021c 9527                          LSR2 a1,a0
-00021d bb25                          out PORTC, a0
+000243 9a36                          DISTANCEREAD            ; read distance in b1:b0
+000244 e604
+000245 2e30
+000246 e001
+000247 930f
+000248 923f
+000249 e300
+00024a 2e30
+00024b e006
+00024c 943a
+00024d f7f1
+00024e 943a
+00024f 950a
+000250 f7d9
+000251 903f
+000252 910f
+000253 943a
+000254 f791
+000255 950a
+000256 f781                          WAIT_MS 100
+000257 e505
+000258 2e40
+000259 e001
+00025a 2e50
+00025b ddd7                          PRINTF	UART0_putc		; print printDistance
+00025c 0d0d
+00025d 6944
+00025e 7473
+00025f 6e61
+000260 6563
+000261 d03d
+000262 2016
+000263 2020
+000264 0020                      	.db	CR,CR,"Distance=",FDEC2,b,"    ",0
+000265 df10                      	rcall LCD_home
+000266 e608
+000267 2e40
+000268 e001
+000269 2e50
+00026a ddc8                      	PRINTF LCD
+00026b 0d0d
+00026c 6944
+00026d 7473
+00026e 6e61
+00026f 6563
+000270 d03d
+000271 2016
+000272 2020
+000273 0020                      	.db	CR,CR,"Distance=",FDEC2,b,"    ",0
+000274 2f26
+000275 2f37                          MOV2 a1,a0,b1,b0
+000276 9536
+000277 9527                          LSR2 a1,a0              ; print on leds
+000278 9536
+000279 9527                          LSR2 a1,a0
+00027a bb25                          out PORTC, a0
                                  
-00021e 3e21                          cpi a0, DISTANCETRESH   ; check distance
-00021f f4b0                          brsh wall           
+00027b 3e21                          cpi a0, DISTANCETRESH   ; check distance
+00027c f4e0                          brsh wall           
                                  
-000220 e505
-000221 2e40
-000222 e001
-000223 2e50
-000224 de0e                          PRINTF	UART0_putc		; print speed
-000225 0d0d
-000226 7053
-000227 6565
-000228 3d64
-000229 08d0
-00022a 2020
-00022b 2020
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(56): warning: .cseg .db misalignment - padding zero byte
-00022c 0000                      	.db	CR,CR,"Speed=",FDEC2,c,"    ",0
-                                     ;PRINTF	LCD		; print speed
-00022d 0d0d
-00022e 7053
-00022f 6565
-000230 3d64
-000231 08d0
-000232 2020
-000233 2020
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(58): warning: .cseg .db misalignment - padding zero byte
-000234 0000                      	.db	CR,CR,"Speed=",FDEC2,c,"    ",0
+00027d e505
+00027e 2e40
+00027f e001
+000280 2e50
+000281 ddb1                          PRINTF	UART0_putc		; print speed
+000282 0d0d
+000283 7053
+000284 6565
+000285 3d64
+000286 08d0
+000287 2020
+000288 2020
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(59): warning: .cseg .db misalignment - padding zero byte
+000289 0000                      	.db	CR,CR,"Speed=",FDEC2,c,"    ",0
+00028a df1a                      	rcall LCD_lf
+00028b e608
+00028c 2e40
+00028d e001
+00028e 2e50
+00028f dda3                      	PRINTF	LCD		; print speed
+000290 0d0d
+000291 7053
+000292 6565
+000293 3d64
+000294 08d0
+000295 2020
+000296 2020
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main2.asm(62): warning: .cseg .db misalignment - padding zero byte
+000297 0000                      	.db	CR,CR,"Speed=",FDEC2,c,"    ",0
                                      
-000235 cfbf                          rjmp main
+000298 cfaa                          rjmp main
                                  
                                  
                                  wall:
-                                     ;rcall LCD_uninit
-000236 df3f                          rcall printSConcerned
-000237 ef04
-000238 2e30
-000239 e002
-00023a 930f
-00023b 923f
-00023c e300
-00023d 2e30
-00023e e006
-00023f 943a
-000240 f7f1
-000241 943a
-000242 950a
-000243 f7d9
-000244 903f
-000245 910f
-000246 943a
-000247 f791
-000248 950a
-000249 f781                          WAIT_MS 500
-00024a df2e                          rcall printSDead
-00024b ed0c
-00024c 2e30
-00024d e006
-00024e 930f
-00024f 923f
-000250 e300
-000251 2e30
-000252 e006
-000253 943a
-000254 f7f1
-000255 943a
-000256 950a
-000257 f7d9
-000258 903f
-000259 910f
-00025a 943a
-00025b f791
-00025c 950a
-00025d f781                          WAIT_MS 1500
+000299 df29                          rcall printSConcerned
+00029a ef04
+00029b 2e30
+00029c e002
+00029d 930f
+00029e 923f
+00029f e300
+0002a0 2e30
+0002a1 e006
+0002a2 943a
+0002a3 f7f1
+0002a4 943a
+0002a5 950a
+0002a6 f7d9
+0002a7 903f
+0002a8 910f
+0002a9 943a
+0002aa f791
+0002ab 950a
+0002ac f781                          WAIT_MS 500
+0002ad df18                          rcall printSDead
+0002ae ed0c
+0002af 2e30
+0002b0 e006
+0002b1 930f
+0002b2 923f
+0002b3 e300
+0002b4 2e30
+0002b5 e006
+0002b6 943a
+0002b7 f7f1
+0002b8 943a
+0002b9 950a
+0002ba f7d9
+0002bb 903f
+0002bc 910f
+0002bd 943a
+0002be f791
+0002bf 950a
+0002c0 f781                          WAIT_MS 1500
 
 
 RESOURCE USE INFORMATION
@@ -4104,40 +4228,40 @@ counted separately from r26..r31 here.
 .dseg memory usage only counts static data declared with .byte
 
 "ATmega128" register use summary:
-x  :   6 y  :   9 z  :   1 r0 :   9 r1 :   0 r2 :   0 r3 :  34 r4 :   3 
-r5 :   3 r6 :   0 r7 :   0 r8 :   7 r9 :   5 r10:   5 r11:   6 r12:  11 
-r13:   0 r14:   0 r15:   0 r16: 122 r17:   0 r18:  39 r19:  24 r20:  18 
+x  :   6 y  :   9 z  :   1 r0 :   9 r1 :   0 r2 :   0 r3 :  36 r4 :   5 
+r5 :   5 r6 :   0 r7 :   0 r8 :   7 r9 :   5 r10:   5 r11:   6 r12:  11 
+r13:   0 r14:   0 r15:   0 r16: 160 r17:   0 r18:  46 r19:  24 r20:  18 
 r21:  15 r22:  11 r23:  27 r24:   7 r25:  15 r26:   4 r27:   4 r28:   2 
 r29:   2 r30:  14 r31:   9 
 Registers used: 27 out of 35 (77.1%)
 
 "ATmega128" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   2 adiw  :   5 and   :   0 
-andi  :   6 asr   :   2 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :   1 brcs  :   0 break :   0 breq  :  17 brge  :   0 brhc  :   0 
+andi  :   7 asr   :   2 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
+brcc  :   1 brcs  :   0 break :   0 breq  :  19 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 brlt  :   0 brmi  :   1 
 brne  :  25 brpl  :   1 brsh  :   2 brtc  :   5 brts  :   0 brvc  :   0 
 brvs  :   0 bset  :   0 bst   :   1 call  :   0 cbi   :   4 cbr   :   0 
 clc   :   1 clh   :   0 cli   :   1 cln   :   0 clr   :  15 cls   :   0 
 clt   :   1 clv   :   0 clz   :   0 com   :   8 cp    :   1 cpc   :   3 
-cpi   :   9 cpse  :   0 dec   :  32 elpm  :   0 eor   :   0 fmul  :   0 
-fmuls :   0 fmulsu:   0 icall :   1 ijmp  :   1 in    :   3 inc   :   3 
-jmp   :   4 ld    :   9 ldd   :   0 ldi   :  72 lds   :   0 lpm   :  13 
-lsl   :   6 lsr   :   5 mov   :  32 movw  :   0 mul   :   0 muls  :   0 
-mulsu :   0 neg   :   0 nop   :  12 or    :   0 ori   :   0 out   :  15 
-pop   :  28 push  :  27 rcall :  23 ret   :  14 reti  :   3 rjmp  :  37 
+cpi   :  11 cpse  :   0 dec   :  32 elpm  :   0 eor   :   0 fmul  :   0 
+fmuls :   0 fmulsu:   0 icall :   1 ijmp  :   1 in    :   5 inc   :   3 
+jmp   :   4 ld    :   9 ldd   :   0 ldi   :  91 lds   :   3 lpm   :  13 
+lsl   :   6 lsr   :   5 mov   :  37 movw  :   0 mul   :   0 muls  :   0 
+mulsu :   0 neg   :   0 nop   :  13 or    :   0 ori   :   2 out   :  17 
+pop   :  29 push  :  28 rcall :  37 ret   :  21 reti  :   3 rjmp  :  51 
 rol   :  10 ror   :  15 sbc   :   3 sbci  :   0 sbi   :   7 sbic  :   0 
-sbis  :   2 sbiw  :   0 sbr   :   0 sbrc  :  11 sbrs  :   1 sec   :   0 
+sbis  :   2 sbiw  :   0 sbr   :   2 sbrc  :  14 sbrs  :   1 sec   :   0 
 seh   :   0 sei   :   2 sen   :   0 ser   :   0 ses   :   0 set   :   1 
 sev   :   0 sez   :   0 sleep :   0 spm   :   0 st    :   6 std   :   0 
-sts   :   3 sub   :   3 subi  :   3 swap  :   4 tst   :   8 wdr   :   0 
+sts   :   6 sub   :   3 subi  :   3 swap  :   4 tst   :   8 wdr   :   0 
 
-Instructions used: 57 out of 114 (50.0%)
+Instructions used: 60 out of 114 (52.6%)
 
 "ATmega128" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0004be   1060     74   1134  131072   0.9%
+[.cseg] 0x000000 0x000584   1240     92   1332  131072   1.0%
 [.dseg] 0x000100 0x000100      0      0      0    4096   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    4096   0.0%
 
