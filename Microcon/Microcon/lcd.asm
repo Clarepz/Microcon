@@ -54,6 +54,12 @@ LCD_init:
 	CW	LCD_wr_ir, 0b00111000	; 8bits=1, 2lines=1, 5x8dots=0
 	ret
 
+LCD_uninit:
+	in	w,MCUCR
+	sbr	w,(1<<SRE)+(1<<SRW10)
+	out	MCUCR,w
+	ret
+
 LCD_pos:
 ; in	a0 = position (0x00..0x0f first line, 0x40..0x4f second line)
 	mov	w,a0
