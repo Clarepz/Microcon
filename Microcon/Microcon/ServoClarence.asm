@@ -16,32 +16,36 @@
 .include "printf.asm"
 .include "UART.asm"
 
+.set	initVal = 200
+.equ	servoOffset=190
+
 ; === interrupt service routines ====
-.set	timer0 = 200
+.dseg
+servoTable: .byte 8		;lookup table of servo management
+.cseg
 
 
 output_compare0:
-	in 		_sreg, SREG
-
 	OUTI 	PORTB, 0x00
 
+	in 		_sreg, SREG
+
 	lsl 	servochanel
-
-	;PRINTF	UART0_putc		; print formatted	
-	;.db	CR,CR,"CACA=",FHEX2,b,"=",FDEC2,b,"    ",0	
-
 	inc		servocounter
 
 	cpi 	servocounter, 10
-	brlo	cacaNicole
+	brlo	skip
+
 	clr		servocounter
 	_LDI		servochanel,	0b00000001
+	skip:
 
+	ldi 	zh, high(servoTable)
+	ldi 	zl, servocounter
+	adiw 	zl, low(servoTable)	
+	ld 		_w, z
+	out 	OCR0, _w
 
-	;cpi 	servocounter, 8
-	;brlo	PC+2
-	;clr 	servochanel 
-cacaNicole:
 	out		SREG, _sreg
 	reti
 
@@ -58,15 +62,40 @@ reset:
 	;OUTI	ASSR,  (1<<AS0)		; clock from TOSC1 (external)
 	OUTI	TCCR0, (0<<CTC0)+3	;  CS0=6 CK	
 	
-	OUTI	OCR0,timer0-1		; Output Compare reg 0
+	OUTI	OCR0,timer0			; Output Compare reg 0
 	
 	
 	OUTI	TIMSK,(1<<OCIE0)+(1<<TOIE0); enable outputcompar and overflow
 	_LDI 	servochanel, 0b00000001
 	clr 	servocounter
+	SERVOWA 10
+
 
 	rcall	UART0_init		; initialize UART
 	sei							; set global interrupt
 ; === main program ===
 main:
+	SERVOW 0, 50+servoOffset
+	WAIT_MS 2000
+	SERVOW 0, -50+servoOffset
+	WAIT_MS 2000
 	rjmp	main
+
+
+.macro SERVOW		; # of the servo (starting at 0), value
+	ldi w, @1
+	sts servoTable+@0, w
+.endmacro
+
+.macro SERVOWA		;value ;=write all servo
+	ldi zh, high(servoTable)
+	ldi zl, low(servoTable)
+	ldi w, 0
+	ldi u, @1
+	loop:
+		st z+, u
+		inc w
+		cpi w, 8
+		brne loop
+
+.endmacro
