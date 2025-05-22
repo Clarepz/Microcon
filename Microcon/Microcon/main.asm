@@ -12,26 +12,24 @@
 .org	0x30
 
 .include "irDistanceMacro.asm"
+.include "printf.asm"
+.include "uart.asm"	
 
 reset:
 	OUTI	DDRC,0xff		; configure portC to output
 	rjmp RESET
     LDSP	RAMEND			; set up stack pointer (SP)
-    
     sei
     IRSET
     rjmp main
 
 main:
-	;OUTI PORTC, 0x00
-	;WAIT_MS 1000
-	;OUTI PORTC, 0XFF
-	;WAIT_MS 1000
-	;rjmp main
-    DISTANCEREAD
-    LSR2 a1,a0
-    LSR2 a1,a0
-    com a0
-    out PORTC, a0           ; show on led
+	
+    DISTANCEREAD            ; read distance in b1:b0
+    WAIT_MS 100
+    PRINTF	UART0_putc		; print formatted
+	.db	CR,CR,"Distance=",FDEC2,b,"    ",0	
+    LSR 2 b1,b0
+    LSR 2 b1,b0
+    out PORTC, b0
     rjmp main
-    
