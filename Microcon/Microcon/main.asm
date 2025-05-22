@@ -17,8 +17,8 @@
 
 reset:
 	OUTI	DDRC,0xff		; configure portC to output
-	rjmp RESET
     LDSP	RAMEND			; set up stack pointer (SP)
+	rcall	UART0_init
     sei
     IRSET
     rjmp main
@@ -28,8 +28,8 @@ main:
     DISTANCEREAD            ; read distance in b1:b0
     WAIT_MS 100
     PRINTF	UART0_putc		; print formatted
-	.db	CR,CR,"Distance=",FDEC2,b,"    ",0	
-    LSR 2 b1,b0
-    LSR 2 b1,b0
+	.db	CR,CR,"CACA=",FHEX2,b,"=",FDEC2,b,"    ",0
+    LSR2 b1,b0
+    LSR2 b1,b0
     out PORTC, b0
     rjmp main

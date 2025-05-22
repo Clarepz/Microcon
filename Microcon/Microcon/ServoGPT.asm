@@ -4,8 +4,8 @@
 .include "definitions.asm"
 
 
-.equ nbServo = 1
-.equ servoROffset = 0b101100
+.equ NBSERVO = 2
+.equ SBOFFSET = 0b110110
 
 .dseg
 servoTable: .byte 12+nbServo		;lookup table of servo management
@@ -34,9 +34,6 @@ servoTable: .byte 12+nbServo		;lookup table of servo management
 	adiw z, low(2*servoTable)
 	ldi w, @1
 	st z+, w
-	neg w
-	subi w, 1
-	st z, w
 .endmacro
 
 ;change the values of a servo in the lookUp table
@@ -47,9 +44,6 @@ servoTable: .byte 12+nbServo		;lookup table of servo management
 	adiw z, low(2*servoTable)
 	mov w, @1
 	st z+, w
-	neg w
-	subi w, 1
-	st z, w
 .endmacro
 
 
@@ -65,6 +59,7 @@ reset:
 	OUTI DDRB, 0xff
 	OUTI DDRC, 0xff
 	OUTI DDRD, 0x00
+	OUTI PORTB, 0xff
 
 	sei
 
@@ -74,6 +69,18 @@ reset:
 
 
 main:
+	rcall output_compare2
+	rcall overflow2
+	rcall output_compare2
+	rcall overflow2
+	rcall overflow2
+	rcall overflow2
+	rcall overflow2
+	rcall overflow2
+	rcall overflow2
+	rcall overflow2
+	rcall overflow2
+	rcall overflow2
 	rjmp main
 
 
@@ -81,107 +88,59 @@ overflow2:
 	in  _sreg, SREG
 	push zl
 	push zh	
-	lds _w, 2*servoTable+11+nbServo		;w contient zl de OCR2
-	mov zl, _w
-	ldi zh, high(2*servoTable)
-	ld _u, z		;u contient la valeur de OCR2				
-	out OCR2, _u
-	INC_CYC _w, low(2*servoTable), low(2*servoTable)+9+nbServo
-	sts 2*servoTable+11+nbServo, _w
-	lds _w, 2*servoTable+10+nbServo
-	sbrs _w, 6		;skip if mode attente
-	rjmp ecrit1		;si on est pas en mode attente	
-	subi _w, -2		;rg++
-sortieInterupt:
-	sts 2*servoTable+10+nbServo, _w
+	lds _w, 2*servoTable+NBSERVO
+	sbrs _w, 7			;skip si EOC=1
+	rjmp PC+2
+	ldi _w, SBOFFSET
+	OUTI TIMSK, (1<<OCIE2)
+	;write 1 sur port servo
+	
+	;OUTI PORTC, 0xff
+	sbrs _w, 6
+	OUTI PORTB, 0xff
+	;end of test
+	subi _w, -1	;SB+1
+	sts 2*servoTable+NBSERVO, _w	;sortie
 	pop zh
 	pop zl
 	out SREG, _sreg
 	reti
-ecrit1:
-	sbrc _w, 0			;skip if IWT=0 ~ WT=1
-	rjmp ecrit0
-	sbrc _w, 7			;skip si EOC=0
-	ldi _w, servoROffset
-	;write 1 sur port servo
-	
-	;OUTI PORTC, 0xff
-	OUTI PORTB, 0xff
-	;end of test
-changeFlanc:
-	subi _w, -1
-	;update OCR2
-	;end of test
-	rjmp sortieInterupt
-ecrit0:
-	;write 0 sur port servo
-	OUTI PORTB, 0b11000000
-	;end of test
-	cpi _w, servoROffset+nbServo
-	brne PC+2
-	ori _w, 0b01000000
-	rjmp changeFlanc
 
 
 output_compare2:
 	in  _sreg, SREG
 	push zl
 	push zh	
-	lds _w, 2*servoTable+11+nbServo		;w contient zl de OCR2
+	lds _w, 2*servoTable+1+nbServo		;w contient zl de OCR2
 	mov zl, _w
 	ldi zh, high(2*servoTable)
 	ld _u, z		;u contient la valeur de OCR2				
 	out OCR2, _u
-	INC_CYC _w, low(2*servoTable), low(2*servoTable)+nbServo
-	sts 2*servoTable+11+nbServo, _w
-	lds _w, 2*servoTable+nbServo
-ecrit0:
-	;write 0 sur port servo
-	OUTI PORTB, 0b11000000
-	;end of test
-	cpi _w, servoROffset+nbServo
-	brne PC+2
-	ori _w, 0b01000000
-	rjmp changeFlanc
-sortieInterupt:
-	sts 2*servoTable+10+nbServo, _w
+	INC_CYC _w, low(2*servoTable), low(2*servoTable)+NBSERVO-1
+	sts 2*servoTable+1+NBSERVO, _w
+	lds _w, 2*servoTable+NBSERVO ;w contient state byte
+	;en cours
+	OUTI PORTB, 0x00
+	;en cours
+	cpi _w, SBOFFSET+NBSERVO
+	brne PC+3	;step=nbServo ?
+	OUTI TIMSK, (0<<OCIE2)
+	ori _w, 0b01000000	;WB=1
+	sts 2*servoTable+NBSERVO, _w	;sortie
 	pop zh
 	pop zl
 	out SREG, _sreg
 	reti
-ecrit1:
-	sbrc _w, 0			;skip if IWT=0 ~ WT=1
-	rjmp ecrit0
-	sbrc _w, 7			;skip si EOC=0
-	ldi _w, servoROffset
-	;write 1 sur port servo
-	
-	;OUTI PORTC, 0xff
-	OUTI PORTB, 0xff
-	;end of test
-changeFlanc:
-	subi _w, -1
-	;update OCR2
-	;end of test
-	rjmp sortieInterupt
-
 
 
 
 servoSetup:
 	ldi	zl, low(2*servoTable)
 	ldi	zh, high(2*servoTable)
-	ldi	a0, nbServo
-	breq PC+7			;in case nbServo=0
+	ldi	a0, NBSERVO
+	breq PC+5			;in case nbServo=0
 	ldi w, 192
 	st  z+, w
-	ldi w, 64
-	st z+, w
-	dec a0
-	brne PC-5
-	ldi a0, 10-nbServo
-	ldi w, 0xff
-	st z+, w
 	dec a0
 	brne PC-3
 	ldi w, 0b10000000
