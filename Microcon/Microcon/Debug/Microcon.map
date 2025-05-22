@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm Thu May 22 18:13:26 2025
+AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm Thu May 22 19:19:12 2025
 
 
 EQU  SIGNATURE_000 0000001e
@@ -940,9 +940,11 @@ EQU  BNC1         00000002
 EQU  BNC2         00000004
 DEF  servochanel  r13
 DEF  servocounter r18
-CSEG reset        00000168
-CSEG output_compare0 0000015a
-CSEG overflow     00000166
+SET  initVal      ffffffce
+EQU  servoOffset  000000be
+CSEG reset        00000177
+CSEG output_compare0 00000164
+CSEG overflow     00000175
 EQU  FDEC         000000c0
 EQU  FDEC2        000000d0
 EQU  FDEC3        000000e0
@@ -1009,6 +1011,10 @@ CSEG UART0_init   00000143
 CSEG UART0        00000152
 CSEG UART0_putc   00000152
 CSEG UART0_getc   00000156
-SET  timer0       000000c8
-CSEG cacaNicole   00000164
-CSEG main         00000179
+DSEG servoTable   00000100
+CSEG servowa      0000015a
+CSEG loop         0000015f
+CSEG skip         0000016e
+CSEG main         00000189
+CSEG WAIT_MS@WAIT_MS@4012 0000018f
+CSEG WAIT_MS@WAIT_MS@4041 000001a5

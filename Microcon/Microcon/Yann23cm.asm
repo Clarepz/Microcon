@@ -40,9 +40,10 @@
 .org 0
 	jmp	reset
 
-;.dseg
-;.db 0b00000000,0b00100100,0b00100100,0b00000000,0b01000010,0b00111100,0b00000000,0b00000000
 .org 0x30
+
+smiley: .db 0b00000000,0b00100100,0b00100100,0b00000000,0b01000010,0b00111100,0b00000000,0b00000000
+
 
 reset:
 	LDSP	RAMEND			; Load Stack Pointer (SP)
@@ -54,45 +55,47 @@ main:
 	rjmp main
 
 
+remplissage :
+	ldi zl, low(2*smiley)
+	ldi zh, high(2*smiley)
+	ldi yl, low(0x0400)
+	ldi yh, high(0x0400)
+	ldi w, 9	;compteur pour les bit
+ligne:
+	dec w
+	brne PC+2
+	ret 
+	lpm u, z+	;contient l'info
+	ldi a1, 8	;compteur pour les leds
+ledRGB:
+	sbrs u, 7
+	rjmp noir
 
-remplissage:
-ldi	b0,17
-ldi zl,low(0x0400)
-	ldi zh,high(0x0400)
-imgld_loop:
-	ldi	a0, 0x0f	; pixel 1, light green
-	st	z+,a0
+jaune :
+	ldi	a0, 0x0f	; pixel jaune
+	st	y+,a0
 	ldi a0,0x0f
-	st	z+,a0
+	st	y+,a0
 	ldi	a0, 0x00
-	st z+,a0
+	st y+,a0
 
-	ldi	a0, 0x00	; pixel 2, light red
-	st	z+,a0
-	ldi a0,0x0f
-	st	z+,a0
+	lsl u
+	dec a1
+	breq ligne
+	rjmp ledRGB
+
+noir:
+	ldi	a0, 0x00	; pixel noir
+	st	y+,a0
+	ldi a0, 0x00
+	st	y+,a0
 	ldi	a0, 0x00
-	st z+,a0
+	st y+,a0
 
-	ldi	a0, 0x00	; pixel 3, light blue
-	st	z+,a0
-	ldi a0,0x00
-	st	z+,a0
-	ldi	a0, 0x0f
-	st z+,a0
-
-	ldi	a0, 0x00	; pixel 4, off
-	st	z+,a0
-	ldi a0,0x00
-	st	z+,a0
-	ldi	a0, 0x00
-	st z+,a0
-
-	dec b0
-	brne imgld_loop
-	ret
-
-
+	lsl u
+	dec a1
+	breq ligne
+	rjmp ledRGB
 
 
 
@@ -101,21 +104,18 @@ printSmileyHappy:
 	rcall remplissage
 	ldi zl,low(0x0400)
 	ldi zh,high(0x0400)
-	ldi w,64
+	_LDI r0,64
 loop:
 
 	ld a0, z+
-	;add a1,b1		; increase intensity (and color) until all white
-	ld a1, z+		;>and high intensity, uncomment to use
-	;add a1,b1
-	ld a2,z+
-	;add a2,b1
+	ld a1, z+	
+	ld a2, z+
 
 	cli
 	rcall ws2812b4_byte3wr
 	sei
 
-	dec w
+	dec r0
 	brne loop
 	rcall ws2812b4_reset
 	ret

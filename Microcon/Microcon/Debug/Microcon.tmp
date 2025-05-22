@@ -26,9 +26,9 @@
   <FILE>Microcon.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <reset><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>54</LINE></reset>
-  <output_compare0><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>23</LINE></output_compare0>
-  <overflow><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>48</LINE></overflow>
+  <reset><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>80</LINE></reset>
+  <output_compare0><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>50</LINE></output_compare0>
+  <overflow><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>74</LINE></overflow>
   <_printf><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\printf.asm</FILE><LINE>138</LINE></_printf>
   <_printf_read><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\printf.asm</FILE><LINE>143</LINE></_printf_read>
   <_printf_end><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\printf.asm</FILE><LINE>153</LINE></_printf_end>
@@ -70,7 +70,10 @@
   <UART0><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\UART.asm</FILE><LINE>32</LINE></UART0>
   <UART0_putc><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\UART.asm</FILE><LINE>33</LINE></UART0_putc>
   <UART0_getc><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\UART.asm</FILE><LINE>39</LINE></UART0_getc>
-  <cacaNicole><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>44</LINE></cacaNicole>
-  <main><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>71</LINE></main>
+  <servoTable><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>34</LINE></servoTable>
+  <servowa><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>37</LINE></servowa>
+  <loop><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>42</LINE></loop>
+  <skip><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>63</LINE></skip>
+  <main><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>99</LINE></main>
  </LABELS>
 </ASSEMBLER_INFO>

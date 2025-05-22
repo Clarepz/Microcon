@@ -1,18 +1,18 @@
 
-AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm Thu May 22 18:13:26 2025
+AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm Thu May 22 19:19:12 2025
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m128def.inc'
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(3): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm'
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(4): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\definitions.asm'
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(5): warning: Register r13 already defined by the .DEF directive
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(6): warning: Register r18 already defined by the .DEF directive
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(16): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\printf.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(17): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\UART.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(28): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\printf.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(29): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\UART.asm'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m128def.inc'
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(3): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm'
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(4): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\definitions.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(16): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\printf.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(17): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\UART.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(28): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\printf.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(29): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\UART.asm'
                                  
                                  
                                  
@@ -3083,13 +3083,25 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\Servo
                                  .list
                                  .def servochanel = r13
                                  .def servocounter = r18
+                                 .set	initVal = -50
+                                 .equ	servoOffset=190
+                                 
+                                 .macro SERVOW		; # of the servo (starting at 0), value
+                                 	ldi w, @1
+                                 	sts servoTable+@0, w
+                                 .endmacro
+                                 
+                                 
+                                 
+                                 
+                                 
                                  ; === interrupt vector table ===
                                  .org	0
-000000 940c 0168                 	jmp	reset
+000000 940c 0177                 	jmp	reset
                                  .org	OC0addr					; timer 0 output compare match
-00001e 940c 015a                 	jmp	output_compare0
+00001e 940c 0164                 	jmp	output_compare0
                                  .org 	OVF0addr
-000020 940c 0166                 	jmp overflow
+000020 940c 0175                 	jmp overflow
                                  .org	0x30
                                  
                                  .include "printf.asm"
@@ -3681,69 +3693,129 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\Servo
 000157 cffe                      	rjmp	PC-1		; loop back if not complete
 000158 b12c                      	in		a0,UDR0		; read character to UART Data Register
 000159 9508                      
-                                 ; === interrupt service routines ====
-                                 .set	timer0 = 200
                                  
+                                 ; === interrupt service routines ====
+                                 .dseg
+000100                           servoTable: .byte 8		;lookup table of servo management
+                                 .cseg
+                                 ;.macro SERVOWA		;value ;=write all servo
+                                 servowa:
+00015a e0f1                      	ldi zh, high(servoTable)
+00015b e0e0                      	ldi zl, low(servoTable)
+00015c e000                      	ldi w, 0
+00015d e00a
+00015e 2e30                      	_LDI u, 10;@0
+                                 	loop:
+00015f 9231                      		st z+, u
+000160 9503                      		inc w
+000161 3008                      		cpi w, 8
+000162 f7e1                      		brne loop
+000163 9508                      		ret
+                                 ;.endmacro
                                  
                                  output_compare0:
-00015a b61f                      	in 		_sreg, SREG
+000164 e000
+000165 bb08                      	OUTI 	PORTB, 0x00
                                  
-00015b e000
-00015c bb08                      	OUTI 	PORTB, 0x00
+000166 b61f                      	in 		_sreg, SREG
                                  
-00015d 0cdd                      	lsl 	servochanel
+000167 0cdd                      	lsl 	servochanel
+000168 9523                      	inc		servocounter
                                  
-                                 	;PRINTF	UART0_putc		; print formatted	
-                                 	;.db	CR,CR,"CACA=",FHEX2,b,"=",FDEC2,b,"    ",0	
+000169 302a                      	cpi 	servocounter, 10
+00016a f018                      	brlo	skip
                                  
-00015e 9523                      	inc		servocounter
+00016b 2722                      	clr		servocounter
+00016c e001
+00016d 2ed0                      	_LDI		servochanel,	0b00000001
+                                 	skip:
                                  
-00015f 302a                      	cpi 	servocounter, 10
-000160 f018                      	brlo	cacaNicole
-000161 2722                      	clr		servocounter
-000162 e001
-000163 2ed0                      	_LDI		servochanel,	0b00000001
+00016e e0f1                      	ldi 	zh, high(servoTable)
+00016f 2fe2                      	mov 	zl, servocounter
+000170 9630                      	adiw 	zl, low(servoTable)	
+000171 8110                      	ld 		_w, z
+000172 bf11                      	out 	OCR0, _w
                                  
-                                 
-                                 	;cpi 	servocounter, 8
-                                 	;brlo	PC+2
-                                 	;clr 	servochanel 
-                                 cacaNicole:
-000164 be1f                      	out		SREG, _sreg
-000165 9518                      	reti
+000173 be1f                      	out		SREG, _sreg
+000174 9518                      	reti
                                  
                                  overflow:
-000166 bad8                      	out 	PORTB, servochanel
+000175 bad8                      	out 	PORTB, servochanel
                                  	
-000167 9518                      	reti
+000176 9518                      	reti
                                  
                                  ; === initialisation (reset) ===	
                                  reset: 
-000168 ef0f
-000169 bf0d
-00016a e100
-00016b bf0e                      	LDSP	RAMEND				; load stack pointer (SP)
-00016c ef0f
-00016d bb07                      	OUTI	DDRB,0xff			; portB = output
+000177 ef0f
+000178 bf0d
+000179 e100
+00017a bf0e                      	LDSP	RAMEND				; load stack pointer (SP)
+00017b ef0f
+00017c bb07                      	OUTI	DDRB,0xff			; portB = output
                                  		
                                  	;OUTI	ASSR,  (1<<AS0)		; clock from TOSC1 (external)
-00016e e003
-00016f bf03                      	OUTI	TCCR0, (0<<CTC0)+3	;  CS0=6 CK	
+00017d e003
+00017e bf03                      	OUTI	TCCR0, (0<<CTC0)+3	;  CS0=6 CK	
                                  	
-000170 ec07
-000171 bf01                      	OUTI	OCR0,timer0-1		; Output Compare reg 0
+00017f ec0e
+000180 bf01                      	OUTI	OCR0,initVal			; Output Compare reg 0
                                  	
                                  	
-000172 e003
-000173 bf07                      	OUTI	TIMSK,(1<<OCIE0)+(1<<TOIE0); enable outputcompar and overflow
-000174 e001
-000175 2ed0                      	_LDI 	servochanel, 0b00000001
-000176 2722                      	clr 	servocounter
+000181 e003
+000182 bf07                      	OUTI	TIMSK,(1<<OCIE0)+(1<<TOIE0); enable outputcompar and overflow
+000183 e001
+000184 2ed0                      	_LDI 	servochanel, 0b00000001
+000185 2722                      	clr 	servocounter
+000186 dfd3                      	rcall SERVOWA ;10
                                  
-000177 dfcb                      	rcall	UART0_init		; initialize UART
-000178 9478                      	sei							; set global interrupt
+                                 
+000187 dfbb                      	rcall	UART0_init		; initialize UART
+000188 9478                      	sei							; set global interrupt
                                  ; === main program ===
                                  main:
+000189 ef00
+00018a 9300 0100                 	SERVOW 0, 50+servoOffset
+00018c ed00
+00018d 2e30
+00018e e008
+00018f 930f
+000190 923f
+000191 e300
+000192 2e30
+000193 e006
+000194 943a
+000195 f7f1
+000196 943a
+000197 950a
+000198 f7d9
+000199 903f
+00019a 910f
+00019b 943a
+00019c f791
+00019d 950a
+00019e f781                      	WAIT_MS 2000
+00019f e80c
+0001a0 9300 0100                 	SERVOW 0, -50+servoOffset
+0001a2 ed00
+0001a3 2e30
+0001a4 e008
+0001a5 930f
+0001a6 923f
+0001a7 e300
+0001a8 2e30
+0001a9 e006
+0001aa 943a
+0001ab f7f1
+0001ac 943a
+0001ad 950a
+0001ae f7d9
+0001af 903f
+0001b0 910f
+0001b1 943a
+0001b2 f791
+0001b3 950a
+0001b4 f781                      	WAIT_MS 2000
+0001b5 cfd3                      	rjmp	main
 
 
 RESOURCE USE INFORMATION
@@ -3761,41 +3833,41 @@ counted separately from r26..r31 here.
 .dseg memory usage only counts static data declared with .byte
 
 "ATmega128" register use summary:
-x  :   6 y  :   0 z  :   0 r0 :   7 r1 :   2 r2 :   0 r3 :   0 r4 :   1 
+x  :   6 y  :   0 z  :   2 r0 :   7 r1 :   2 r2 :   0 r3 :  16 r4 :   1 
 r5 :   1 r6 :   0 r7 :   0 r8 :   5 r9 :   5 r10:   5 r11:   6 r12:  11 
-r13:   4 r14:   0 r15:   0 r16:  72 r17:   0 r18:  23 r19:  15 r20:  15 
+r13:   4 r14:   0 r15:   0 r16: 101 r17:   2 r18:  24 r19:  15 r20:  15 
 r21:  15 r22:   9 r23:  25 r24:   7 r25:  15 r26:   4 r27:   4 r28:   0 
-r29:   0 r30:  11 r31:   6 
-Registers used: 24 out of 35 (68.6%)
+r29:   0 r30:  14 r31:   8 
+Registers used: 27 out of 35 (77.1%)
 
 "ATmega128" instruction use summary:
-.lds  :   0 .sts  :   0 adc   :   0 add   :   2 adiw  :   5 and   :   0 
+.lds  :   0 .sts  :   0 adc   :   0 add   :   2 adiw  :   6 and   :   0 
 andi  :   6 asr   :   2 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
 brcc  :   1 brcs  :   0 break :   0 breq  :  14 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   2 brlt  :   0 brmi  :   1 
-brne  :   7 brpl  :   1 brsh  :   1 brtc  :   5 brts  :   0 brvc  :   0 
+brne  :  16 brpl  :   1 brsh  :   1 brtc  :   5 brts  :   0 brvc  :   0 
 brvs  :   0 bset  :   0 bst   :   1 call  :   0 cbi   :   0 cbr   :   0 
 clc   :   1 clh   :   0 cli   :   0 cln   :   0 clr   :  14 cls   :   0 
 clt   :   1 clv   :   0 clz   :   0 com   :   8 cp    :   1 cpc   :   3 
-cpi   :   9 cpse  :   0 dec   :   6 elpm  :   0 eor   :   0 fmul  :   0 
-fmuls :   0 fmulsu:   0 icall :   1 ijmp  :   1 in    :   2 inc   :   3 
-jmp   :   3 ld    :   6 ldd   :   0 ldi   :  33 lds   :   0 lpm   :  12 
-lsl   :   2 lsr   :   3 mov   :  20 movw  :   0 mul   :   0 muls  :   0 
-mulsu :   0 neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :  13 
-pop   :  22 push  :  21 rcall :  14 ret   :   9 reti  :   2 rjmp  :  23 
+cpi   :  10 cpse  :   0 dec   :  16 elpm  :   0 eor   :   0 fmul  :   0 
+fmuls :   0 fmulsu:   0 icall :   1 ijmp  :   1 in    :   2 inc   :   4 
+jmp   :   3 ld    :   7 ldd   :   0 ldi   :  48 lds   :   0 lpm   :  12 
+lsl   :   2 lsr   :   3 mov   :  26 movw  :   0 mul   :   0 muls  :   0 
+mulsu :   0 neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :  14 
+pop   :  26 push  :  25 rcall :  15 ret   :  10 reti  :   2 rjmp  :  23 
 rol   :  10 ror   :  13 sbc   :   3 sbci  :   0 sbi   :   0 sbic  :   0 
 sbis  :   2 sbiw  :   0 sbr   :   0 sbrc  :   8 sbrs  :   0 sec   :   0 
 seh   :   0 sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   1 
-sev   :   0 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 
-sts   :   2 sub   :   3 subi  :   3 swap  :   4 tst   :   8 wdr   :   0 
+sev   :   0 sez   :   0 sleep :   0 spm   :   0 st    :   1 std   :   0 
+sts   :   4 sub   :   3 subi  :   3 swap  :   4 tst   :   8 wdr   :   0 
 
-Instructions used: 51 out of 114 (44.7%)
+Instructions used: 52 out of 114 (45.6%)
 
 "ATmega128" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0002f4    672      0    672  131072   0.5%
-[.dseg] 0x000100 0x000100      0      0      0    4096   0.0%
+[.cseg] 0x000000 0x00036c    792      0    792  131072   0.6%
+[.dseg] 0x000100 0x000108      0      8      8    4096   0.2%
 [.eseg] 0x000000 0x000000      0      0      0    4096   0.0%
 
 Assembly complete, 0 errors, 2 warnings
