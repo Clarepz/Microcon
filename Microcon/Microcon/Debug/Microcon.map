@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm Thu May 22 09:49:33 2025
+AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm Thu May 22 10:45:41 2025
 
 
 EQU  SIGNATURE_000 0000001e
@@ -867,6 +867,8 @@ EQU  UTXC1addr    00000040
 EQU  TWIaddr      00000042
 EQU  SPMRaddr     00000044
 EQU  INT_VECTORS_SIZE 00000046
+CSEG reset        00000061
+CSEG ADCCaddr_sra 00000057
 SET  clock        003d0900
 DEF  char         r0
 DEF  _sreg        r1
@@ -938,7 +940,14 @@ EQU  SERVO1       00000004
 EQU  POT          00000000
 EQU  BNC1         00000002
 EQU  BNC2         00000004
-CSEG reset        00000034
-CSEG ADCCaddr_sra 00000030
-CSEG main         00000043
-CSEG WAIT_MS@WAIT_MS@3224 00000047
+EQU  baud0        00002580
+EQU  _UBRR0       00000019
+CSEG UART0_init   00000030
+CSEG UART0        0000003f
+CSEG UART0_putc   0000003f
+CSEG UART0_getc   00000043
+CSEG puthex       00000047
+CSEG puthex1      0000004f
+CSEG _af          00000054
+CSEG main         00000071
+CSEG WAIT_MS@WAIT_MS@3307 00000075

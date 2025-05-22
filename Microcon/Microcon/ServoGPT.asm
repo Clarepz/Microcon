@@ -54,7 +54,7 @@ reset:
 	LDSP RAMEND
 	call servoSetup
 
-	OUTI TIMSK, (1<<OCIE2)
+	OUTI TIMSK, (1<<OCIE2)+(1<<TOIE2)
 	OUTI TCCR2, (1<<CTC2)+3
 	OUTI OCR2, 120
 	SERVOWI 0, 200

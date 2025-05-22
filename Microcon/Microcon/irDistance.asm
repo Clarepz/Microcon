@@ -1,10 +1,6 @@
 ; file target ATmega128L-4MHz-STK300
 ; purpose button triggered ADC with semaphore
 
-.include "macros.asm"		; include macro definitions
-.include "definitions.asm"	; include register/constant definitions
-.include "uart.asm"			;
-.include "puthex.asm"		;
 
 ; === interrupt table ===
 .org	0
@@ -13,6 +9,12 @@
 	jmp	ADCCaddr_sra
 	
 .org	0x30
+
+.include "macros.asm"		; include macro definitions
+.include "definitions.asm"	; include register/constant definitions
+.include "uart.asm"			;
+.include "puthex.asm"		;
+
 	
 ; === interrupt service routines
 ADCCaddr_sra:

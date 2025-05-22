@@ -12,6 +12,8 @@
   <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m128def.inc</FILE>
   <FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm</FILE>
   <FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\definitions.asm</FILE>
+  <FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\uart.asm</FILE>
+  <FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\puthex.asm</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
   <FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\Debug\Microcon.obj</FILE>
@@ -24,8 +26,15 @@
   <FILE>Microcon.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <reset><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm</FILE><LINE>30</LINE></reset>
-  <ADCCaddr_sra><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm</FILE><LINE>16</LINE></ADCCaddr_sra>
-  <main><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm</FILE><LINE>42</LINE></main>
+  <reset><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm</FILE><LINE>33</LINE></reset>
+  <ADCCaddr_sra><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm</FILE><LINE>20</LINE></ADCCaddr_sra>
+  <UART0_init><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\uart.asm</FILE><LINE>8</LINE></UART0_init>
+  <UART0><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\uart.asm</FILE><LINE>32</LINE></UART0>
+  <UART0_putc><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\uart.asm</FILE><LINE>33</LINE></UART0_putc>
+  <UART0_getc><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\uart.asm</FILE><LINE>39</LINE></UART0_getc>
+  <puthex><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\puthex.asm</FILE><LINE>4</LINE></puthex>
+  <puthex1><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\puthex.asm</FILE><LINE>18</LINE></puthex1>
+  <_af><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\puthex.asm</FILE><LINE>24</LINE></_af>
+  <main><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm</FILE><LINE>48</LINE></main>
  </LABELS>
 </ASSEMBLER_INFO>

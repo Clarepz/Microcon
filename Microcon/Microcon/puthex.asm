@@ -22,5 +22,5 @@ puthex1:
 	rcall	UART0_putc		; display the character
 	ret
 _af:	addi	a0,('a'-10)	; add the ASCI code of �a� as offset
-	rcall	putc		; display the character
+	rcall	UART0_putc		; display the character
 	ret

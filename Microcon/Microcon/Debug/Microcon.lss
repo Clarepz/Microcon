@@ -1,12 +1,16 @@
 
-AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm Thu May 22 09:49:33 2025
+AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm Thu May 22 10:45:41 2025
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m128def.inc'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm(4): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm(5): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\definitions.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm(13): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm(14): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\definitions.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm(15): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\uart.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm(16): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\puthex.asm'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m128def.inc'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm(4): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm(5): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\definitions.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm(13): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm(14): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\definitions.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm(15): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\uart.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistance.asm(16): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\puthex.asm'
                                  
                                  ; file target ATmega128L-4MHz-STK300
                                  
@@ -1228,6 +1232,15 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDis
                                  ; ***** END OF FILE ******************************************************
                                  
                                  ; purpose button triggered ADC with semaphore
+                                 
+                                 
+                                 ; === interrupt table ===
+                                 .org	0
+000000 940c 0061                 	jmp	reset
+                                 .org 	ADCCaddr
+00002a 940c 0057                 	jmp	ADCCaddr_sra
+                                 	
+                                 .org	0x30
                                  
                                  .include "macros.asm"		; include macro definitions
                                  
@@ -3076,73 +3089,137 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDis
                                  
                                  ; === definitions  ===
                                  .list
+                                 .include "uart.asm"			;
                                  
-                                 ; === interrupt table ===
-                                 .org	0
-000000 940c 0034                 	jmp	reset
-                                 .org 	ADCCaddr
-00002a 940c 0030                 	jmp	ADCCaddr_sra
+                                 ; purpose setup to two UART units 0 and 1
+                                 
+                                 ;.equ	baud0	= 19200
+                                 .equ	baud0	= 9600
+                                 .equ	_UBRR0	= clock/(16*baud0)-1
+                                 
+                                 UART0_init:	; 19200-8-N-1
+                                 
+                                 	;ldi		r16, 12
+                                 	;out		UBRR0L,r16
+000030 e000                      	ldi		r16, 0x00
+000031 9300 0090                 	sts		UBRR0H,r16
+000033 e002                      	ldi		r16,0b00000010
+000034 b902                      	out		DDRE,r16
+000035 2700                      	clr	r16
+000036 e108                      	ldi r16,(1<<TXEN0)|(1<<RXEN0)
+000037 b90a                      	out	UCSR0B,r16
+000038 2700                      	clr r16
+000039 e006                      	ldi r16,(1<<UCSZ01)+(1<<UCSZ00)
+00003a 9300 0095                 	sts	UCSR0C, r16
+                                 
+                                 
+                                 
+00003c e109
+00003d b909                      	OUTI	UBRR0L, _UBRR0				; set Baud rate
+                                 	;OUTI	UBRR0H, 0x00
+                                 	;OUTI	DDRE,0b00000010				; make pin TX0 output
+                                 	;OUTI	UCSR0B,(1<<TXEN0)+(1<<RXEN0)	; Transmit/Receive Enable
+                                 	;OUTI	UCSR0C, (1<<UCSZ01)+(1<<UCSZ00)	; 8-bit, 1 stop bit, parity disabled
+00003e 9508                      	ret
+                                 
+                                 UART0:
+                                 UART0_putc:	
+00003f 9b5d                      	sbis	UCSR0A,UDRE0					; wait for UART Data Register Empty
+000040 cffe                      	rjmp	PC-1						; loop back if not empty
+000041 b92c                      	out		UDR0,a0						; output character to UART Data Register
+000042 9508                      	ret
                                  	
-                                 .org	0x30
+                                 UART0_getc:
+000043 9b5f                      	sbis	UCSR0A,RXC0		; wait for UART Receive Complete
+000044 cffe                      	rjmp	PC-1		; loop back if not complete
+000045 b12c                      	in		a0,UDR0		; read character to UART Data Register
+                                 .include "puthex.asm"		;
+000046 9508                      
+                                 ; purpose library, hexadecimal ascii display
+                                 
+                                 puthex:
+                                 ; put hexadecimal value 
+                                 ; in 	a0	(value to convert)
+                                 ;	putc 	(address of a routine to "write" the character)
+                                 
+000047 932f                      	push	a0			; push a0 to store it temporarly
+000048 9522                      	swap	a0			; swap high and low nibble
+000049 702f                      	andi	a0,0x0f		; mask half of byte
+00004a d004                      	rcall	puthex1		; display high nibble
+00004b 912f                      	pop	a0				; restore a0
+00004c 702f                      	andi	a0,0x0f		; mask half byte
+00004d d001                      	rcall	puthex1		; display low nibble
+00004e 9508                      	ret
+                                 
+                                 puthex1:
+00004f 302a                      	cpi	a0,10			; test if a0 >= 10
+000050 f418                      	brsh	_af
+000051 5d20                      	addi	a0,'0'		; add the ASCI code of �0� as offset
+000052 dfec                      	rcall	UART0_putc		; display the character
+000053 9508                      	ret
+000054 5a29                      _af:	addi	a0,('a'-10)	; add the ASCI code of �a� as offset
+000055 dfe9                      	rcall	UART0_putc		; display the character
+000056 9508                      
                                  	
                                  ; === interrupt service routines
                                  ADCCaddr_sra:
                                  		
-000030 b124                      	in	a0,ADCL				; read low byte first
-000031 b135                      	in	a1,ADCH				; store 2 MSB
-                                 	;cpi a1,0b00000010		; compare value
-000032 bb35                      	out PORTC, a1
-                                 	;brlo PC + 3			
-                                 	;ldi	r23,0x00			; clear boolean
-                                 	;reti			
-                                 	;ldi r23,0xff			; set the boolean
-000033 9518                      	reti					; ADIF cleared here
-                                 	;sbi	ADCSR,ADSC			; AD start conversion
-                                 	
+000057 b164                      	in	b0,ADCL				; read low byte first
+000058 b175                      	in	b1,ADCH				; store 2 MSB
+000059 bb75                      	out PORTC, b1			
+00005a 2f27                      	mov a0, b1				
+00005b dfeb                      	rcall	puthex
+00005c 2f28                      	mov a0,	b2
+00005d dfe9                      	rcall   puthex
+00005e e02d                      	ldi a0, 0x0d
+00005f dfe7                      	rcall	puthex
+000060 9518                      	reti					
                                  ; === initialization (reset) ====
                                  reset:
-000034 ef0f
-000035 bf0d
-000036 e100
-000037 bf0e                      	LDSP	RAMEND			; set up stack pointer (SP)
-000038 ef0f
-000039 bb07                      	OUTI	DDRB,0xff		; configure portC to output
-00003a ef0f
-00003b bb04                      	OUTI	DDRC,0xff
-00003c 9478                      	sei
-00003d e80e
-00003e b906                      	OUTI	ADCSR,(1<<ADEN)+(1<<ADIE)+6 ; AD Enable, AD int. enable, PS=CK/64	
-00003f e003
-000040 b907                      	OUTI	ADMUX,3			; select channel irdistance
-000041 9a36                      	sbi	ADCSR,ADSC			; start conversion
-000042 c000                      	rjmp	main			; jump ahead to the main program
+000061 ef0f
+000062 bf0d
+000063 e100
+000064 bf0e                      	LDSP	RAMEND			; set up stack pointer (SP)
+000065 ef0f
+000066 bb07                      	OUTI	DDRB,0xff		; configure portC to output
+000067 ef0f
+000068 bb04                      	OUTI	DDRC,0xff
+000069 9478                      	sei
+00006a e80e
+00006b b906                      	OUTI	ADCSR,(1<<ADEN)+(1<<ADIE)+6 ; AD Enable, AD int. enable, PS=CK/64	
+00006c e003
+00006d b907                      	OUTI	ADMUX,3			; select channel irdistance
+00006e 9a36                      	sbi	ADCSR,ADSC			; start conversion
+                                 
+00006f dfc0                      	rcall	UART0_init		; initialize UART
+                                 
+000070 c000                      	rjmp	main			; jump ahead to the main program
                                  	
                                  
                                  ; === main program ===
                                  main:
                                  	
-000043 9a36                      	sbi	ADCSR,ADSC			; AD start conversion
-000044 e604
-000045 2e30
-000046 e001
-000047 930f
-000048 923f
-000049 e300
-00004a 2e30
-00004b e006
-00004c 943a
-00004d f7f1
-00004e 943a
-00004f 950a
-000050 f7d9
-000051 903f
-000052 910f
-000053 943a
-000054 f791
-000055 950a
-000056 f781                      	WAIT_MS 100				;
-                                 	;out r23, PORTC			;
-000057 cfeb                      	rjmp	main			; jump back to main
+000071 9a36                      	sbi	ADCSR,ADSC			; AD start conversion
+000072 e604
+000073 2e30
+000074 e001
+000075 930f
+000076 923f
+000077 e300
+000078 2e30
+000079 e006
+00007a 943a
+00007b f7f1
+00007c 943a
+00007d 950a
+00007e f7d9
+00007f 903f
+000080 910f
+000081 943a
+000082 f791
+000083 950a
+000084 f781                      	WAIT_MS 100				;
+000085 cfeb                      	rjmp	main			; jump back to main
 
 
 RESOURCE USE INFORMATION
@@ -3162,38 +3239,38 @@ counted separately from r26..r31 here.
 "ATmega128" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   7 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  22 r17:   0 r18:   1 r19:   2 r20:   0 
-r21:   0 r22:   0 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
+r13:   0 r14:   0 r15:   0 r16:  34 r17:   0 r18:  13 r19:   0 r20:   0 
+r21:   0 r22:   1 r23:   3 r24:   1 r25:   0 r26:   0 r27:   0 r28:   0 
 r29:   0 r30:   0 r31:   0 
-Registers used: 4 out of 35 (11.4%)
+Registers used: 6 out of 35 (17.1%)
 
 "ATmega128" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
-andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
+andi  :   2 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
 brcc  :   0 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
-brne  :   4 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brne  :   4 brpl  :   0 brsh  :   1 brtc  :   0 brts  :   0 brvc  :   0 
 brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   0 cbr   :   0 
-clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0 
+clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   2 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
-cpi   :   0 cpse  :   0 dec   :   5 elpm  :   0 eor   :   0 fmul  :   0 
-fmuls :   0 fmulsu:   0 icall :   0 ijmp  :   0 in    :   2 inc   :   0 
-jmp   :   2 ld    :   0 ldd   :   0 ldi   :  10 lds   :   0 lpm   :   0 
-lsl   :   0 lsr   :   0 mov   :   2 movw  :   0 mul   :   0 muls  :   0 
-mulsu :   0 neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   7 
-pop   :   2 push  :   2 rcall :   0 ret   :   0 reti  :   1 rjmp  :   2 
+cpi   :   1 cpse  :   0 dec   :   5 elpm  :   0 eor   :   0 fmul  :   0 
+fmuls :   0 fmulsu:   0 icall :   0 ijmp  :   0 in    :   3 inc   :   0 
+jmp   :   2 ld    :   0 ldd   :   0 ldi   :  16 lds   :   0 lpm   :   0 
+lsl   :   0 lsr   :   0 mov   :   4 movw  :   0 mul   :   0 muls  :   0 
+mulsu :   0 neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :  11 
+pop   :   3 push  :   3 rcall :   8 ret   :   6 reti  :   1 rjmp  :   4 
 rol   :   0 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   2 sbic  :   0 
-sbis  :   0 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 
+sbis  :   2 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 
 seh   :   0 sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 
 sev   :   0 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 
-sts   :   0 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
+sts   :   2 sub   :   0 subi  :   2 swap  :   1 tst   :   0 wdr   :   0 
 
-Instructions used: 13 out of 114 (11.4%)
+Instructions used: 23 out of 114 (20.2%)
 
 "ATmega128" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0000b0     88      0     88  131072   0.1%
+[.cseg] 0x000000 0x00010c    180      0    180  131072   0.1%
 [.dseg] 0x000100 0x000100      0      0      0    4096   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    4096   0.0%
 

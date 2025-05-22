@@ -89,6 +89,9 @@
     <Compile Include="printf.asm">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="puthex.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="servo1.asm">
       <SubType>Code</SubType>
     </Compile>
@@ -99,6 +102,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="smiley.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="uart.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ws2812b_4MHz_demo01_S.asm">
