@@ -40,7 +40,7 @@ main:
     DISTANCEREAD            ; read distance in b1:b0
     WAIT_MS 100
     PRINTF	UART0_putc		; print printDistance
-	.db	CR,CR,"CACA=",FHEX2,b,"=",FDEC2,b,"    ",0
+	.db	CR,CR,"Distance=",FDEC2,b,"    ",0
     MOV2 a1,a0,b1,b0
     LSR2 a1,a0              ; print on leds
     LSR2 a1,a0
@@ -51,7 +51,9 @@ main:
 
     PRINTF	UART0_putc		; print speed
 	.db	CR,CR,"Speed=",FDEC2,c,"    ",0
-
+    PRINTF	LCD		; print speed
+	.db	CR,CR,"Speed=",FDEC2,c,"    ",0
+    
     rjmp main
 wall:
     OUTI PORTC, 0xff
