@@ -1,12 +1,5 @@
-; file	int0.asm   target ATmega128L-4MHz-STK300		
-; purpose using INT0..INT3
 
 
-; === interrupt table ===
-.org	0x02
-	jmp	ext_int0
-.org	0x04
-	jmp	ext_int1
 ; === interrupt service routines	
 ext_int0:
 	inc speed
