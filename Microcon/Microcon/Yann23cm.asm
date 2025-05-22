@@ -49,6 +49,7 @@ smileyConcerned: .db 0b00000000,0b00100100,0b00100100,0b00000000,0b00111100,0b01
 reset:
 	LDSP	RAMEND			; Load Stack Pointer (SP)
 	rcall	ws2812b4_init	; initialize 
+	
 	rjmp main
 
 main:
@@ -73,7 +74,7 @@ printSConcerned:
 	ldi zh, high(2*smileyConcerned)
 	rjmp remplissageEtEnvoie
 
-printSAngry
+
 
 
 
@@ -85,8 +86,7 @@ remplissageEtEnvoie:
 	ldi w, 9	;compteur pour les bit
 ligne:
 	dec w
-	brne envoie
-	ret 
+	breq envoie
 	lpm u, z+	;contient l'info
 	ldi a1, 8	;compteur pour les leds
 pixel:

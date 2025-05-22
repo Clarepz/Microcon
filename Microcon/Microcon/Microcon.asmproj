@@ -15,7 +15,7 @@
     <Name>Microcon</Name>
     <RootNamespace>Microcon</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
-    <EntryFile>$(MSBuildProjectDirectory)\ServoClarence.asm</EntryFile>
+    <EntryFile>$(MSBuildProjectDirectory)\Yann23cm.asm</EntryFile>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <CacheFlash>true</CacheFlash>
