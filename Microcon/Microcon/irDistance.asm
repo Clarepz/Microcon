@@ -3,6 +3,8 @@
 
 .include "macros.asm"		; include macro definitions
 .include "definitions.asm"	; include register/constant definitions
+.include "uart.asm"			;
+.include "puthex.asm"		;
 
 ; === interrupt table ===
 .org	0
@@ -15,17 +17,16 @@
 ; === interrupt service routines
 ADCCaddr_sra:
 		
-	in	a0,ADCL				; read low byte first
-	in	a1,ADCH				; store 2 MSB
-	;cpi a1,0b00000010		; compare value
-	out PORTC, a1
-	;brlo PC + 3			
-	;ldi	r23,0x00			; clear boolean
-	;reti			
-	;ldi r23,0xff			; set the boolean
-	reti					; ADIF cleared here
-	;sbi	ADCSR,ADSC			; AD start conversion
-	
+	in	b0,ADCL				; read low byte first
+	in	b1,ADCH				; store 2 MSB
+	out PORTC, b1			
+	mov a0, b1				
+	rcall	puthex
+	mov a0,	b2
+	rcall   puthex
+	ldi a0, 0x0d
+	rcall	puthex
+	reti					
 ; === initialization (reset) ====
 reset:
 	LDSP	RAMEND			; set up stack pointer (SP)
@@ -35,6 +36,9 @@ reset:
 	OUTI	ADCSR,(1<<ADEN)+(1<<ADIE)+6 ; AD Enable, AD int. enable, PS=CK/64	
 	OUTI	ADMUX,3			; select channel irdistance
 	sbi	ADCSR,ADSC			; start conversion
+
+	rcall	UART0_init		; initialize UART
+
 	rjmp	main			; jump ahead to the main program
 	
 
@@ -43,5 +47,4 @@ main:
 	
 	sbi	ADCSR,ADSC			; AD start conversion
 	WAIT_MS 100				;
-	;out r23, PORTC			;
 	rjmp	main			; jump back to main
