@@ -52,8 +52,7 @@ reset:
 
 main:
 	; ------ part 1: store image that will be displayed into SRAM
-	ldi	b0,17	; 64 pls = 16 * 4 pls, 17 due to loop condition
-	clr b1
+	ldi	b0,17	; 64 pls = 16 * 4 pls, 17 due to loop condition -> variable de loop du prof
 	ldi zl,low(0x0400)
 	ldi zh,high(0x0400)
 
@@ -94,7 +93,6 @@ restart:
 
 	ldi zl,low(0x0400)
 	ldi zh,high(0x0400)
-	add	zl,b1
 
 	_LDI	r0,64
 loop:
@@ -107,12 +105,61 @@ loop:
 	;add a2,b1
 
 	cli
-	rcall ws2812b4_byte3wr
+	rcall ws2812b4_byte3wr	;write content of a0,a1,a2 into ws....
 	sei
 
-	dec r0
+	dec r0		;compteur pour tout load
 	brne loop
 	rcall ws2812b4_reset
+
+	ldi zl,low(0x0400)
+	ldi zh,high(0x0400)
+	ldi	a0, 0x0f	; pixel 1, light green
+	st	z+,a0
+	ldi a0,0x0f
+	st	z+,a0
+	ldi	a0, 0x00
+	st z+,a0
+
+	ldi	a0, 0x00	; pixel 2, light red
+	st	z+,a0
+	ldi a0,0x0f
+	st	z+,a0
+	ldi	a0, 0x0f
+	st z+,a0
+
+	ldi	a0, 0x00	; pixel 3, light blue
+	st	z+,a0
+	ldi a0,0x0f
+	st	z+,a0
+	ldi	a0, 0x0f
+	st z+,a0
+
+	ldi	a0, 0x0a	; pixel 4, off
+	st	z+,a0
+	ldi a0,0x0f
+	st	z+,a0
+	ldi	a0, 0x0f
+	st z+,a0
+	_LDI	r0,4
+loop2:
+ldi zl,low(0x0400)
+	ldi zh,high(0x0400)
+	ld a0, z+
+	;add a1,b1		; increase intensity (and color) until all white
+	ld a1, z+		;>and high intensity, uncomment to use
+	;add a1,b1
+	ld a2,z+
+	;add a2,b1
+
+	cli
+	rcall ws2812b4_byte3wr	;write content of a0,a1,a2 into ws....
+	sei
+
+	dec r0		;compteur pour tout load
+	brne loop2
+	rcall ws2812b4_reset
+	boucle: rjmp boucle
 
 switch:
 	sbic PINC,0

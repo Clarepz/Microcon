@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm Thu May 22 15:34:16 2025
+AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm Thu May 22 16:47:57 2025
 
 
 EQU  SIGNATURE_000 0000001e
@@ -938,30 +938,10 @@ EQU  SERVO1       00000004
 EQU  POT          00000000
 EQU  BNC1         00000002
 EQU  BNC2         00000004
-CSEG reset        00000002
-CSEG ws2812b4_init 0000008f
-CSEG main         0000000c
-CSEG smileyHappy  00000021
-CSEG oops         00000010
-CSEG chargement   00000043
-CSEG restart      0000006a
-CSEG smileyConcerned 00000032
-CSEG boucle_chargement 00000046
-CSEG rouge        0000005f
-CSEG blanc        0000004b
-CSEG return       00000069
-CSEG noir         00000055
-CSEG loop         0000006e
-CSEG ws2812b4_byte3wr 00000092
-CSEG ws2812b4_reset 000000c3
-CSEG WAIT_MS@WAIT_MS@3382 0000007a
-CSEG bcv          0000008e
-CSEG ws2b3_starta0 00000093
-CSEG ws2b3w1      0000009b
-CSEG ws2b3_nexta0 0000009f
-CSEG ws2b3_starta1 000000a3
-CSEG ws2b3w1a1    000000ab
-CSEG ws2b3_nexta1 000000af
-CSEG ws2b3_starta2 000000b3
-CSEG ws2b3w1a2    000000bb
-CSEG ws2b3_nexta2 000000bf
+DEF  servochanel  r13
+DEF  servocounter r19
+CSEG reset        0000003f
+CSEG output_compare0 00000030
+CSEG overflow     0000003d
+SET  timer0       00000064
+CSEG main         00000051

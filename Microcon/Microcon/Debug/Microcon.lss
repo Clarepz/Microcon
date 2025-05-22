@@ -1,14 +1,16 @@
 
-AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm Thu May 22 15:34:16 2025
+AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm Thu May 22 16:47:57 2025
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m128def.inc'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm(22): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm(23): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\definitions.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(3): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(4): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\definitions.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(5): warning: Register r13 already defined by the .DEF directive
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(6): warning: Register r19 already defined by the .DEF directive
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m128def.inc'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm(22): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm(23): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\definitions.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(3): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm'
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm(4): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\definitions.asm'
                                  
-                                 /*
+                                 
                                  
                                  ;***** Created: 2011-02-09 12:03 ******* Source: ATmega128.xml ***********
                                  ;*************************************************************************
@@ -1227,25 +1229,6 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smile
                                  
                                  ; ***** END OF FILE ******************************************************
                                  
-                                  * smiley.asm
-                                  *
-                                  *  Created: 02.05.2025 23:12:36
-                                  *   Author: royer
-                                  */ 
-                                  ; file	ws2812b_4MHz_demo01_S.asm   target ATmega128L-4MHz-STK300
-                                 ; purpose send data to ws2812b using 4 MHz MCU and standard I/O port
-                                 ;         display and paralllel process (blinking LED0)
-                                 ; usage: buttons on PORTC, ws2812 on PORTD (bit 1)
-                                 ;        press button 0
-                                 ;       a pattern is stored into memory and displayed on the array
-                                 ;       LED0 blinks fast; when button0 is pressed and released, LED1
-                                 ;       akcnowledges and the pattern displayed on the array moves by
-                                 ;       one memory location
-                                 ; warnings: 1/2 timings of pulses in the macros are sensitive
-                                 ;			2/2 intensity of LEDs is high, thus keep intensities
-                                 ;				within the range 0x00-0x0f, and do not look into
-                                 ;				LEDs
-                                 ; 20220315 AxS
                                  
                                  .include "macros.asm"		; include macro definitions
                                  
@@ -3094,307 +3077,75 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smile
                                  
                                  ; === definitions  ===
                                  .list
+                                 .def servochanel = r13
+                                 .def servocounter = r19
                                  
-                                 ; WS2812b4_WR0	; macro ; arg: void; used: void
-                                 ; purpose: write an active-high zero-pulse to PD1
-                                 .macro	WS2812b4_WR0
-                                 	clr u
-                                 	sbi PORTD, 1
-                                 	out PORTD, u
-                                 	nop
-                                 	nop
-                                 	;nop	;deactivated on purpose of respecting timings
-                                 	;nop
-                                 .endm
+                                 ; === interrupt vector table ===
+                                 .org	0
+000000 940c 003f                 	jmp	reset
+                                 .org	OC0addr					; timer 0 output compare match
+00001e 940c 0030                 	jmp	output_compare0
+                                 .org 	OVF0addr
+000020 940c 003d                 	jmp overflow
+                                 .org	0x30
                                  
-                                 ; WS2812b4_WR1	; macro ; arg: void; used: void
-                                 ; purpose: write an active-high one-pulse to PD1
-                                 .macro	WS2812b4_WR1
-                                 	sbi PORTD, 1
-                                 	nop
-                                 	nop
-                                 	cbi PORTD, 1
-                                 	;nop	;deactivated on purpose of respecting timings
-                                 	;nop
-                                 
-                                 .endm
-                                 
-                                 .org 0
-000000 940c 0002                 	jmp	reset
+                                 ; === interrupt service routines ====
+                                 .set	timer0 = 100
                                  
                                  
-                                 reset:
-000002 ef0f
-000003 bf0d
-000004 e100
-000005 bf0e                      	LDSP	RAMEND			; Load Stack Pointer (SP)
-000006 d088                      	rcall	ws2812b4_init	; initialize 
-000007 ef0f
-000008 bb07                      	OUTI	DDRB, 0xff		; connect LEDs to PORTB, output mode
-000009 e000
-00000a bb04                      	OUTI	DDRC, 0x00		; connectbuttons to PORTC, input mode
-00000b e050                      	ldi a3, 0
+                                 output_compare0:
+000030 b61f                      	in 		_sreg, SREG
                                  
+000031 e000
+000032 bb08                      	OUTI 	PORTB, 0x00
+                                 
+000033 0cdd                      	lsl 	servochanel
+000034 9533                      	inc		servocounter
+                                 
+000035 303a                      	cpi 	servocounter, 10
+000036 f008                      	brlo	PC+2
+000037 2733                      	clr		servocounter  
+                                 
+000038 3038                      	cpi 	servocounter, 8
+000039 f008                      	brlo	PC+2
+00003a 24dd                      	clr 	servochanel 	
+                                 	
+                                 
+00003b be1f                      	out		SREG, _sreg
+00003c 9518                      	reti
+                                 
+                                 overflow:
+00003d bad8                      	out 	PORTB, servochanel
+                                 	
+00003e 9518                      	reti
+                                 
+                                 ; === initialisation (reset) ===	
+                                 reset: 
+00003f ef0f
+000040 bf0d
+000041 e100
+000042 bf0e                      	LDSP	RAMEND				; load stack pointer (SP)
+000043 ef0f
+000044 bb07                      	OUTI	DDRB,0xff			; portB = output
+                                 		
+000045 e008
+000046 bf00                      	OUTI	ASSR,  (1<<AS0)		; clock from TOSC1 (external)
+000047 e006
+000048 bf03                      	OUTI	TCCR0, (0<<CTC0)+6	;  CS0=6 CK	
+                                 	
+000049 e603
+00004a bf01                      	OUTI	OCR0,timer0-1		; Output Compare reg 0
+                                 	
+                                 	
+00004b e003
+00004c bf07                      	OUTI	TIMSK,(1<<OCIE0)+(1<<TOIE0); enable outputcompar and overflow
+00004d e001
+00004e 2ed0                      	_LDI 	servochanel, 0b00000001
+00004f 2733                      	clr 	servocounter
+                                 
+000050 9478                      	sei							; set global interrupt
+                                 ; === main program ===
                                  main:
-                                 	; ------ part 1: store image that will be displayed into SRAM
-00000c 2777                      	clr b1
-00000d e0e0                      	ldi zl,low(0x0400)
-00000e e0f4                      	ldi zh,high(0x0400)
-00000f c011                      	rjmp smileyHappy
-                                 
-                                 ;debut du chargement de la RAM
-                                 oops:
-000010 ef37                      	ldi a1, 0b11110111
-000011 d031                      	rcall chargement
-000012 ee3f                      	ldi a1, 0b11101111
-000013 d02f                      	rcall chargement
-000014 ed3b                      	ldi a1, 0b11011011
-000015 d02d                      	rcall chargement
-000016 e635                      	ldi a1, 0b01100101
-000017 d02b                      	rcall chargement
-000018 ea36                      	ldi a1, 0b10100110
-000019 d029                      	rcall chargement
-00001a ed3b                      	ldi a1, 0b11011011
-00001b d027                      	rcall chargement
-00001c ef37                      	ldi a1, 0b11110111
-00001d d025                      	rcall chargement
-00001e ee3f                      	ldi a1, 0b11101111
-00001f d023                      	rcall chargement
-                                 
-000020 c049                      	rjmp restart
-                                 
-                                 smileyHappy:
-000021 e030                      	ldi a1,0b00000000
-000022 d020                      	rcall chargement
-000023 e234                      	ldi a1,0b00100100
-000024 d01e                      	rcall chargement
-000025 e234                      	ldi a1,0b00100100
-000026 d01c                      	rcall chargement
-000027 e030                      	ldi a1,0b00000000
-000028 d01a                      	rcall chargement
-000029 e432                      	ldi a1,0b01000010
-00002a d018                      	rcall chargement
-00002b e33c                      	ldi a1,0b00111100
-00002c d016                      	rcall chargement
-00002d e030                      	ldi a1,0b00000000
-00002e d014                      	rcall chargement
-00002f e030                      	ldi a1,0b00000000
-000030 d012                      	rcall chargement
-                                 
-000031 c038                      	rjmp restart
-                                 
-                                 smileyConcerned :
-000032 e030                      	ldi a1,0b00000000
-000033 d00f                      	rcall chargement
-000034 e234                      	ldi a1,0b00100100
-000035 d00d                      	rcall chargement
-000036 e234                      	ldi a1,0b00100100
-000037 d00b                      	rcall chargement
-000038 e030                      	ldi a1,0b00000000
-000039 d009                      	rcall chargement
-00003a e33c                      	ldi a1,0b00111100
-00003b d007                      	rcall chargement
-00003c e432                      	ldi a1,0b01000010
-00003d d005                      	rcall chargement
-00003e e432                      	ldi a1,0b01000010
-00003f d003                      	rcall chargement
-000040 e33c                      	ldi a1,0b00111100
-000041 d001                      	rcall chargement
-                                 
-000042 c027                      	rjmp restart
-                                 	
-                                 
-                                 chargement:
-000043 e048                      	ldi a2, 8		;compteur
-000044 c001                      	rjmp boucle_chargement
-000045 9518                      	reti
-                                 
-                                 boucle_chargement:
-000046 ff37                      	sbrs a1, 7
-000047 c017                      	rjmp rouge
-000048 2388                      	tst b2
-000049 f009                      	breq blanc
-00004a c000                      	rjmp blanc
-                                 
-                                 	blanc:
-00004b 0f33                      	lsl a1
-00004c e027                      	ldi	a0, 0x07	; pixel blanc
-00004d 9321                      	st	z+,a0
-00004e e027                      	ldi a0, 0x07
-00004f 9321                      	st	z+,a0
-000050 e027                      	ldi	a0, 0x07
-000051 9321                      	st z+,a0
-                                 
-000052 954a                      	dec a2
-000053 f0a9                      	breq return 
-000054 cff1                      	rjmp boucle_chargement
-                                 
-                                 	noir:
-000055 0f33                      	lsl a1
-000056 e020                      	ldi	a0, 0x00	; pixel blanc
-000057 9321                      	st	z+,a0
-000058 e020                      	ldi a0, 0x00
-000059 9321                      	st	z+,a0
-00005a e020                      	ldi	a0, 0x00
-00005b 9321                      	st z+,a0
-                                 
-00005c 954a                      	dec a2
-00005d f059                      	breq return 
-00005e cfe7                      	rjmp boucle_chargement
-                                 
-                                 	rouge:
-00005f 0f33                      	lsl a1
-000060 e020                      	ldi	a0, 0x00	; pixel noir
-000061 9321                      	st	z+,a0
-000062 e02f                      	ldi a0,0x0f
-000063 9321                      	st	z+,a0
-000064 e020                      	ldi	a0, 0x00
-000065 9321                      	st z+,a0
-                                 
-000066 954a                      	dec a2
-000067 f009                      	breq return 
-000068 cfdd                      	rjmp boucle_chargement
-                                 
-                                 return:
-000069 9518                      	reti
-                                 
-                                 
-                                 	; ------ part 2, display: read image from SRAM and send to display
-                                 restart:
-                                 
-00006a e0e0                      	ldi zl,low(0x0400)
-00006b e0f4                      	ldi zh,high(0x0400)
-                                 
-00006c e400
-00006d 2e00                      	_LDI	r0,64
-                                 loop:
-                                 
-00006e 9121                      	ld a0, z+
-                                 	;add a1,b1		; increase intensity (and color) until all white
-00006f 9131                      	ld a1, z+		;>and high intensity, uncomment to use
-                                 	;add a1,b1
-000070 9141                      	ld a2,z+
-                                 	;add a2,b1
-                                 
-000071 94f8                      	cli
-000072 d01f                      	rcall ws2812b4_byte3wr
-000073 9478                      	sei
-                                 
-000074 940a                      	dec r0
-000075 f7c1                      	brne loop
-000076 d04c                      	rcall ws2812b4_reset
-000077 ed00
-000078 2e30
-000079 e008
-00007a 930f
-00007b 923f
-00007c e300
-00007d 2e30
-00007e e006
-00007f 943a
-000080 f7f1
-000081 943a
-000082 950a
-000083 f7d9
-000084 903f
-000085 910f
-000086 943a
-000087 f791
-000088 950a
-000089 f781                      	WAIT_MS 2000
-00008a df85                      	rcall oops
-00008b 94f8                      	cli
-00008c d005                      	rcall ws2812b4_byte3wr
-00008d 9478                      	sei
-00008e cfff                      	bcv: rjmp bcv
-                                 
-                                 
-                                 ; ws2812b4_init		; arg: void; used: r16 (w)
-                                 ; purpose: initialize AVR to support ws2812
-                                 ws2812b4_init:
-00008f e002
-000090 bb01                      	OUTI	DDRD,0x02
-000091 9508                      ret
-                                 
-                                 ; ws2812b4_byte3wr	; arg: a0,a1,a2 ; used: r16 (w)
-                                 ; purpose: write contents of a0,a1,a2 (24 bit) into ws2812, 1 LED configuring
-                                 ;     GBR color coding, LSB first
-                                 ws2812b4_byte3wr:
-                                 
-000092 e008                      	ldi w,8
-                                 ws2b3_starta0:
-000093 fd27                      	sbrc a0,7
-000094 c006                      	rjmp	ws2b3w1
-000095 2433
-000096 9a91
-000097 ba32
-000098 0000
-000099 0000                      	WS2812b4_WR0			; write a zero
-00009a c004                      	rjmp	ws2b3_nexta0
-                                 ws2b3w1:
-00009b 9a91
-00009c 0000
-00009d 0000
-00009e 9891                      	WS2812b4_WR1
-                                 ws2b3_nexta0:
-00009f 0f22                      	lsl a0
-0000a0 950a                      	dec	w
-0000a1 f789                      	brne ws2b3_starta0
-                                 
-0000a2 e008                      	ldi w,8
-                                 ws2b3_starta1:
-0000a3 fd37                      	sbrc a1,7
-0000a4 c006                      	rjmp	ws2b3w1a1
-0000a5 2433
-0000a6 9a91
-0000a7 ba32
-0000a8 0000
-0000a9 0000                      	WS2812b4_WR0			; write a zero
-0000aa c004                      	rjmp	ws2b3_nexta1
-                                 ws2b3w1a1:
-0000ab 9a91
-0000ac 0000
-0000ad 0000
-0000ae 9891                      	WS2812b4_WR1
-                                 ws2b3_nexta1:
-0000af 0f33                      	lsl a1
-0000b0 950a                      	dec	w
-0000b1 f789                      	brne ws2b3_starta1
-                                 
-0000b2 e008                      	ldi w,8
-                                 ws2b3_starta2:
-0000b3 fd47                      	sbrc a2,7
-0000b4 c006                      	rjmp	ws2b3w1a2
-0000b5 2433
-0000b6 9a91
-0000b7 ba32
-0000b8 0000
-0000b9 0000                      	WS2812b4_WR0			; write a zero
-0000ba c004                      	rjmp	ws2b3_nexta2
-                                 ws2b3w1a2:
-0000bb 9a91
-0000bc 0000
-0000bd 0000
-0000be 9891                      	WS2812b4_WR1
-                                 ws2b3_nexta2:
-0000bf 0f44                      	lsl a2
-0000c0 950a                      	dec	w
-0000c1 f789                      	brne ws2b3_starta2
-                                 	
-0000c2 9508                      ret
-                                 
-                                 ; ws2812b4_reset	; arg: void; used: r16 (w)
-                                 ; purpose: reset pulse, configuration becomes effective
-                                 ws2812b4_reset:
-0000c3 9891                      	cbi PORTD, 1
-0000c4 e401
-0000c5 2e30
-0000c6 e001
-0000c7 943a
-0000c8 f7f1
-0000c9 943a
-0000ca 950a
-0000cb f7d9                      	WAIT_US	50 	; 50 us are required, NO smaller works
 
 
 RESOURCE USE INFORMATION
@@ -3412,41 +3163,41 @@ counted separately from r26..r31 here.
 .dseg memory usage only counts static data declared with .byte
 
 "ATmega128" register use summary:
-x  :   0 y  :   0 z  :  12 r0 :   2 r1 :   0 r2 :   0 r3 :  16 r4 :   0 
+x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   2 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  32 r17:   0 r18:  21 r19:  31 r20:   7 
-r21:   1 r22:   0 r23:   1 r24:   1 r25:   0 r26:   0 r27:   0 r28:   0 
-r29:   0 r30:   2 r31:   2 
-Registers used: 12 out of 35 (34.3%)
+r13:   4 r14:   0 r15:   0 r16:  18 r17:   0 r18:   0 r19:   5 r20:   0 
+r21:   0 r22:   0 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
+r29:   0 r30:   0 r31:   0 
+Registers used: 4 out of 35 (11.4%)
 
 "ATmega128" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :   0 brcs  :   0 break :   0 breq  :   4 brge  :   0 brhc  :   0 
-brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
-brne  :  10 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   4 cbr   :   0 
-clc   :   0 clh   :   0 cli   :   2 cln   :   0 clr   :   4 cls   :   0 
+brcc  :   0 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
+brhs  :   0 brid  :   0 brie  :   0 brlo  :   2 brlt  :   0 brmi  :   0 
+brne  :   0 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   0 cbr   :   0 
+clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   3 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
-cpi   :   0 cpse  :   0 dec   :  15 elpm  :   0 eor   :   0 fmul  :   0 
-fmuls :   0 fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   0 
-jmp   :   1 ld    :   3 ldd   :   0 ldi   :  54 lds   :   0 lpm   :   0 
-lsl   :   6 lsr   :   0 mov   :   4 movw  :   0 mul   :   0 muls  :   0 
-mulsu :   0 neg   :   0 nop   :  12 or    :   0 ori   :   0 out   :   8 
-pop   :   2 push  :   2 rcall :  29 ret   :   3 reti  :   2 rjmp  :  17 
-rol   :   0 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   6 sbic  :   0 
-sbis  :   0 sbiw  :   0 sbr   :   0 sbrc  :   3 sbrs  :   1 sec   :   0 
-seh   :   0 sei   :   2 sen   :   0 ser   :   0 ses   :   0 set   :   0 
-sev   :   0 sez   :   0 sleep :   0 spm   :   0 st    :   9 std   :   0 
-sts   :   0 sub   :   0 subi  :   0 swap  :   0 tst   :   1 wdr   :   0 
+cpi   :   2 cpse  :   0 dec   :   0 elpm  :   0 eor   :   0 fmul  :   0 
+fmuls :   0 fmulsu:   0 icall :   0 ijmp  :   0 in    :   1 inc   :   1 
+jmp   :   3 ld    :   0 ldd   :   0 ldi   :   9 lds   :   0 lpm   :   0 
+lsl   :   1 lsr   :   0 mov   :   1 movw  :   0 mul   :   0 muls  :   0 
+mulsu :   0 neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :  10 
+pop   :   0 push  :   0 rcall :   0 ret   :   0 reti  :   2 rjmp  :   1 
+rol   :   0 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 
+sbis  :   0 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 
+seh   :   0 sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 
+sev   :   0 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 
+sts   :   0 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
 
-Instructions used: 25 out of 114 (21.9%)
+Instructions used: 13 out of 114 (11.4%)
 
 "ATmega128" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x00019a    410      0    410  131072   0.3%
+[.cseg] 0x000000 0x0000a4     80      0     80  131072   0.1%
 [.dseg] 0x000100 0x000100      0      0      0    4096   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    4096   0.0%
 
-Assembly complete, 0 errors, 0 warnings
+Assembly complete, 0 errors, 2 warnings

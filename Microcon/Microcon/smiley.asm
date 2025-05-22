@@ -58,11 +58,10 @@ reset:
 	ldi a3, 0
 
 main:
-	; ------ part 1: store image that will be displayed into SRAM
+	ldi	b0,17	; 64 pls = 16 * 4 pls, 17 due to loop condition
 	clr b1
 	ldi zl,low(0x0400)
 	ldi zh,high(0x0400)
-	rjmp smileyHappy
 
 ;debut du chargement de la RAM
 oops:
@@ -186,6 +185,7 @@ restart:
 
 	ldi zl,low(0x0400)
 	ldi zh,high(0x0400)
+	add	zl,b1
 
 	_LDI	r0,64
 loop:
@@ -204,12 +204,22 @@ loop:
 	dec r0
 	brne loop
 	rcall ws2812b4_reset
-	WAIT_MS 2000
-	rcall oops
-	cli
-	rcall ws2812b4_byte3wr
-	sei
-	bcv: rjmp bcv
+
+switch:
+	sbic PINC,0
+	rjmp cproc01
+	sbis PINC,0
+	rjmp PC-1
+
+	inc b1
+	INVP PORTB, 1
+	jmp restart
+
+cproc01:
+	INVP PORTB,0		; blink LED to assume a parallel process
+	WAIT_MS 20
+	rjmp switch
+
 
 
 ; ws2812b4_init		; arg: void; used: r16 (w)

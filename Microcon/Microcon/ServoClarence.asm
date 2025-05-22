@@ -2,8 +2,8 @@
 
 .include "macros.asm"		; include macro definitions
 .include "definitions.asm"	; include register/constant definitions
-.def servochannel = r12
-.def servocounter = r13
+.def servochanel = r13
+.def servocounter = r19
 
 ; === interrupt vector table ===
 .org	0
@@ -57,7 +57,7 @@ reset:
 	
 	
 	OUTI	TIMSK,(1<<OCIE0)+(1<<TOIE0); enable outputcompar and overflow
-	ldi 	servochanel, 0b00000001
+	_LDI 	servochanel, 0b00000001
 	clr 	servocounter
 
 	sei							; set global interrupt

@@ -15,7 +15,7 @@
     <Name>Microcon</Name>
     <RootNamespace>Microcon</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
-    <EntryFile>$(MSBuildProjectDirectory)\smiley.asm</EntryFile>
+    <EntryFile>$(MSBuildProjectDirectory)\ServoClarence.asm</EntryFile>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <CacheFlash>true</CacheFlash>
@@ -112,6 +112,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="servo1.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ServoClarence.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="servoDeYannLeBoss.asm">

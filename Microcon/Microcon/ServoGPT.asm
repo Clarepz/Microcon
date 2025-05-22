@@ -28,20 +28,20 @@ servoTable: .byte 12+nbServo		;lookup table of servo management
 
 ;change the values of a servo in the lookUp table
 .macro SERVOWI		; nbr of the servo (starting at 0), value
-	ldi zh, high(2*servoTable)
+	ldi zh, high(servoTable)
 	ldi zl, @0
 	lsl zl
-	adiw z, low(2*servoTable)
+	adiw z, low(servoTable)
 	ldi w, @1
 	st z+, w
 .endmacro
 
 ;change the values of a servo in the lookUp table
 .macro SERVOW		; nbr of the servo (starting at 0), value
-	ldi zh, high(2*servoTable)
+	ldi zh, high(servoTable)
 	ldi zl, @0
 	lsl zl
-	adiw z, low(2*servoTable)
+	adiw z, low(servoTable)
 	mov w, @1
 	st z+, w
 .endmacro
@@ -91,7 +91,7 @@ overflow2:
 	push zl
 	push zh
 	push a0	
-	lds _w, 2*servoTable+NBSERVO
+	lds _w, servoTable+NBSERVO
 	sbrs _w, 6
 	;write1 zone
 	subi _w, SBOFFSET
@@ -100,7 +100,7 @@ overflow2:
 	sbrc _w, 1
 	OUTI PORTA, 0xff
 	;end of test
-	lds _w, 2*servoTable+NBSERVO
+	lds _w, servoTable+NBSERVO
 	subi _w, -1	;SB+1
 	sbrs _w, 7			;skip si EOC=1
 	rjmp suite
@@ -109,7 +109,7 @@ overflow2:
 	ori a0, 0b01000000
 	out TIMSK, a0
 suite:
-	sts 2*servoTable+NBSERVO, _w	;sortie
+	sts servoTable+NBSERVO, _w	;sortie
 	pop a0
 	pop zh
 	pop zl
@@ -122,14 +122,14 @@ output_compare2:
 	push zl
 	push zh	
 	push a0
-	lds _w, 2*servoTable+1+nbServo		;w contient zl de OCR2
+	lds _w, servoTable+1+nbServo		;w contient zl de OCR2
 	mov zl, _w
-	ldi zh, high(2*servoTable)
+	ldi zh, high(servoTable)
 	ld _u, z		;u contient la valeur de OCR2				
 	out OCR2, _u
-	INC_CYC _w, low(2*servoTable), low(2*servoTable)+NBSERVO-1
-	sts 2*servoTable+1+NBSERVO, _w
-	lds _w, 2*servoTable+NBSERVO ;w contient state byte
+	INC_CYC _w, low(servoTable), low(servoTable)+NBSERVO-1
+	sts servoTable+1+NBSERVO, _w
+	lds _w, servoTable+NBSERVO ;w contient state byte
 	;en cours
 	OUTI PORTB, 0x00
 	OUTI PORTA, 0x00
@@ -142,7 +142,7 @@ output_compare2:
 	out TIMSK, a0
 	ori _w, 0b01000000	;WB=1
 step2:
-	sts 2*servoTable+NBSERVO, _w	;sortie
+	sts servoTable+NBSERVO, _w	;sortie
 	pop a0
 	pop zh
 	pop zl
@@ -152,18 +152,18 @@ step2:
 
 
 servoSetup:
-	ldi	zl, low(2*servoTable)
-	ldi	zh, high(2*servoTable)
+	ldi	yl, low(servoTable)
+	ldi	yh, high(servoTable)
 	ldi	a0, NBSERVO
 	breq PC+5			;in case nbServo=0
 	ldi w, 192
-	st  z+, w
+	st  y+, w
 	dec a0
 	brne PC-3
 	ldi w, SBOFFSET
-	st z+, w
-	ldi w,low(2*servoTable)
-	st z, w
+	st y+, w
+	ldi w,low(servoTable)
+	st y, w
 	ret
 
 

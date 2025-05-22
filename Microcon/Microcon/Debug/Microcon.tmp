@@ -7,7 +7,7 @@
   <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
   <DIR></DIR>
  </INCLUDE_PATH>
- <SOURCE_FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</SOURCE_FILE>
+ <SOURCE_FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</SOURCE_FILE>
  <INCLUDED_FILES>
   <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m128def.inc</FILE>
   <FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm</FILE>
@@ -24,31 +24,9 @@
   <FILE>Microcon.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <reset><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>53</LINE></reset>
-  <ws2812b4_init><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>217</LINE></ws2812b4_init>
-  <main><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>60</LINE></main>
-  <smileyHappy><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>88</LINE></smileyHappy>
-  <oops><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>68</LINE></oops>
-  <chargement><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>129</LINE></chargement>
-  <restart><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>185</LINE></restart>
-  <smileyConcerned><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>108</LINE></smileyConcerned>
-  <boucle_chargement><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>134</LINE></boucle_chargement>
-  <rouge><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>167</LINE></rouge>
-  <blanc><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>141</LINE></blanc>
-  <return><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>180</LINE></return>
-  <noir><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>154</LINE></noir>
-  <loop><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>191</LINE></loop>
-  <ws2812b4_byte3wr><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>224</LINE></ws2812b4_byte3wr>
-  <ws2812b4_reset><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>269</LINE></ws2812b4_reset>
-  <bcv><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>212</LINE></bcv>
-  <ws2b3_starta0><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>227</LINE></ws2b3_starta0>
-  <ws2b3w1><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>232</LINE></ws2b3w1>
-  <ws2b3_nexta0><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>234</LINE></ws2b3_nexta0>
-  <ws2b3_starta1><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>240</LINE></ws2b3_starta1>
-  <ws2b3w1a1><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>245</LINE></ws2b3w1a1>
-  <ws2b3_nexta1><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>247</LINE></ws2b3_nexta1>
-  <ws2b3_starta2><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>253</LINE></ws2b3_starta2>
-  <ws2b3w1a2><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>258</LINE></ws2b3w1a2>
-  <ws2b3_nexta2><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\smiley.asm</FILE><LINE>260</LINE></ws2b3_nexta2>
+  <reset><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>47</LINE></reset>
+  <output_compare0><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>21</LINE></output_compare0>
+  <overflow><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>41</LINE></overflow>
+  <main><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\ServoClarence.asm</FILE><LINE>63</LINE></main>
  </LABELS>
 </ASSEMBLER_INFO>
