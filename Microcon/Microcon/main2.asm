@@ -57,8 +57,8 @@ main:
     
     rjmp main
 wall:
-    OUTI PORTC, 0xff
-    WAIT_MS 200
-    OUTI PORTC, 0x00
-    WAIT_MS 200
+    rcall printSConcerned
+    WAIT_MS 500
+    rcall printSDead
+    WAIT_MS 1500
     rjmp wall
