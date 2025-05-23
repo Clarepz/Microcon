@@ -43,13 +43,13 @@ output_compare0:
 	_LDI		servochanel,	0b00000001
 	skip:
 
-	cp		servocounter, 4
+	_cpi		servocounter, 4
 	brlo	servo0_3
 	out		OCR0, a0
 	brsh	servo4_7
 	servo0_3:
 	out		OCR0, a1
-	sero4_7:
+	servo4_7:
 
 	;sbrs	servocounter, 2
 	;OUTI OCR0, 180
@@ -84,14 +84,14 @@ reset:
 	sei						; set global interrupt
 ; === main program ===
 main:
-	ldi	a1, 180
-	ldi a0, 200
+	ldi	a1, 128
+	ldi a0, 255
 	;_LDI	servospeed1, 180
 	;_LDI	servospeed2, 200
-	WAIT_MS 2000
+	WAIT_MS 1000
 	;_LDI	servospeed1, 200
 	;_LDI	servospeed2, 180
-	ldi	a0, 180
-	ldi a1, 200
-	WAIT_MS 2000
+	ldi	a0, 190
+	ldi a1, 190
+	WAIT_MS 1000
 	rjmp	main
