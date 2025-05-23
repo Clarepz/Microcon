@@ -3,6 +3,15 @@
 ;===Definition===
 .equ DISTANCETRESH = 225
 .equ ISPEED = 170
+
+.equ servoZero  = 190
+.equ turnSpeed  = 10
+.equ turnTime   = 2000    ;ms
+.equ offsetTime = 2000    ;ms
+
+.def servospeed1 = r24
+.def servospeed2 = r25
+.def globalspeed = r8
 ; === interrupt table ===
 .org	0
 	jmp	reset
@@ -17,13 +26,15 @@
 .include "macros.asm"		; include macro definitions
 .include "definitions.asm"	; include register/constant definitions
 
-.include "irDistanceMacro.asm"
+.include "irDistanceMacro.asm"  ; uses b0-b1
 .include "printf.asm"
 .include "uart.asm"	
 .include "lcd.asm"
-.include "speedControl.asm"
+.include "speedControl.asm"     ;uses c0
 .include "Yann23cm.asm"
 ;================
+
+
 
 
 reset:
@@ -42,31 +53,58 @@ main:
 	
     DISTANCEREAD            ; read distance in b1:b0
     WAIT_MS 100
+
     PRINTF	UART0_putc		; print printDistance
 	.db	CR,CR,"Distance=",FDEC2,b,"    ",0
 	rcall LCD_home
+
 	PRINTF LCD
 	.db	CR,CR,"Distance=",FDEC2,b,"    ",0
-    MOV2 a1,a0,b1,b0
-    LSR2 a1,a0              ; print on leds
-    LSR2 a1,a0
-    out PORTC, a0
 
-    cpi a0, DISTANCETRESH   ; check distance
-    brsh wall           
+    DISTANCECOMPARE
+    brsh wall  
+
+    SERVOW 0 , servoZero + globalspeed     ;set speed
+    SERVOW 1 , servoZero + globalspeed
 
     PRINTF	UART0_putc		; print speed
 	.db	CR,CR,"Speed=",FDEC2,c,"    ",0
 	rcall LCD_lf
 	PRINTF	LCD		; print speed
 	.db	CR,CR,"Speed=",FDEC2,c,"    ",0
-    
+
     rjmp main
 
 
 wall:
+
     rcall printSConcerned
-    WAIT_MS 500
+
+    ;turn 90
+    SERVOWI 0, servoZero+turnSpeed
+    SERVOWI 1, servoZero-turnSpeed
+    WAIT_MS turnTime
+    ;move offet
+    SERVOWI 0, servoZero+turnSpeed
+    SERVOWI 1, servoZero+turnSpeed
+
+    clr w
+    loop:
+        DISTANCEREAD
+        DISTANCECOMPARE
+        brsh dead
+        WAIT_MS offsetTime/10
+        inc w
+        cpse w,10
+        rjmp loop
+    ;turn 90
+    SERVOWI 0, servoZero+turnSpeed
+    SERVOWI 1, servoZero-turnSpeed
+    WAIT_MS turnTime
+
+    rcall   printSHappy
+    rjmp    main
+dead:
     rcall printSDead
-    WAIT_MS 1500
-    rjmp wall
+    SERVOWI 0, servoZero
+    SERVOWI 1, servoZero

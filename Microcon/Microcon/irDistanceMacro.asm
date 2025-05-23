@@ -19,4 +19,11 @@ ADCCaddr_sra:
 	;sbrs r25, 0				; wait for semapho
 .endmacro
 
+.macro DISTANCECOMPARE
+	MOV2 a1,a0,b1,b0
+    LSR2 a1,a0              ; reformat
+    LSR2 a1,a0
+    cpi a0, DISTANCETRESH   ; check distance
+.endmacro
+
 
