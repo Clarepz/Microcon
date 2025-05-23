@@ -30,9 +30,9 @@ servoTable: .byte 8		;lookup table of servo management
 
 ; === interrupt service routines ====
 output_compare0:
-	in 		_sreg, SREG
-
 	OUTI 	PORTB, 0x00
+
+	in 		_sreg, SREG
 
 	lsl 	servochanel
 	inc		servocounter
@@ -41,17 +41,22 @@ output_compare0:
 	brlo	skip
 	clr		servocounter
 	_LDI		servochanel,	0b00000001
-skip:
-	sbrs	servocounter, 2
-	;OUTI OCR0, 180
-	out		OCR0, a0
-	sbrc	servocounter, 2
-	;OUTI OCR0, 200
-	out		OCR0, a1
+	skip:
 
-	;in			_w, OCR0
-	;inc		_w
-	;out		OCR0,_w
+	cp		servocounter, 4
+	brlo	servo0_3
+	out		OCR0, a0
+	brsh	servo4_7
+	servo0_3:
+	out		OCR0, a1
+	sero4_7:
+
+	;sbrs	servocounter, 2
+	;OUTI OCR0, 180
+	;out		OCR0, a0
+	;sbrc	servocounter, 2
+	;OUTI OCR0, 200
+	;out		OCR0, a1
 
 	out		SREG, _sreg
 	reti
