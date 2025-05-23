@@ -4,45 +4,69 @@
  *  Created: 08.04.2025 18:23:15
  *   Author: royer
  */ 
+ /* pin servo 1= B0		servo 2=B1
+ */
 
-.include "macros.asm"
-.include "definitions.asm"
+.set NPoint = 6000		;range=+-2000
+
+
+.macro SERVO1W	; entre -100 et +100
+	_LDI u, high(@0/20+NPoint)
+	ldi w, low(@0/20+NPoint)
+
+	OUT OCR1AH, u
+	OUT OCR1AL, w
+.endmacro
+
+.macro SERVO2W	; entre -100 et +100
+	_LDI u, high(@0/20+NPoint)
+	ldi w, low(@0/20+NPoint)
+
+	OUT OCR1BH, u
+	OUT OCR1BL, w
+.endmacro
+
+.macro SERVOSETUP
+	OUTI DDRB, 0xff
+
+	OUTI TCCR1B, 1
+
+	OUTI TIMSK,(1<<TOIE1)+(1<<OCIE1A)+(1<<OCIE1B)
+	sei
+.endmacro
 
 ;=== interruption table
-.org 0
-	rjmp reset
 
-.set pwm0_preset = 157
-.set pwm0_compare = 24
+.org OVF1addr
+	rjmp overflow1
+.org OC1Aaddr
+	rjmp output_compare1a
+.org OC1Baddr
+	rjmp output_compare1b
+
+.org 30
 
 
-;===intialisation
+overflow1:
+	ldi _w, 0xff
+	out	PORTB, _w	;allumage du servo1 et 2
+	reti
 
-reset:
-	LDSP RAMEND
-	OUTI DDRB, 0xff
-	OUTI DDRC, 0xff
-	OUTI DDRD, 0x00
+output_compare1a:
+	in	_w, PORTB
+	andi 0b0
+	out	PORTB, _w	;Exctinction1
+	reti
 
-	OUTI ASSR, (0<<AS0)
-	OUTI TCCR0, (1<<PWM0)+(0b10<<COM00)+5
+output_compare1b:
+	in	_w, PORTB
+	andi 0b01
+	out	PORTB, _w	;Exctinction 2
+	reti
 
-	OUTI OCR0,pwm0_compare
-	ldi r17, pwm0_compare
+.cseg
 
-main:
-	out OCR0,r17
-	ldi r17, pwm0_compare		;store la valeur du pwm
-	ldi r18, -4					;addition
-	ldi r19, 8
-	in r16, PIND
-	out PORTC, r16
 
-	loop:
-	sbrs r16, 7
-	add r17, r18
-	inc r18
-	lsl r16				;shift de r16 left
-	dec r19
-	breq main
-	rjmp loop
+
+
+

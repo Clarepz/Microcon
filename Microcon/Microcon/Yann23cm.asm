@@ -13,8 +13,8 @@
 ; purpose: write an active-high zero-pulse to PD1
 .macro	WS2812b4_WR0
 	clr u
-	sbi PORTD, 1
-	out PORTD, u
+	sbi PORTC, 1
+	out PORTC, u
 	nop
 	nop
 	;nop	;deactivated on purpose of respecting timings
@@ -24,17 +24,18 @@
 ; WS2812b4_WR1	; macro ; arg: void; used: void
 ; purpose: write an active-high one-pulse to PD1
 .macro	WS2812b4_WR1
-	sbi PORTD, 1
+	sbi PORTC, 1
 	nop
 	nop
-	cbi PORTD, 1
+	cbi PORTC, 1
 	;nop	;deactivated on purpose of respecting timings
 	;nop
 .endm
 
 smileyHapppy: .db 0b00000000,0b00100100,0b00100100,0b00000000,0b01000010,0b00111100,0b00000000,0b00000000
 smileyConcerned: .db 0b00000000,0b00100100,0b00100100,0b00000000,0b00111100,0b01000010,0b01000010,0b00111100
-smileyDead: .db 0b00000000,0b10100101,0b01000010,0b10100101,0b00000000,0b00111100,0b01000010,0b00000000
+smileyDead: .db 0b00000000,0b01010101,0b00100010,0b01010101,0b00000000,0b00011100,0b00100010,0b00000000
+smileySleepy: .db 0b00000000, 0b00000000, 0b01010101,0b00100010,0b00000000,0b00000000,0b00111000
 
 ;========= Sous Routines à appeler ===========
 
@@ -54,6 +55,11 @@ printSConcerned:
 printSDead:
 	ldi zl, low(2*smileyDead)
 	ldi zh, high(2*smileyDead)
+	rjmp remplissageEtEnvoie
+
+printSSleepy:
+	ldi zl, low(2*smileySleepy)
+	ldi zh, high(2*smileySleepy)
 	rjmp remplissageEtEnvoie
 
 ;========== Fin des Sous Routines à appeler =======
@@ -124,7 +130,7 @@ envoiePixel:
 
 
  ws2812b4_init:
-	OUTI	DDRD,0x02
+	OUTI	DDRC,0x02
 ret
 
 ; ws2812b4_byte3wr	; arg: a0,a1,a2 ; used: r16 (w)
@@ -176,6 +182,6 @@ ret
 ; ws2812b4_reset	; arg: void; used: r16 (w)
 ; purpose: reset pulse, configuration becomes effective
 ws2812b4_reset:
-	cbi PORTD, 1
+	cbi PORTC, 1
 	WAIT_US	50 	; 50 us are required, NO smaller works
 ret
