@@ -14,13 +14,23 @@
 .endmacro
 
 
-.macro SERVO1W	; entre -5 et +5
+.macro SERVO1WI	; entre -5 et +5
 	ldi w, NPoint+@0
 	out OCR0, w
 .endmacro
 
-.macro SERVO2W	; entre -5 et +5
+.macro SERVO2WI	; entre -5 et +5
 	ldi w, NPoint+@0
 	out OCR2, w
+.endmacro
+
+.macro SERVO1W	; entre -5 et +5
+	subi @0, NPoint
+	out OCR0, @0
+.endmacro
+
+.macro SERVO2W	; entre -5 et +5
+	subi @0, NPoint
+	out OCR2, @0
 .endmacro
 

@@ -1,5 +1,7 @@
 ; file target ATmega128L-4MHz-STK300
 
+.include "macros.asm"		; include macro definitions
+.include "definitions.asm"	; include register/constant definitions
 
 ; button on PORTD
 ; IR distance PORTF
@@ -10,13 +12,13 @@
 .equ DISTANCETRESH = 225
 .equ ISPEED = 170
 
-.equ servoZero  = 190
-.equ turnSpeed  = 10
+
+.equ turnSpeed  = 2
 .equ turnTime   = 2000      ;ms
 .equ offsetTime = 2000      ;ms
 
-.def semaphore  = r12       ;d0
-.def globalspeed = r8       ;c0
+.def semaphore  = r22       ;d0
+.def globalspeed = r23       ;c0
 
 ; === interrupt table ===
 .org	0
@@ -31,15 +33,14 @@
 	jmp	ADCCaddr_sra
 .org	0x30
 ;=== includes ===
-.include "macros.asm"		; include macro definitions
-.include "definitions.asm"	; include register/constant definitions
 
 .include "irDistanceMacro.asm"          ; uses b0-b1
 .include "printf.asm"
 .include "uart.asm"	
-.include "lcd.asm"
-.include "speedStanbyControl.asm"       ; uses c0
+;.include "lcd.asm"
+.include "speedStandbyControl.asm"       ; uses c0
 .include "Yann23cm.asm"
+.include "servoClean.asm"
 ;================
 
 reset:
@@ -47,9 +48,10 @@ reset:
 	OUTI	DDRC,0xff		; leds
 	rcall	ws2812b4_init
 	rcall	UART0_init
-    rcall   LCD_init    
+   ; rcall   LCD_init    
     rcall   SPEED_init      ;init speed control
     IRSET                   ;init le capteur de distance
+	SERVOSETUP
 
 
     clr globalspeed
@@ -60,16 +62,16 @@ reset:
 
 standby:
     rcall printSSleepy
-    SERVOWI 0, servoZero    ;speed = 0
-    SERVOWI 1, servoZero
+    SERVO1WI 0    ;speed = 0
+    SERVO2WI 0
     sbloop:
-        sbrc semaphore
+        sbrc semaphore, 0
         rjmp main
         rjmp sbLoop
 
 
 main:
-    cbr semaphore
+    cbr semaphore, 0
     rcall   printSHappy
 	mainloop:
     DISTANCEREAD            ; read distance in b1:b0
@@ -77,29 +79,27 @@ main:
 
     PRINTF	UART0_putc		; print printDistance
 	.db	CR,CR,"Distance=",FDEC2,b,"    ",0
-	rcall LCD_home
+	;rcall LCD_home
 
-	PRINTF LCD
-	.db	CR,CR,"Distance=",FDEC2,b,"    ",0
+	;PRINTF LCD
+	;.db	CR,CR,"Distance=",FDEC2,b,"    ",0
 
     DISTANCECOMPARE
     brsh wall  
 
     ;set speed:
-    ldi    a0, globalspeed
-    ADDI   a0, servoZero
-    SERVOW 0 , a0     
-    SERVOW 1 , a0
+    SERVO1W globalSpeed     
+    SERVO2W globalSpeed
 
     PRINTF	UART0_putc		; print speed
 	.db	CR,CR,"Speed=",FDEC2,c,"    ",0
-	rcall LCD_lf
-	PRINTF	LCD		; print speed
-	.db	CR,CR,"Speed=",FDEC2,c,"    ",0
+	;rcall LCD_lf
+	;PRINTF	LCD		; print speed
+	;.db	CR,CR,"Speed=",FDEC2,c,"    ",0
 
     ;check if start stop button pressed:
 
-    sbrc semaphore
+    sbrc semaphore, 0
     rjmp standby
 
     rjmp mainloop
@@ -110,12 +110,12 @@ wall:
     rcall printSConcerned
 
     ;turn 90
-    SERVOWI 0, servoZero+turnSpeed
-    SERVOWI 1, servoZero-turnSpeed
+    SERVO1WI turnSpeed
+    SERVO2WI -turnSpeed
     WAIT_MS turnTime
     ;move offet
-    SERVOWI 0, servoZero+turnSpeed
-    SERVOWI 1, servoZero+turnSpeed
+    SERVO1WI turnSpeed
+    SERVO2WI turnSpeed
 
     clr w
     loop:
@@ -124,15 +124,16 @@ wall:
         brsh dead
         WAIT_MS offsetTime/10
         inc w
-        cpse w,10
+        cpi w,10
+		breq PC+2
         rjmp loop
     ;turn 90
-    SERVOWI 0, servoZero+turnSpeed
-    SERVOWI 1, servoZero-turnSpeed
+    SERVO1WI turnSpeed
+    SERVO2WI -turnSpeed
     WAIT_MS turnTime
     rjmp    main
 dead:
     rcall printSDead
-    SERVOWI 0, servoZero
-    SERVOWI 1, servoZero
+    SERVO1WI 0
+    SERVO2WI 0
 

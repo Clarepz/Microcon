@@ -15,7 +15,7 @@
     <Name>Microcon</Name>
     <RootNamespace>Microcon</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
-    <EntryFile>$(MSBuildProjectDirectory)\ServoQuiMarche.asm</EntryFile>
+    <EntryFile>$(MSBuildProjectDirectory)\main3.asm</EntryFile>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <CacheFlash>true</CacheFlash>
@@ -105,6 +105,9 @@
     <Compile Include="main2.asm">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="main3.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="printf.asm">
       <SubType>Code</SubType>
     </Compile>
@@ -117,10 +120,16 @@
     <Compile Include="ServoClarence.asm">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="servoClean.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="servoDeYannLeBoss.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ServoGPT.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ServoQuiMarche%2520copy.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ServoQuiMarche.asm">
@@ -129,7 +138,10 @@
     <Compile Include="smiley.asm">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="speedControl.asm">
+    <Compile Include="speedStandbyControl.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="testmicro.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="uart.asm">
@@ -139,6 +151,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Yann23cm.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Yann24cm.asm">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
