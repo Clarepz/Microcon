@@ -79,8 +79,8 @@ reset:
 	sei						; set global interrupt
 ; === main program ===
 main:
-	ldi	a0, 180
-	ldi a1,200
+	ldi	a1, 180
+	ldi a0,200
 	;_LDI	servospeed1, 180
 	;_LDI	servospeed2, 200
 	WAIT_MS 2000
