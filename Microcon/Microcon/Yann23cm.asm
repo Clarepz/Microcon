@@ -13,8 +13,8 @@
 ; purpose: write an active-high zero-pulse to PD1
 .macro	WS2812b4_WR0
 	clr u
-	sbi PORTC, 1
-	out PORTC, u
+	sbi PORTE, 1
+	out PORTE, u
 	nop
 	nop
 	;nop	;deactivated on purpose of respecting timings
@@ -24,13 +24,18 @@
 ; WS2812b4_WR1	; macro ; arg: void; used: void
 ; purpose: write an active-high one-pulse to PD1
 .macro	WS2812b4_WR1
-	sbi PORTC, 1
+	sbi PORTE, 1
 	nop
 	nop
-	cbi PORTC, 1
+	cbi PORTE, 1
 	;nop	;deactivated on purpose of respecting timings
 	;nop
 .endm
+
+ .macro D_LED_INIT		;initialise la dalle led
+	OUTI	DDRE,0x02
+.endmacro
+
 
 smileyHapppy: .db 0b00000000,0b00100100,0b00100100,0b00000000,0b01000010,0b00111100,0b00000000,0b00000000
 smileyConcerned: .db 0b00000000,0b00100100,0b00100100,0b00000000,0b00111100,0b01000010,0b01000010,0b00111100
@@ -129,10 +134,6 @@ envoiePixel:
 	ret
 
 
- ws2812b4_init:
-	OUTI	DDRC,0x02
-ret
-
 ; ws2812b4_byte3wr	; arg: a0,a1,a2 ; used: r16 (w)
 ; purpose: write contents of a0,a1,a2 (24 bit) into ws2812, 1 LED configuring
 ;     GBR color coding, LSB first
@@ -182,6 +183,6 @@ ret
 ; ws2812b4_reset	; arg: void; used: r16 (w)
 ; purpose: reset pulse, configuration becomes effective
 ws2812b4_reset:
-	cbi PORTC, 1
+	cbi PORTE, 1
 	WAIT_US	50 	; 50 us are required, NO smaller works
 ret

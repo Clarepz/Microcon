@@ -37,7 +37,7 @@
 .include "irDistanceMacro.asm"          ; uses b0-b1
 .include "printf.asm"
 .include "uart.asm"	
-;.include "lcd.asm"
+.include "lcd.asm"
 .include "speedStandbyControl.asm"       ; uses c0
 .include "Yann23cm.asm"
 .include "servoClean.asm"
@@ -46,9 +46,9 @@
 reset:
     LDSP	RAMEND			; set up stack pointer (SP)
 	OUTI	DDRC,0xff		; leds
-	rcall	ws2812b4_init
+	D_LED_INIT
 	rcall	UART0_init
-   ; rcall   LCD_init    
+    rcall   LCD_init    
     rcall   SPEED_init      ;init speed control
     IRSET                   ;init le capteur de distance
 	SERVOSETUP
@@ -79,10 +79,10 @@ main:
 
     PRINTF	UART0_putc		; print printDistance
 	.db	CR,CR,"Distance=",FDEC2,b,"    ",0
-	;rcall LCD_home
+	rcall LCD_home
 
-	;PRINTF LCD
-	;.db	CR,CR,"Distance=",FDEC2,b,"    ",0
+	PRINTF LCD
+	.db	CR,CR,"Distance=",FDEC2,b,"    ",0
 
     DISTANCECOMPARE
     brsh wall  
@@ -93,9 +93,9 @@ main:
 
     PRINTF	UART0_putc		; print speed
 	.db	CR,CR,"Speed=",FDEC2,c,"    ",0
-	;rcall LCD_lf
-	;PRINTF	LCD		; print speed
-	;.db	CR,CR,"Speed=",FDEC2,c,"    ",0
+	rcall LCD_lf
+	PRINTF	LCD		; print speed
+	.db	CR,CR,"Speed=",FDEC2,c,"    ",0
 
     ;check if start stop button pressed:
 

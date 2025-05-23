@@ -10,17 +10,38 @@
 .set NPoint = 6000		;range=+-2000
 
 
+
 .macro SERVO1W	; entre -100 et +100
-	_LDI u, high(@0/20+NPoint)
-	ldi w, low(@0/20+NPoint)
+	;_LDI u, high(@0*20+NPoint)
+	MULT4 @0
+	mov w, @0
+	MULT4 @0
+	mov w, @0
+	subi w, -NP
 
 	OUT OCR1AH, u
 	OUT OCR1AL, w
 .endmacro
 
 .macro SERVO2W	; entre -100 et +100
-	_LDI u, high(@0/20+NPoint)
-	ldi w, low(@0/20+NPoint)
+	_LDI u, high(@0*20+NPoint)
+	ldi w, low(@0*20+NPoint)
+
+	OUT OCR1BH, u
+	OUT OCR1BL, w
+.endmacro
+
+.macro SERVO1WI	; entre -100 et +100
+	_LDI u, high(@0*20+NPoint)
+	ldi w, low(@0*20+NPoint)
+
+	OUT OCR1AH, u
+	OUT OCR1AL, w
+.endmacro
+
+.macro SERVO2WI	; entre -100 et +100
+	_LDI u, high(@0*20+NPoint)
+	ldi w, low(@0*20+NPoint)
 
 	OUT OCR1BH, u
 	OUT OCR1BL, w
@@ -64,7 +85,6 @@ output_compare1b:
 	out	PORTB, _w	;Exctinction 2
 	reti
 
-.cseg
 
 
 
