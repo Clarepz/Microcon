@@ -72,7 +72,7 @@ reset:
 
     sei
     rjmp standby
-	
+
 ;======== main ========
 
 standby:
@@ -88,19 +88,21 @@ standby:
         rjmp sbLoop
 
 main:
-	
-	PRINTF LCD
-	.db	CR,CR,"Content",FDEC2,b,"    ",0
-	rcall printSHappy
-	
-	SERVO1WI 20    
+	SERVO1WI 20    	;set speed
     SERVO2WI 20
+	PRINTF	LCD		;print speed
+	    .db	LF,CR,"Speed=",FDEC,c,"    ",0
 
 	DISTANCEREAD
 	WAIT_MS 20
+	PRINTF LCD		;print speed
+	.db	CR,CR,"Distance=",FDEC2,b,"    ",0
+	
 	DISTANCECOMPARE
 	brsh wall
 	
+	sbrc semaphore, 0
+    rjmp standby
 	
 	rjmp main
 
