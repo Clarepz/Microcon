@@ -20,10 +20,14 @@
 ; === interrupt table ===
 .org	0
 	jmp	reset
-
+.org INT0addr
+    jmp ext_int0
+.org INT1addr
+	jmp	ext_int1
+.org INT2addr
+    jmp ext_int2
 .org 	ADCCaddr
 	jmp	ADCCaddr_sra
-
 .org OVF1addr
 	rjmp overflow1
 .org OC1Aaddr
@@ -60,20 +64,29 @@ reset:
 	rcall   LCD_init
 	SERVOSETUP
 
-	D_LED_INIT
-  
-    ;rcall   SPEED_init      ;init speed/standby control
+    rcall   SPEED_init      ;init speed/standby control
     IRSET                   ;init le capteur de distance
 
     ldi globalspeed, ISPEED
     clr semaphore
 
     sei
-    rjmp main
-    ;rjmp standby
-
-
+    rjmp standby
+	
 ;======== main ========
+
+standby:
+    rcall printSSleepy
+    SERVO1WI 0    ;speed = 0
+    SERVO2WI 0
+    sbloop:
+        PRINTF	LCD		; print speed
+	    .db	CR,CR,"Speed=",FDEC,c,"    ",0
+
+        sbrc semaphore, 0 ;  check if pause button pressed
+        rjmp main
+        rjmp sbLoop
+
 main:
 	
 	PRINTF LCD
