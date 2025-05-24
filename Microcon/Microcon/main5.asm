@@ -76,6 +76,7 @@ reset:
 ;======== main ========
 
 standby:
+	cbr semaphore, 0
     rcall printSSleepy
     SERVO1WI 128    ;speed = 0
     SERVO2WI 128
@@ -88,6 +89,9 @@ standby:
         rjmp sbLoop
 
 main:
+	cbr semaphore, 0
+	rcall   printSHappy
+	mainloop:
 	SERVO1WI 20    	;set speed
     SERVO2WI 20
 	PRINTF	LCD		;print speed
@@ -104,7 +108,7 @@ main:
 	sbrc semaphore, 0
     rjmp standby
 	
-	rjmp main
+	rjmp mainloop
 
 
 wall:
