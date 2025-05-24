@@ -78,8 +78,8 @@ reset:
 standby:
 	cbr semaphore, 0
     rcall printSSleepy
-    SERVO1WI 128    ;speed = 0
-    SERVO2WI 128
+    SERVO1WI 0    ;speed = 0
+    SERVO2WI 0
     sbloop:
         PRINTF	LCD		; print speed
 	    .db	CR,CR,"Speed=",FDEC,c,"    ",0
@@ -115,7 +115,7 @@ wall:
 	PRINTF LCD
 	.db	CR,CR,"Duper",FDEC2,b,"    ",0
 	rcall printSConcerned
-	SERVO1WI turnSpeed   
-    SERVO2WI 128+turnSpeed
+	SERVO1WI -turnSpeed   
+    SERVO2WI +turnSpeed
 	WAIT_MS 3000
 	rjmp main
