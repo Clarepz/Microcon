@@ -20,15 +20,20 @@
 ; === interrupt table ===
 .org	0
 	jmp	reset
-.org INT0addr
-    jmp ext_int0
-.org INT1addr
-	jmp	ext_int1
-.org INT2addr
-    jmp ext_int2
+
 .org 	ADCCaddr
 	jmp	ADCCaddr_sra
+
+.org OVF1addr
+	rjmp overflow1
+.org OC1Aaddr
+	rjmp output_compare1a
+.org OC1Baddr
+	rjmp output_compare1b
+
 .org	0x30
+
+
 
 
 ;======== biblioth�ques =======
@@ -63,7 +68,7 @@ reset:
     ldi globalspeed, ISPEED
     clr semaphore
 
-    ;sei
+    sei
     rjmp main
     ;rjmp standby
 
@@ -75,13 +80,13 @@ main:
 	.db	CR,CR,"Content",FDEC2,b,"    ",0
 	rcall printSHappy
 	
-	SERVO1WI 100    
-    SERVO2WI 100
+	SERVO1WI 20    
+    SERVO2WI 20
 
 	DISTANCEREAD
 	WAIT_MS 20
 	DISTANCECOMPARE
-	rjmp wall
+	brsh wall
 	
 	
 	rjmp main
@@ -92,6 +97,6 @@ wall:
 	.db	CR,CR,"Duper",FDEC2,b,"    ",0
 	rcall printSConcerned
 	SERVO1WI turnSpeed   
-    SERVO2WI -turnSpeed
+    SERVO2WI 128+turnSpeed
 	WAIT_MS 3000
 	rjmp main
