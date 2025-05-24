@@ -6,11 +6,11 @@
 ; button on PORTD
 ; IR distance PORTF
 ; servo PORTB PIN 0,1 
-; LED matrix PORTC PIN,0
+; LED matrix PORTE PIN,1
 
 ;===Definition===
 .equ DISTANCETRESH = 225
-.equ ISPEED = 170
+.equ ISPEED = 0
 
 
 .equ turnSpeed  = 2
@@ -18,7 +18,7 @@
 .equ offsetTime = 2000      ;ms
 
 .def semaphore  = r22       ;d0
-.def globalspeed = r23       ;c0
+.def globalspeed = r23      ;c0
 
 ; === interrupt table ===
 .org	0
@@ -53,8 +53,7 @@ reset:
     IRSET                   ;init le capteur de distance
 	SERVOSETUP
 
-
-    clr globalspeed
+    ldi globalspeed, ISPEED
     clr semaphore
 
     sei
@@ -65,7 +64,10 @@ standby:
     SERVO1WI 0    ;speed = 0
     SERVO2WI 0
     sbloop:
-        sbrc semaphore, 0
+        PRINTF	LCD		; print speed
+	    .db	CR,CR,"Speed=",FDEC,c,"    ",0
+
+        sbrc semaphore, 0 ;  check if pause button pressed
         rjmp main
         rjmp sbLoop
 
@@ -92,12 +94,12 @@ main:
     SERVO2W globalSpeed
 
     PRINTF	UART0_putc		; print speed
-	.db	CR,CR,"Speed=",FDEC2,c,"    ",0
-	rcall LCD_lf
+	.db	CR,CR,"Speed=",FDEC,c,"    ",0
+	;rcall LCD_lf
 	PRINTF	LCD		; print speed
-	.db	CR,CR,"Speed=",FDEC2,c,"    ",0
+	.db	LF,CR,CR,"Speed=",FDEC,c,"    ",0
 
-    ;check if start stop button pressed:
+    ;check if pause button pressed:
 
     sbrc semaphore, 0
     rjmp standby
@@ -110,10 +112,10 @@ wall:
     rcall printSConcerned
 
     ;turn 90
-    SERVO1WI turnSpeed
-    SERVO2WI -turnSpeed
+    SERVO1WI -turnSpeed
+    SERVO2WI turnSpeed
     WAIT_MS turnTime
-    ;move offet
+    ;move to offet
     SERVO1WI turnSpeed
     SERVO2WI turnSpeed
 
@@ -127,6 +129,7 @@ wall:
         cpi w,10
 		breq PC+2
         rjmp loop
+
     ;turn 90
     SERVO1WI turnSpeed
     SERVO2WI -turnSpeed
