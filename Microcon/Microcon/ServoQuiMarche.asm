@@ -91,7 +91,7 @@ main:
 	WAIT_MS 1000
 	;_LDI	servospeed1, 200
 	;_LDI	servospeed2, 180
-	ldi	a0, 190
-	ldi a1, 190
+	ldi	a0, 128
+	ldi a1, 200
 	WAIT_MS 1000
 	rjmp	main

@@ -15,7 +15,7 @@
     <Name>Microcon</Name>
     <RootNamespace>Microcon</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
-    <EntryFile>$(MSBuildProjectDirectory)\main4.asm</EntryFile>
+    <EntryFile>$(MSBuildProjectDirectory)\main3.asm</EntryFile>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <CacheFlash>true</CacheFlash>
@@ -130,9 +130,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ServoGPT.asm">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ServoQuiMarche%2520copy.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ServoQuiMarche.asm">

@@ -7,6 +7,14 @@
 .org	0
 	jmp	reset
 
+.org OVF1addr
+	rjmp overflow1
+
+.org OC1Aaddr
+	rjmp output_compare1a
+
+.org OC1Baddr
+	rjmp output_compare1b
 
 .org	30
 
@@ -34,13 +42,13 @@ main:
 	PRINTF LCD
 	.db	CR,CR,"Content",FDEC2,b,"    ",0
 	rcall printSHappy
-	SERVO1WI 2    ;speed = 0
-    SERVO2WI 2
+	SERVO1WI 100    ;speed = 0
+    SERVO2WI 100
 	WAIT_MS 2000
 	PRINTF LCD
 	.db	CR,CR,"Duper",FDEC2,b,"    ",0
 	rcall printSConcerned
-	SERVO1WI 4    ;speed = 0
-    SERVO2WI 4
+	SERVO1WI -50    ;speed = 0
+    SERVO2WI -50
 	WAIT_MS 2000
 	rjmp main

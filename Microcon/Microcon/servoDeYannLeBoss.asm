@@ -11,37 +11,32 @@
 
 
 
-.macro SERVO1W	; entre -100 et +100
+.macro SERVO1W	; entre -125 et +125
 	;_LDI u, high(@0*20+NPoint)
-	MULT4 @0
-	mov w, @0
-	MULT4 @0
-	mov w, @0
-	subi w, -NP
+
+	;OUT OCR1AH, u
+	;OUT OCR1AL, w
+.endmacro
+
+.macro SERVO2W	; entre -125 et +125
+	;_LDI u, high(@0*16+NPoint)
+	;ldi w, low(@0*16+NPoint)
+
+	;OUT OCR1BH, u
+	;OUT OCR1BL, w
+.endmacro
+
+.macro SERVO1WI	; entre -125 et +125
+	_LDI u, high(@0*16+NPoint)
+	ldi w, low(@0*16+NPoint)
 
 	OUT OCR1AH, u
 	OUT OCR1AL, w
 .endmacro
 
-.macro SERVO2W	; entre -100 et +100
-	_LDI u, high(@0*20+NPoint)
-	ldi w, low(@0*20+NPoint)
-
-	OUT OCR1BH, u
-	OUT OCR1BL, w
-.endmacro
-
-.macro SERVO1WI	; entre -100 et +100
-	_LDI u, high(@0*20+NPoint)
-	ldi w, low(@0*20+NPoint)
-
-	OUT OCR1AH, u
-	OUT OCR1AL, w
-.endmacro
-
-.macro SERVO2WI	; entre -100 et +100
-	_LDI u, high(@0*20+NPoint)
-	ldi w, low(@0*20+NPoint)
+.macro SERVO2WI	; entre -125 et +125
+	_LDI u, high(@0*16+NPoint)
+	ldi w, low(@0*16+NPoint)
 
 	OUT OCR1BH, u
 	OUT OCR1BL, w
@@ -56,16 +51,19 @@
 	sei
 .endmacro
 
-;=== interruption table
 
+
+
+
+;=== interruption table
+/*
 .org OVF1addr
 	rjmp overflow1
 .org OC1Aaddr
 	rjmp output_compare1a
 .org OC1Baddr
 	rjmp output_compare1b
-
-.org 30
+*/
 
 
 overflow1:
@@ -75,13 +73,13 @@ overflow1:
 
 output_compare1a:
 	in	_w, PORTB
-	andi 0b0
+	andi _w, 0b11111110
 	out	PORTB, _w	;Exctinction1
 	reti
 
 output_compare1b:
 	in	_w, PORTB
-	andi 0b01
+	andi _w, 0b11111101
 	out	PORTB, _w	;Exctinction 2
 	reti
 

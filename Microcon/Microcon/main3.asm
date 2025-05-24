@@ -13,7 +13,7 @@
 .equ ISPEED = 0
 
 
-.equ turnSpeed  = 2
+.equ turnSpeed  = 80
 .equ turnTime   = 2000      ;ms
 .equ offsetTime = 2000      ;ms
 
@@ -40,7 +40,7 @@
 .include "lcd.asm"
 .include "speedStandbyControl.asm"       ; uses c0
 .include "Yann23cm.asm"
-.include "servoClean.asm"
+.include "servoDeYannLeBoss.asm"
 ;================
 
 reset:
@@ -90,8 +90,10 @@ main:
     brsh wall  
 
     ;set speed:
-    SERVO1W globalSpeed     
-    SERVO2W globalSpeed
+    ;SERVO1W globalSpeed     
+    ;SERVO2W globalSpeed
+	SERVO1WI 100     
+    SERVO2WI 100
 
     PRINTF	UART0_putc		; print speed
 	.db	CR,CR,"Speed=",FDEC,c,"    ",0
