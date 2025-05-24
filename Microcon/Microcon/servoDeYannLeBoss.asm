@@ -7,26 +7,43 @@
  /* pin servo 1= B0		servo 2=B1
  */
 
-.set NPoint = 6000		;range=+-2000
+.set NPoint = 4000		;range= 0-4000
 
 
 
-.macro SERVO1W	; entre -125 et +125
-	;_LDI u, high(@0*20+NPoint)
+.macro SERVO1W	; entre 0 et 255
+	;@0*16+NPoint
+	push a0
+	clr a0
+	mov w, @0
+	LSL2 a0, w
+	LSL2 a0, w
+	LSL2 a0, w
+	LSL2 a0, w
+	SUBI2 a0, w, -NPoint
 
-	;OUT OCR1AH, u
-	;OUT OCR1AL, w
+	out OCR1AH, a0
+	out OCR1AL, w
+	pop a0
 .endmacro
 
-.macro SERVO2W	; entre -125 et +125
-	;_LDI u, high(@0*16+NPoint)
-	;ldi w, low(@0*16+NPoint)
+.macro SERVO2W	; entre 0 et 255
+	;@0*16+NPoint
+	push a0
+	clr a0
+	mov w, @0
+	LSL2 a0, w
+	LSL2 a0, w
+	LSL2 a0, w
+	LSL2 a0, w
+	SUBI2 a0, w, -NPoint
 
-	;OUT OCR1BH, u
-	;OUT OCR1BL, w
+	out OCR1BH, a0
+	out OCR1BL, w
+	pop a0
 .endmacro
 
-.macro SERVO1WI	; entre -125 et +125
+.macro SERVO1WI	; entre 0 et 255
 	_LDI u, high(@0*16+NPoint)
 	ldi w, low(@0*16+NPoint)
 
@@ -34,7 +51,7 @@
 	OUT OCR1AL, w
 .endmacro
 
-.macro SERVO2WI	; entre -125 et +125
+.macro SERVO2WI	; entre 0 et 255
 	_LDI u, high(@0*16+NPoint)
 	ldi w, low(@0*16+NPoint)
 

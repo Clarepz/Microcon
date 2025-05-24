@@ -35,7 +35,8 @@ reset:
 	D_LED_INIT
 	rcall   LCD_init
 	SERVOSETUP
-	ldi a1, 200
+	_ldi d3, 128
+	_ldi d2, 128
 
 
 ;======== main ========
@@ -43,13 +44,13 @@ main:
 	PRINTF LCD
 	.db	CR,CR,"Content",FDEC2,b,"    ",0
 	rcall printSHappy
-	SERVO1WI 30    ;speed = 0
-    SERVO2WI 30
+	SERVO1W b2    ;speed = 0
+    SERVO2W b2
 	WAIT_MS 2000
 	PRINTF LCD
 	.db	CR,CR,"Duper",FDEC2,b,"    ",0
 	rcall printSConcerned
-	SERVO1W a1    ;speed = 0
-    SERVO2W a1
+	SERVO1W b3    ;speed = 0
+    SERVO2W b3
 	WAIT_MS 2000
 	rjmp main
