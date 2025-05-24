@@ -50,7 +50,7 @@
 .include "printf.asm"
 .include "uart.asm"	
 .include "lcd.asm"
-;.include "speedStandbyControl.asm"       ; uses c0
+.include "speedStandbyControl.asm"       ; uses c0
 .include "Yann23cm.asm"
 
 
@@ -77,8 +77,8 @@ reset:
 
 standby:
     rcall printSSleepy
-    SERVO1WI 0    ;speed = 0
-    SERVO2WI 0
+    SERVO1WI 128    ;speed = 0
+    SERVO2WI 128
     sbloop:
         PRINTF	LCD		; print speed
 	    .db	CR,CR,"Speed=",FDEC,c,"    ",0

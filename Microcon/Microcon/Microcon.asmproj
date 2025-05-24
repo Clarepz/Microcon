@@ -15,7 +15,7 @@
     <Name>Microcon</Name>
     <RootNamespace>Microcon</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
-    <EntryFile>$(MSBuildProjectDirectory)\main3.asm</EntryFile>
+    <EntryFile>$(MSBuildProjectDirectory)\main5.asm</EntryFile>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <CacheFlash>true</CacheFlash>
@@ -109,6 +109,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="main4.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="main5.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="printf.asm">

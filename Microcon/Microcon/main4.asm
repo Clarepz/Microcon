@@ -44,13 +44,13 @@ main:
 	PRINTF LCD
 	.db	CR,CR,"Content",FDEC2,b,"    ",0
 	rcall printSHappy
-	SERVO1W b2    ;speed = 0
-    SERVO2W b2
+	SERVO1W d2    ;speed = 0
+    SERVO2W d2
 	WAIT_MS 2000
 	PRINTF LCD
 	.db	CR,CR,"Duper",FDEC2,b,"    ",0
 	rcall printSConcerned
-	SERVO1W b3    ;speed = 0
-    SERVO2W b3
+	SERVO1W d3    ;speed = 0
+    SERVO2W d3
 	WAIT_MS 2000
 	rjmp main
