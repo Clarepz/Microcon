@@ -1,10 +1,10 @@
-; file target ATmega128L-4MHz-STK300
+; irDistanceMacro.asm
 
-; === interrupt service routines
+; === interrupt service routines==
 ADCCaddr_sra:
+	;read mesured distance
 	in	b0,ADCL				; read low byte first
 	in	b1,ADCH				; store 2 MSB
-	;sbr r25, 0b00000001 	; set semaphore
 	reti
 	
 ; === initialization (reset) ====
@@ -14,9 +14,7 @@ ADCCaddr_sra:
 .endmacro
 
 .macro DISTANCEREAD
-	;cbr r25, 0x01			; clear semaphore
 	sbi	ADCSR,ADSC			; start conversion
-	;sbrs r25, 0				; wait for semapho
 .endmacro
 
 .macro DISTANCECOMPARE
@@ -25,5 +23,3 @@ ADCCaddr_sra:
     LSR2 a1,a0
     cpi a0, DISTANCETRESH   ; check distance
 .endmacro
-
-
