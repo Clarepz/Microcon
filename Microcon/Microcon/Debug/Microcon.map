@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm Sat May 24 12:50:33 2025
+AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm Sat May 24 16:24:26 2025
 
 
 EQU  SIGNATURE_000 0000001e
@@ -939,12 +939,12 @@ EQU  POT          00000000
 EQU  BNC1         00000002
 EQU  BNC2         00000004
 EQU  DISTANCETRESH 000000e1
-EQU  ISPEED       00000000
-EQU  turnSpeed    00000050
-EQU  turnTime     000007d0
-EQU  offsetTime   000007d0
-DEF  semaphore    r22
-DEF  globalspeed  r23
+EQU  ISPEED       0000001e
+EQU  turnSpeed    0000001e
+EQU  turnTime     000003e8
+EQU  offsetTime   000003e8
+DEF  semaphore    r9
+DEF  globalspeed  r8
 CSEG reset        00000243
 CSEG ext_int0     000001b5
 CSEG ext_int1     000001b7
@@ -954,6 +954,7 @@ CSEG overflow1    00000030
 CSEG output_compare1a 00000033
 CSEG output_compare1b 00000037
 SET  NPoint       00000fa0
+SET  NPoint2      00001036
 EQU  FDEC         000000c0
 EQU  FDEC2        000000d0
 EQU  FDEC3        000000e0
@@ -1070,9 +1071,15 @@ CSEG ws2b3_nexta1 00000225
 CSEG ws2b3_starta2 00000229
 CSEG ws2b3w1a2    00000231
 CSEG ws2b3_nexta2 00000235
-CSEG standby      0000025a
-CSEG sbloop       00000265
-CSEG main         00000275
-CSEG WAIT_MS@WAIT_MS@4644 00000290
-CSEG wall         000002b9
-CSEG WAIT_MS@WAIT_MS@4740 000002d3
+CSEG standby      0000025b
+CSEG sbloop       00000267
+CSEG main         00000279
+CSEG mainloop     0000027b
+CSEG WAIT_MS@WAIT_MS@4723 000002b1
+CSEG wall         000002cc
+CSEG WAIT_MS@WAIT_MS@4811 000002da
+CSEG WAIT_MS@WAIT_MS@4860 000002f7
+CSEG WAIT_MS@WAIT_MS@4891 0000030b
+CSEG dead         00000341
+CSEG WAIT_MS@WAIT_MS@4971 00000330
+CSEG idle         0000034c

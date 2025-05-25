@@ -52,6 +52,7 @@ reset:
     rcall   SPEED_init      ;init speed control
     IRSET                   ;init le capteur de distance
 	SERVOSETUP
+	OUTI	DDRD, 0x00		;enable pullups
 
     ldi globalspeed, ISPEED
     clr semaphore
@@ -92,8 +93,8 @@ main:
     ;set speed:
     ;SERVO1W globalSpeed     
     ;SERVO2W globalSpeed
-	SERVO1WI 100     
-    SERVO2WI 100
+	SERVO1WI 10     
+    SERVO2WI 10
 
     PRINTF	UART0_putc		; print speed
 	.db	CR,CR,"Speed=",FDEC,c,"    ",0

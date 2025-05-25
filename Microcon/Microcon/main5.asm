@@ -7,15 +7,15 @@
 
 ;===Definition===
 .equ DISTANCETRESH = 225
-.equ ISPEED = 0
+.equ ISPEED = 30
 
 
-.equ turnSpeed  = 80
-.equ turnTime   = 2000      ;ms
-.equ offsetTime = 2000      ;ms
+.equ turnSpeed  = 30
+.equ turnTime   = 1000      ;ms
+.equ offsetTime = 1000      ;ms
 
-.def semaphore  = r22       ;d0
-.def globalspeed = r23      ;c0
+.def semaphore  = r9       ;c1
+.def globalspeed = r8      ;c0
 
 ; === interrupt table ===
 .org	0
@@ -67,55 +67,108 @@ reset:
     rcall   SPEED_init      ;init speed/standby control
     IRSET                   ;init le capteur de distance
 
-    ldi globalspeed, ISPEED
+    _LDI globalspeed, ISPEED
     clr semaphore
 
     sei
     rjmp standby
+	;rjmp main
 
 ;======== main ========
 
 standby:
-	cbr semaphore, 0
+	clr semaphore
     rcall printSSleepy
     SERVO1WI 0    ;speed = 0
     SERVO2WI 0
     sbloop:
-        PRINTF	LCD		; print speed
-	    .db	CR,CR,"Speed=",FDEC,c,"    ",0
+        PRINTF	LCD		;print speed
+		.db	CR,CR,"Speed=",FDEC2,c,"        ",0
+		;PRINTF	LCD
+		;.db LF,"sem=",FHEX2,c,"       ",0
 
-        sbrc semaphore, 0 ;  check if pause button pressed
-        rjmp main
-        rjmp sbLoop
+        sbrc semaphore, 0 ;check pause button
+		rjmp main
+		rjmp sbloop
+
+
 
 main:
-	cbr semaphore, 0
+	
+	clr semaphore
 	rcall   printSHappy
-	mainloop:
-	SERVO1WI 20    	;set speed
-    SERVO2WI 20
-	PRINTF	LCD		;print speed
-	    .db	LF,CR,"Speed=",FDEC,c,"    ",0
 
+	
+	mainloop:
+	;SERVO1WI -30*1.3   	;set speed
+   ; SERVO2WI 30
+
+	SERVO2W globalspeed   	;set speed
+	mov b3, globalspeed
+	neg b3
+    SERVO1W b3
+
+
+	PRINTF	LCD		;print speed
+	.db	CR,"Speed=",FDEC2,c,"       ",0
+	;PRINTF	LCD
+	;.db LF,"sem=",FHEX2,c,"       ",0
+	
 	DISTANCEREAD
 	WAIT_MS 20
-	PRINTF LCD		;print speed
-	.db	CR,CR,"Distance=",FDEC2,b,"    ",0
-	
-	DISTANCECOMPARE
+	;PRINTF LCD		;print distance
+	;.db	CR,CR,"Distance=",FDEC2,b,"       ",0
+
+	DISTANCECOMPARE ;compare distance
 	brsh wall
 	
-	sbrc semaphore, 0
+	sbrc semaphore, 0 ;check pause button
     rjmp standby
-	
 	rjmp mainloop
 
 
 wall:
-	PRINTF LCD
+	/*PRINTF LCD
 	.db	CR,CR,"Duper",FDEC2,b,"    ",0
 	rcall printSConcerned
 	SERVO1WI -turnSpeed   
-    SERVO2WI +turnSpeed
+    SERVO2WI turnSpeed
 	WAIT_MS 3000
-	rjmp main
+	rjmp main*/
+	rcall printSConcerned
+
+    ;turn 90
+    SERVO1WI turnSpeed
+    SERVO2WI turnSpeed
+    WAIT_MS turnTime
+    ;move to offet
+    SERVO1WI -turnSpeed
+    SERVO2WI turnSpeed
+	WAIT_MS offsettime
+
+	DISTANCEREAD
+	WAIT_MS 20
+    DISTANCECOMPARE
+    brsh dead
+
+    /*clr a0
+    loop:
+        DISTANCEREAD
+        DISTANCECOMPARE
+        brsh dead
+        WAIT_MS offsetTime/10
+        inc a0
+        cpse a0,10
+        rjmp loop*/
+
+    ;turn 90
+    SERVO1WI turnSpeed
+    SERVO2WI turnSpeed
+    WAIT_MS turnTime
+    rjmp    main
+dead:
+    rcall printSDead
+    SERVO1WI 0
+    SERVO2WI 0
+idle:
+	rjmp idle

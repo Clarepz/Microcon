@@ -8,7 +8,8 @@ ext_int1:
     dec c0
 	reti
 ext_int2: ; pause button clicked
-    sbr semaphore, 1
+	inc c1
+    ;_SBR semaphore, 0
     reti
 
 ; === initialization (reset) ====

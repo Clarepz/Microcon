@@ -36,9 +36,9 @@
   <ext_int1><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\speedStandbyControl.asm</FILE><LINE>7</LINE></ext_int1>
   <ext_int2><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\speedStandbyControl.asm</FILE><LINE>10</LINE></ext_int2>
   <ADCCaddr_sra><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistanceMacro.asm</FILE><LINE>4</LINE></ADCCaddr_sra>
-  <overflow1><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\servoDeYannLeBoss.asm</FILE><LINE>86</LINE></overflow1>
-  <output_compare1a><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\servoDeYannLeBoss.asm</FILE><LINE>91</LINE></output_compare1a>
-  <output_compare1b><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\servoDeYannLeBoss.asm</FILE><LINE>97</LINE></output_compare1b>
+  <overflow1><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\servoDeYannLeBoss.asm</FILE><LINE>89</LINE></overflow1>
+  <output_compare1a><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\servoDeYannLeBoss.asm</FILE><LINE>94</LINE></output_compare1a>
+  <output_compare1b><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\servoDeYannLeBoss.asm</FILE><LINE>100</LINE></output_compare1b>
   <_printf><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\printf.asm</FILE><LINE>138</LINE></_printf>
   <_printf_read><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\printf.asm</FILE><LINE>143</LINE></_printf_read>
   <_printf_end><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\printf.asm</FILE><LINE>153</LINE></_printf_end>
@@ -101,7 +101,7 @@
   <LCD_init><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\lcd.asm</FILE><LINE>47</LINE></LCD_init>
   <LCD_uninit><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\lcd.asm</FILE><LINE>57</LINE></LCD_uninit>
   <LCD_pos><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\lcd.asm</FILE><LINE>63</LINE></LCD_pos>
-  <SPEED_init><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\speedStandbyControl.asm</FILE><LINE>15</LINE></SPEED_init>
+  <SPEED_init><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\speedStandbyControl.asm</FILE><LINE>16</LINE></SPEED_init>
   <smileyHapppy><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\Yann23cm.asm</FILE><LINE>40</LINE></smileyHapppy>
   <smileyConcerned><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\Yann23cm.asm</FILE><LINE>41</LINE></smileyConcerned>
   <smileyDead><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\Yann23cm.asm</FILE><LINE>42</LINE></smileyDead>
@@ -128,9 +128,12 @@
   <ws2b3_starta2><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\Yann23cm.asm</FILE><LINE>169</LINE></ws2b3_starta2>
   <ws2b3w1a2><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\Yann23cm.asm</FILE><LINE>174</LINE></ws2b3w1a2>
   <ws2b3_nexta2><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\Yann23cm.asm</FILE><LINE>176</LINE></ws2b3_nexta2>
-  <standby><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm</FILE><LINE>78</LINE></standby>
-  <sbloop><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm</FILE><LINE>82</LINE></sbloop>
-  <main><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm</FILE><LINE>90</LINE></main>
-  <wall><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm</FILE><LINE>110</LINE></wall>
+  <standby><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm</FILE><LINE>79</LINE></standby>
+  <sbloop><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm</FILE><LINE>84</LINE></sbloop>
+  <main><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm</FILE><LINE>96</LINE></main>
+  <mainloop><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm</FILE><LINE>102</LINE></mainloop>
+  <wall><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm</FILE><LINE>130</LINE></wall>
+  <dead><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm</FILE><LINE>169</LINE></dead>
+  <idle><FILE>C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm</FILE><LINE>173</LINE></idle>
  </LABELS>
 </ASSEMBLER_INFO>

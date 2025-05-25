@@ -50,7 +50,7 @@ main:
 	PRINTF LCD
 	.db	CR,CR,"Duper",FDEC2,b,"    ",0
 	rcall printSConcerned
-	SERVO1W d3    ;speed = 0
-    SERVO2W d3
+	SERVO1WI  80   ;speed = 0
+    SERVO2WI -80
 	WAIT_MS 2000
 	rjmp main

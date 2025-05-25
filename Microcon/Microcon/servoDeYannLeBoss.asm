@@ -8,14 +8,16 @@
  */
 
 .set NPoint = 4000		;range= 0-4000
+.set NPoint2 = 4150		;Le offset du servo 2 n'est pas réglable
 
 
 
-.macro SERVO1W	; entre 0 et 255
+.macro SERVO1W	; entre -125 et 125
 	;@0*16+NPoint
 	push a0
 	clr a0
 	mov w, @0
+	subi w, -128
 	LSL2 a0, w
 	LSL2 a0, w
 	LSL2 a0, w
@@ -27,33 +29,34 @@
 	pop a0
 .endmacro
 
-.macro SERVO2W	; entre 0 et 255
+.macro SERVO2W	; entre -125 et 125
 	;@0*16+NPoint
 	push a0
 	clr a0
 	mov w, @0
+	subi w, -128
 	LSL2 a0, w
 	LSL2 a0, w
 	LSL2 a0, w
 	LSL2 a0, w
-	SUBI2 a0, w, -NPoint
+	SUBI2 a0, w, -NPoint2
 
 	out OCR1BH, a0
 	out OCR1BL, w
 	pop a0
 .endmacro
 
-.macro SERVO1WI	; entre 0 et 255
-	_LDI u, high(@0*16+NPoint)
-	ldi w, low(@0*16+NPoint)
+.macro SERVO1WI	; entre -125 et 125
+	_LDI u, high(@0*16+NPoint+2000)
+	ldi w, low(@0*16+NPoint+2000)
 
 	OUT OCR1AH, u
 	OUT OCR1AL, w
 .endmacro
 
-.macro SERVO2WI	; entre 0 et 255
-	_LDI u, high(@0*16+NPoint)
-	ldi w, low(@0*16+NPoint)
+.macro SERVO2WI	; entre -125 et 125
+	_LDI u, high(@0*16+NPoint2+2000)
+	ldi w, low(@0*16+NPoint2+2000)
 
 	OUT OCR1BH, u
 	OUT OCR1BL, w

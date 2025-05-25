@@ -1,11 +1,11 @@
 
-AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm Sat May 24 12:50:33 2025
+AVRASM ver. 2.2.6  C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm Sat May 24 16:24:26 2025
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m128def.inc'
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm(1): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\macros.asm'
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm(2): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\definitions.asm'
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm(17): warning: Register r22 already defined by the .DEF directive
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm(18): warning: Register r23 already defined by the .DEF directive
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm(17): warning: Register r9 already defined by the .DEF directive
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm(18): warning: Register r8 already defined by the .DEF directive
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm(48): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\servoDeYannLeBoss.asm'
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm(49): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\irDistanceMacro.asm'
 C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm(50): Including file 'C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\printf.asm'
@@ -3096,15 +3096,15 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5
                                  
                                  ;===Definition===
                                  .equ DISTANCETRESH = 225
-                                 .equ ISPEED = 0
+                                 .equ ISPEED = 30
                                  
                                  
-                                 .equ turnSpeed  = 80
-                                 .equ turnTime   = 2000      ;ms
-                                 .equ offsetTime = 2000      ;ms
+                                 .equ turnSpeed  = 30
+                                 .equ turnTime   = 1000      ;ms
+                                 .equ offsetTime = 1000      ;ms
                                  
-                                 .def semaphore  = r22       ;d0
-                                 .def globalspeed = r23      ;c0
+                                 .def semaphore  = r9       ;c1
+                                 .def globalspeed = r8      ;c0
                                  
                                  ; === interrupt table ===
                                  .org	0
@@ -3145,14 +3145,16 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5
                                   */
                                  
                                  .set NPoint = 4000		;range= 0-4000
+                                 .set NPoint2 = 4150		;Le offset du servo 2 n'est pas réglable
                                  
                                  
                                  
-                                 .macro SERVO1W	; entre 0 et 255
+                                 .macro SERVO1W	; entre -125 et 125
                                  	;@0*16+NPoint
                                  	push a0
                                  	clr a0
                                  	mov w, @0
+                                 	subi w, -128
                                  	LSL2 a0, w
                                  	LSL2 a0, w
                                  	LSL2 a0, w
@@ -3164,33 +3166,34 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5
                                  	pop a0
                                  .endmacro
                                  
-                                 .macro SERVO2W	; entre 0 et 255
+                                 .macro SERVO2W	; entre -125 et 125
                                  	;@0*16+NPoint
                                  	push a0
                                  	clr a0
                                  	mov w, @0
+                                 	subi w, -128
                                  	LSL2 a0, w
                                  	LSL2 a0, w
                                  	LSL2 a0, w
                                  	LSL2 a0, w
-                                 	SUBI2 a0, w, -NPoint
+                                 	SUBI2 a0, w, -NPoint2
                                  
                                  	out OCR1BH, a0
                                  	out OCR1BL, w
                                  	pop a0
                                  .endmacro
                                  
-                                 .macro SERVO1WI	; entre 0 et 255
-                                 	_LDI u, high(@0*16+NPoint)
-                                 	ldi w, low(@0*16+NPoint)
+                                 .macro SERVO1WI	; entre -125 et 125
+                                 	_LDI u, high(@0*16+NPoint+2000)
+                                 	ldi w, low(@0*16+NPoint+2000)
                                  
                                  	OUT OCR1AH, u
                                  	OUT OCR1AL, w
                                  .endmacro
                                  
-                                 .macro SERVO2WI	; entre 0 et 255
-                                 	_LDI u, high(@0*16+NPoint)
-                                 	ldi w, low(@0*16+NPoint)
+                                 .macro SERVO2WI	; entre -125 et 125
+                                 	_LDI u, high(@0*16+NPoint2+2000)
+                                 	ldi w, low(@0*16+NPoint2+2000)
                                  
                                  	OUT OCR1BH, u
                                  	OUT OCR1BL, w
@@ -3975,7 +3978,8 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5
 0001b7 948a                          dec c0
 0001b8 9518                      	reti
                                  ext_int2: ; pause button clicked
-0001b9 6061                          sbr semaphore, 1
+0001b9 9493                      	inc c1
+                                     ;_SBR semaphore, 0
 0001ba 9518                          reti
                                  
                                  ; === initialization (reset) ====
@@ -4243,165 +4247,313 @@ C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5
 000254 e003
 000255 b907                          IRSET                   ;init le capteur de distance
                                  
-000256 e070                          ldi globalspeed, ISPEED
-000257 2766                          clr semaphore
+000256 e10e
+000257 2e80                          _LDI globalspeed, ISPEED
+000258 2499                          clr semaphore
                                  
-000258 9478                          sei
-000259 c000                          rjmp standby
+000259 9478                          sei
+00025a c000                          rjmp standby
+                                 	;rjmp main
                                  
                                  ;======== main ========
                                  
                                  standby:
-00025a df7f                          rcall printSSleepy
-00025b e107
-00025c 2e30
-00025d ea00
-00025e bc3b
-00025f bd0a                          SERVO1WI 128    ;speed = 0
-000260 e107
-000261 2e30
-000262 ea00
-000263 bc39
-000264 bd08                          SERVO2WI 128
+00025b 2499                      	clr semaphore
+00025c df7d                          rcall printSSleepy
+00025d e107
+00025e 2e30
+00025f e700
+000260 bc3b
+000261 bd0a                          SERVO1WI 0    ;speed = 0
+000262 e108
+000263 2e30
+000264 e006
+000265 bc39
+000266 bd08                          SERVO2WI 0
                                      sbloop:
-000265 e703
-000266 2e40
-000267 e001
-000268 2e50
-000269 ddd4                              PRINTF	LCD		; print speed
-00026a 0d0d
-00026b 7053
-00026c 6565
-00026d 3d64
-00026e 08c0
-00026f 2020
-000270 2020
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm(84): warning: .cseg .db misalignment - padding zero byte
-000271 0000                      	    .db	CR,CR,"Speed=",FDEC,c,"    ",0
+000267 e703
+000268 2e40
+000269 e001
+00026a 2e50
+00026b ddd2                              PRINTF	LCD		;print speed
+00026c 0d0d
+00026d 7053
+00026e 6565
+00026f 3d64
+000270 08d0
+000271 2020
+000272 2020
+000273 2020
+000274 2020
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm(86): warning: .cseg .db misalignment - padding zero byte
+000275 0000                      		.db	CR,CR,"Speed=",FDEC2,c,"        ",0
+                                 		;PRINTF	LCD
+                                 		;.db LF,"sem=",FHEX2,c,"       ",0
                                  
-000272 fd60                              sbrc semaphore, 0 ;  check if pause button pressed
-000273 c001                              rjmp main
-000274 cff0                              rjmp sbLoop
+000276 fc90                              sbrc semaphore, 0 ;check pause button
+000277 c001                      		rjmp main
+000278 cfee                      		rjmp sbloop
+                                 
+                                 
                                  
                                  main:
-000275 e100
-000276 2e30
-000277 ee00
-000278 bc3b
-000279 bd0a                      	SERVO1WI 20    	;set speed
-00027a e100
-00027b 2e30
-00027c ee00
-00027d bc39
-00027e bd08                          SERVO2WI 20
-00027f e703
-000280 2e40
-000281 e001
-000282 2e50
-000283 ddba                      	PRINTF	LCD		;print speed
-000284 0d0a
-000285 7053
-000286 6565
-000287 3d64
-000288 08c0
-000289 2020
-00028a 2020
-C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm(94): warning: .cseg .db misalignment - padding zero byte
-00028b 0000                      	    .db	LF,CR,"Speed=",FDEC,c,"    ",0
+                                 	
+000279 2499                      	clr semaphore
+00027a df56                      	rcall   printSHappy
                                  
-00028c 9a36                      	DISTANCEREAD
-00028d e104
-00028e 2e30
-00028f e001
-000290 930f
-000291 923f
-000292 e300
-000293 2e30
-000294 e006
-000295 943a
-000296 f7f1
-000297 943a
-000298 950a
-000299 f7d9
-00029a 903f
-00029b 910f
-00029c 943a
-00029d f791
-00029e 950a
-00029f f781                      	WAIT_MS 20
-0002a0 e703
-0002a1 2e40
-0002a2 e001
-0002a3 2e50
-0002a4 dd99                      	PRINTF LCD		;print speed
-0002a5 0d0d
-0002a6 6944
-0002a7 7473
-0002a8 6e61
-0002a9 6563
-0002aa d03d
-0002ab 2016
-0002ac 2020
-0002ad 0020                      	.db	CR,CR,"Distance=",FDEC2,b,"    ",0
                                  	
-0002ae 2f26
-0002af 2f37
-0002b0 9536
-0002b1 9527
-0002b2 9536
-0002b3 9527
-0002b4 3e21                      	DISTANCECOMPARE
-0002b5 f418                      	brsh wall
+                                 	mainloop:
+                                 	;SERVO1WI -30*1.3   	;set speed
+                                    ; SERVO2WI 30
+                                 
+00027b 932f
+00027c 2722
+00027d 2d08
+00027e 5800
+00027f 0f00
+000280 1f22
+000281 0f00
+000282 1f22
+000283 0f00
+000284 1f22
+000285 0f00
+000286 1f22
+000287 5c0a
+000288 4e2f
+000289 bd29
+00028a bd08
+00028b 912f                      	SERVO2W globalspeed   	;set speed
+00028c 2d98                      	mov b3, globalspeed
+00028d 9591                      	neg b3
+00028e 932f
+00028f 2722
+000290 2f09
+000291 5800
+000292 0f00
+000293 1f22
+000294 0f00
+000295 1f22
+000296 0f00
+000297 1f22
+000298 0f00
+000299 1f22
+00029a 5600
+00029b 4f20
+00029c bd2b
+00029d bd0a
+00029e 912f                          SERVO1W b3
+                                 
+                                 
+00029f e703
+0002a0 2e40
+0002a1 e001
+0002a2 2e50
+0002a3 dd9a                      	PRINTF	LCD		;print speed
+0002a4 530d
+0002a5 6570
+0002a6 6465
+0002a7 d03d
+0002a8 2008
+0002a9 2020
+0002aa 2020
+0002ab 2020
+C:\Users\royer\Documents\MT\BA4\Microcontrolers\Microcon\Microcon\Microcon\main5.asm(113): warning: .cseg .db misalignment - padding zero byte
+0002ac 0000                      	.db	CR,"Speed=",FDEC2,c,"       ",0
+                                 	;PRINTF	LCD
+                                 	;.db LF,"sem=",FHEX2,c,"       ",0
                                  	
-0002b6 fd60                      	sbrc semaphore, 0
-0002b7 cfa2                          rjmp standby
+0002ad 9a36                      	DISTANCEREAD
+0002ae e104
+0002af 2e30
+0002b0 e001
+0002b1 930f
+0002b2 923f
+0002b3 e300
+0002b4 2e30
+0002b5 e006
+0002b6 943a
+0002b7 f7f1
+0002b8 943a
+0002b9 950a
+0002ba f7d9
+0002bb 903f
+0002bc 910f
+0002bd 943a
+0002be f791
+0002bf 950a
+0002c0 f781                      	WAIT_MS 20
+                                 	;PRINTF LCD		;print distance
+                                 	;.db	CR,CR,"Distance=",FDEC2,b,"       ",0
+                                 
+0002c1 2f26
+0002c2 2f37
+0002c3 9536
+0002c4 9527
+0002c5 9536
+0002c6 9527
+0002c7 3e21                      	DISTANCECOMPARE ;compare distance
+0002c8 f418                      	brsh wall
                                  	
-0002b8 cfbc                      	rjmp main
+0002c9 fc90                      	sbrc semaphore, 0 ;check pause button
+0002ca cf90                          rjmp standby
+0002cb cfaf                      	rjmp mainloop
                                  
                                  
                                  wall:
-0002b9 e703
-0002ba 2e40
-0002bb e001
-0002bc 2e50
-0002bd dd80                      	PRINTF LCD
-0002be 0d0d
-0002bf 7544
-0002c0 6570
-0002c1 d072
-0002c2 2016
-0002c3 2020
-0002c4 0020                      	.db	CR,CR,"Duper",FDEC2,b,"    ",0
-0002c5 df0e                      	rcall printSConcerned
-0002c6 e104
-0002c7 2e30
-0002c8 ea00
-0002c9 bc3b
-0002ca bd0a                      	SERVO1WI turnSpeed   
-0002cb e105
-0002cc 2e30
-0002cd e200
-0002ce bc39
-0002cf bd08                          SERVO2WI 128+turnSpeed
-0002d0 eb08
-0002d1 2e30
-0002d2 e00c
-0002d3 930f
-0002d4 923f
-0002d5 e300
-0002d6 2e30
-0002d7 e006
-0002d8 943a
-0002d9 f7f1
-0002da 943a
-0002db 950a
-0002dc f7d9
-0002dd 903f
-0002de 910f
+                                 	/*PRINTF LCD
+                                 	.db	CR,CR,"Duper",FDEC2,b,"    ",0
+                                 	rcall printSConcerned
+                                 	SERVO1WI -turnSpeed   
+                                     SERVO2WI turnSpeed
+                                 	WAIT_MS 3000
+                                 	rjmp main*/
+0002cc df07                      	rcall printSConcerned
+                                 
+                                     ;turn 90
+0002cd e109
+0002ce 2e30
+0002cf e500
+0002d0 bc3b
+0002d1 bd0a                          SERVO1WI turnSpeed
+0002d2 e109
+0002d3 2e30
+0002d4 ee06
+0002d5 bc39
+0002d6 bd08                          SERVO2WI turnSpeed
+0002d7 ee08
+0002d8 2e30
+0002d9 e004
+0002da 930f
+0002db 923f
+0002dc e300
+0002dd 2e30
+0002de e006
 0002df 943a
-0002e0 f791
-0002e1 950a
-0002e2 f781                      	WAIT_MS 3000
+0002e0 f7f1
+0002e1 943a
+0002e2 950a
+0002e3 f7d9
+0002e4 903f
+0002e5 910f
+0002e6 943a
+0002e7 f791
+0002e8 950a
+0002e9 f781                          WAIT_MS turnTime
+                                     ;move to offet
+0002ea e105
+0002eb 2e30
+0002ec e900
+0002ed bc3b
+0002ee bd0a                          SERVO1WI -turnSpeed
+0002ef e109
+0002f0 2e30
+0002f1 ee06
+0002f2 bc39
+0002f3 bd08                          SERVO2WI turnSpeed
+0002f4 ee08
+0002f5 2e30
+0002f6 e004
+0002f7 930f
+0002f8 923f
+0002f9 e300
+0002fa 2e30
+0002fb e006
+0002fc 943a
+0002fd f7f1
+0002fe 943a
+0002ff 950a
+000300 f7d9
+000301 903f
+000302 910f
+000303 943a
+000304 f791
+000305 950a
+000306 f781                      	WAIT_MS offsettime
+                                 
+000307 9a36                      	DISTANCEREAD
+000308 e104
+000309 2e30
+00030a e001
+00030b 930f
+00030c 923f
+00030d e300
+00030e 2e30
+00030f e006
+000310 943a
+000311 f7f1
+000312 943a
+000313 950a
+000314 f7d9
+000315 903f
+000316 910f
+000317 943a
+000318 f791
+000319 950a
+00031a f781                      	WAIT_MS 20
+00031b 2f26
+00031c 2f37
+00031d 9536
+00031e 9527
+00031f 9536
+000320 9527
+000321 3e21                          DISTANCECOMPARE
+000322 f4f0                          brsh dead
+                                 
+                                     /*clr a0
+                                     loop:
+                                         DISTANCEREAD
+                                         DISTANCECOMPARE
+                                         brsh dead
+                                         WAIT_MS offsetTime/10
+                                         inc a0
+                                         cpse a0,10
+                                         rjmp loop*/
+                                 
+                                     ;turn 90
+000323 e109
+000324 2e30
+000325 e500
+000326 bc3b
+000327 bd0a                          SERVO1WI turnSpeed
+000328 e109
+000329 2e30
+00032a ee06
+00032b bc39
+00032c bd08                          SERVO2WI turnSpeed
+00032d ee08
+00032e 2e30
+00032f e004
+000330 930f
+000331 923f
+000332 e300
+000333 2e30
+000334 e006
+000335 943a
+000336 f7f1
+000337 943a
+000338 950a
+000339 f7d9
+00033a 903f
+00033b 910f
+00033c 943a
+00033d f791
+00033e 950a
+00033f f781                          WAIT_MS turnTime
+000340 cf38                          rjmp    main
+                                 dead:
+000341 de95                          rcall printSDead
+000342 e107
+000343 2e30
+000344 e700
+000345 bc3b
+000346 bd0a                          SERVO1WI 0
+000347 e108
+000348 2e30
+000349 e006
+00034a bc39
+00034b bd08                          SERVO2WI 0
+                                 idle:
+00034c cfff                      	rjmp idle
 
 
 RESOURCE USE INFORMATION
@@ -4419,10 +4571,10 @@ counted separately from r26..r31 here.
 .dseg memory usage only counts static data declared with .byte
 
 "ATmega128" register use summary:
-x  :   6 y  :   9 z  :   1 r0 :   9 r1 :   0 r2 :   0 r3 :  41 r4 :   5 
-r5 :   5 r6 :   0 r7 :   0 r8 :   7 r9 :   5 r10:   5 r11:   6 r12:  11 
-r13:   0 r14:   0 r15:   0 r16: 178 r17:   8 r18:  45 r19:  24 r20:  18 
-r21:  15 r22:  15 r23:  28 r24:   7 r25:  15 r26:   4 r27:   4 r28:   2 
+x  :   6 y  :   9 z  :   1 r0 :   9 r1 :   0 r2 :   0 r3 :  70 r4 :   3 
+r5 :   3 r6 :   0 r7 :   0 r8 :  10 r9 :  11 r10:   5 r11:   6 r12:  11 
+r13:   0 r14:   0 r15:   0 r16: 234 r17:   8 r18:  67 r19:  27 r20:  18 
+r21:  15 r22:  12 r23:  28 r24:   7 r25:  18 r26:   4 r27:   4 r28:   2 
 r29:   2 r30:  15 r31:  10 
 Registers used: 28 out of 35 (80.0%)
 
@@ -4431,28 +4583,28 @@ Registers used: 28 out of 35 (80.0%)
 andi  :   9 asr   :   2 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
 brcc  :   1 brcs  :   0 break :   0 breq  :  19 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 brlt  :   0 brmi  :   1 
-brne  :  21 brpl  :   1 brsh  :   2 brtc  :   5 brts  :   0 brvc  :   0 
+brne  :  33 brpl  :   1 brsh  :   3 brtc  :   5 brts  :   0 brvc  :   0 
 brvs  :   0 bset  :   0 bst   :   1 call  :   0 cbi   :   4 cbr   :   0 
-clc   :   1 clh   :   0 cli   :   1 cln   :   0 clr   :  16 cls   :   0 
+clc   :   1 clh   :   0 cli   :   1 cln   :   0 clr   :  20 cls   :   0 
 clt   :   1 clv   :   0 clz   :   0 com   :   8 cp    :   1 cpc   :   3 
-cpi   :  11 cpse  :   0 dec   :  27 elpm  :   0 eor   :   0 fmul  :   0 
-fmuls :   0 fmulsu:   0 icall :   1 ijmp  :   1 in    :   7 inc   :   3 
-jmp   :   5 ld    :   9 ldd   :   0 ldi   : 105 lds   :   3 lpm   :  13 
-lsl   :   6 lsr   :   5 mov   :  41 movw  :   0 mul   :   0 muls  :   0 
-mulsu :   0 neg   :   0 nop   :  13 or    :   0 ori   :   2 out   :  33 
-pop   :  27 push  :  26 rcall :  32 ret   :  20 reti  :   7 rjmp  :  58 
-rol   :  10 ror   :  15 sbc   :   3 sbci  :   0 sbi   :   7 sbic  :   0 
-sbis  :   2 sbiw  :   0 sbr   :   3 sbrc  :  16 sbrs  :   1 sec   :   0 
+cpi   :  12 cpse  :   0 dec   :  42 elpm  :   0 eor   :   0 fmul  :   0 
+fmuls :   0 fmulsu:   0 icall :   1 ijmp  :   1 in    :   7 inc   :   4 
+jmp   :   5 ld    :   9 ldd   :   0 ldi   : 121 lds   :   3 lpm   :  13 
+lsl   :  14 lsr   :   7 mov   :  53 movw  :   0 mul   :   0 muls  :   0 
+mulsu :   0 neg   :   1 nop   :  13 or    :   0 ori   :   2 out   :  45 
+pop   :  35 push  :  34 rcall :  32 ret   :  20 reti  :   7 rjmp  :  59 
+rol   :  18 ror   :  17 sbc   :   3 sbci  :   2 sbi   :   8 sbic  :   0 
+sbis  :   2 sbiw  :   0 sbr   :   2 sbrc  :  16 sbrs  :   1 sec   :   0 
 seh   :   0 sei   :   3 sen   :   0 ser   :   0 ses   :   0 set   :   1 
 sev   :   0 sez   :   0 sleep :   0 spm   :   0 st    :   6 std   :   0 
-sts   :   6 sub   :   3 subi  :   3 swap  :   4 tst   :   8 wdr   :   0 
+sts   :   6 sub   :   3 subi  :   7 swap  :   4 tst   :   8 wdr   :   0 
 
-Instructions used: 60 out of 114 (52.6%)
+Instructions used: 62 out of 114 (54.4%)
 
 "ATmega128" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0005c8   1314     96   1410  131072   1.1%
+[.cseg] 0x000000 0x00069a   1550     70   1620  131072   1.2%
 [.dseg] 0x000100 0x000100      0      0      0    4096   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    4096   0.0%
 
